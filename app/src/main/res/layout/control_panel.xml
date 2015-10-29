@@ -106,7 +106,9 @@
             android:layout_marginTop="@dimen/et_margin_top"
             android:layout_marginBottom="@dimen/et_margin_bottom"
             android:ems="3"
-            android:maxEms="3" />
+            android:maxEms="3" >
+            <requestFocus/>
+        </EditText>
     </LinearLayout>
 
     <LinearLayout

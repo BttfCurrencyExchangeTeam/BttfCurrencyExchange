@@ -12,6 +12,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
     private ControlPanelItem destinationTimePanel, presentTimePanel, lastTimeDepartedPanel;
     private Button bTravel;
+    private Exchange exchange;
 
     private int yearPresent, yearLast;
 

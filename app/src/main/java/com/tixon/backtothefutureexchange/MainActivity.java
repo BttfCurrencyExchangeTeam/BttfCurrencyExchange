@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         exchange = Exchange.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
-        exchange.setYearIndex(1);
+        exchange.setYearIndex(2015);
 
         currentYear = 2015;
         initViews();
@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Constants.TYPEFACE_DIGITS));
 
         tvCurrentYear.setText(String.valueOf(currentYear));
-        tvMoney.setText("$1000");
+        cash = 1000;
+        exchange.setCurrency(Exchange.CURRENCY_DOLLARS);
+        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf(cash));
     }
 
     @Override
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case Constants.REQUEST_CODE_TRAVEL:
                     currentYear = data
                             .getIntExtra(Constants.KEY_YEAR_DESTINATION, 2015);
+                    exchange.setYearIndex(currentYear);
                     tvCurrentYear.setText(String.valueOf(currentYear));
                     Log.d("myLogs", "currentYear = " + currentYear + ", lastYear = " + lastYear);
                     break;
@@ -81,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_activity_button_exchange:
                 showExchangeDialog();
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -90,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myBuilder.setTitle("Выберите валюту");
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
-        arrayAdapter.add("Рубли");
-        arrayAdapter.add("Фунты");
+        setArrayAdapter(arrayAdapter);
 
         myBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
             @Override
@@ -103,18 +106,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = arrayAdapter.getItem(which);
+//                String name = arrayAdapter.getItem(which);
+                final int currencyIndex = exchange.getAvailableCurrencies()[which];
                 AlertDialog.Builder innerBuilder = new AlertDialog.Builder(MainActivity.this);
-                innerBuilder.setMessage("some message");
+                Log.d("myLogs", "from exchange = " + exchange.getCurrency() + ", currencyIndex = " + currencyIndex);
+                cash = exchange.change(exchange.getCurrency(), currencyIndex, cash);
+                exchange.setCurrency(currencyIndex);
+
                 innerBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        Log.d("myLogs", "message = " + exchange.getCurrencySymbol() + String.valueOf(cash));
                         dialog.dismiss();
                     }
                 });
+                innerBuilder.setMessage(exchange.getCurrencySymbol() + String.valueOf(cash));
                 innerBuilder.show();
             }
         });
         myBuilder.show();
+    }
+
+    private void setArrayAdapter(ArrayAdapter<String> arrayAdapter) {
+        int[] currencies = exchange.getAvailableCurrencies();
+        for (int currency : currencies) {
+            switch (currency) {
+                case Exchange.CURRENCY_DOLLARS:
+                    arrayAdapter.add("Доллары");
+                    break;
+                case Exchange.CURRENCY_RUBLES:
+                    arrayAdapter.add("Рубли");
+                    break;
+                case Exchange.CURRENCY_POUNDS:
+                    arrayAdapter.add("Фунты");
+                    break;
+            }
+        }
     }
 }
