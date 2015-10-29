@@ -1,11 +1,14 @@
 package com.tixon.backtothefutureexchange;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -76,9 +79,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Constants.REQUEST_CODE_TRAVEL);
                 break;
             case R.id.main_activity_button_exchange:
-
+                showExchangeDialog();
                 break;
             default: break;
         }
+    }
+
+    public void showExchangeDialog() {
+        AlertDialog.Builder myBuilder = new AlertDialog.Builder(MainActivity.this);
+        myBuilder.setTitle("Выберите валюту");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.add("Рубли");
+        arrayAdapter.add("Фунты");
+
+        myBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        myBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = arrayAdapter.getItem(which);
+                AlertDialog.Builder innerBuilder = new AlertDialog.Builder(MainActivity.this);
+                innerBuilder.setMessage("some message");
+                innerBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                innerBuilder.show();
+            }
+        });
+        myBuilder.show();
     }
 }
