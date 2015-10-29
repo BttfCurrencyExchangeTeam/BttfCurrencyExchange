@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BackToTheFutureExchange</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="years">
+        <item>1941</item>
+        <item>1955</item>
+        <item>1985</item>
+        <item>2015</item>
+    </string-array>
+</resources>

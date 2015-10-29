@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="et_height">36dp</dimen>
+    <dimen name="et_padding">4dp</dimen>
+
+    <dimen name="tv_text_size">10sp</dimen>
+    <dimen name="et_text_size">18sp</dimen>
+    <dimen name="et_margin_top">10dp</dimen>
+    <dimen name="et_margin_bottom">5dp</dimen>
+    <dimen name="et_margin_side">5dp</dimen>
+    <dimen name="tv_margin_top">5dp</dimen>
+</resources>
