@@ -105,6 +105,11 @@ public class ControlPanelItem extends RelativeLayout {
         etYear.setOnClickListener(listener);
     }
 
+    public void setOnChangeTimeClickListener(View.OnClickListener listener) {
+        etHour.setOnClickListener(listener);
+        etMinute.setOnClickListener(listener);
+    }
+
     //set colors for each editText
     private void setColorForEditTexts(int color) {
         etMonth.setTextColor(color);

@@ -1,12 +1,14 @@
 package com.tixon.backtothefutureexchange;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
 
@@ -56,6 +58,13 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
                 showDatePickerDialog();
             }
         });
+
+        destinationTimePanel.setOnChangeTimeClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
     }
 
     @Override
@@ -87,6 +96,26 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
         DatePickerDialog dialog = new DatePickerDialog(ControlPanelActivity.this,
                 mDateSetListener, year, month, day);
+        dialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar presentTimeCalendar = presentTimePanel.getDate();
+        int minute = presentTimeCalendar.get(Calendar.MINUTE);
+        int hour = presentTimeCalendar.get(Calendar.HOUR_OF_DAY);
+
+        TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                presentTimeCalendar.set(Calendar.MINUTE, minute);
+                presentTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                destinationTimePanel.setDate(presentTimeCalendar);
+
+            }
+        };
+
+        TimePickerDialog dialog = new TimePickerDialog(ControlPanelActivity.this,
+                mTimeSetListener, hour, minute, true);
         dialog.show();
     }
 }
