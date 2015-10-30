@@ -25,8 +25,6 @@ public class ControlPanelItem extends RelativeLayout {
 
     private Calendar calendar;
 
-    //private View.OnClickListener onChangeDateClickListener, onChangeTimeClickListener;
-
     public ControlPanelItem(Context context) {
         super(context);
         init();
@@ -92,6 +90,9 @@ public class ControlPanelItem extends RelativeLayout {
         etMonth.setText(months[calendar.get(Calendar.MONTH)]);
         etDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         etYear.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+
+        etMinute.setText(String.valueOf(calendar.get(Calendar.MINUTE)));
+        etHour.setText(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
     }
 
     public Calendar getDate() {

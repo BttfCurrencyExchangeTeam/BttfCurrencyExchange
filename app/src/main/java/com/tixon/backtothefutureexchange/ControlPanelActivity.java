@@ -16,17 +16,21 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
     private ControlPanelItem destinationTimePanel, presentTimePanel, lastTimeDepartedPanel;
     private Button bTravel;
-    private Exchange exchange;
 
-    private int yearPresent, yearLast;
+    private Calendar calendarPresent, calendarLast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_panel_activity_layout);
+
+        calendarPresent = Calendar.getInstance();
+        calendarLast = Calendar.getInstance();
+
         Intent fromMainActivity = getIntent();
-        yearPresent = fromMainActivity.getIntExtra(Constants.KEY_YEAR_PRESENT, 2015);
-        yearLast = fromMainActivity.getIntExtra(Constants.KEY_YEAR_LAST, 2015);
+
+        calendarPresent.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_PRESENT, System.currentTimeMillis()));
+        calendarLast.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
         initPanel();
     }
 
@@ -42,8 +46,9 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
         presentTimePanel.setTextColor(ControlPanelItem.YELLOW);
         lastTimeDepartedPanel.setTextColor(ControlPanelItem.RED);
 
-        presentTimePanel.setYear(yearPresent);
-        lastTimeDepartedPanel.setYear(yearLast);
+        destinationTimePanel.setDate(calendarPresent);
+        presentTimePanel.setDate(calendarPresent);
+        lastTimeDepartedPanel.setDate(calendarLast);
 
         destinationTimePanel.setOnChangeDateClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +63,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.control_panel_button_travel:
                 Intent intent = new Intent();
-                intent.putExtra(Constants.KEY_YEAR_DESTINATION, destinationTimePanel.getYear());
+                intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate().getTimeInMillis());
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
@@ -66,7 +71,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void showDatePickerDialog() {
-        Calendar presentTimeCalendar = Calendar.getInstance();
+        Calendar presentTimeCalendar = presentTimePanel.getDate();
         int day = presentTimeCalendar.get(Calendar.DAY_OF_MONTH);
         int month = presentTimeCalendar.get(Calendar.MONTH);
         int year = presentTimeCalendar.get(Calendar.YEAR);

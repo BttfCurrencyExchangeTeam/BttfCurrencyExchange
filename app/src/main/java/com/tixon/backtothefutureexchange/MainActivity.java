@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Calendar calendar;
 
-    private int currentYear, lastYear;
+    private Calendar calendarPresent, calendarLast;
+
     private double cash;
 
     Exchange exchange;
@@ -30,13 +31,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         calendar = Calendar.getInstance();
+
+        calendarPresent = Calendar.getInstance();
+        calendarLast = Calendar.getInstance();
+
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         exchange = Exchange.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
         exchange.setYearIndex(calendar.get(Calendar.YEAR));
 
-        currentYear = calendar.get(Calendar.YEAR);
+        calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
         initViews();
 
         cash = 1000;
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvMoney.setTypeface(Typeface.createFromAsset(getResources().getAssets(),
                 Constants.TYPEFACE_DIGITS));
 
-        tvCurrentYear.setText(String.valueOf(currentYear));
+        tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
     }
 
     @Override
@@ -67,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.REQUEST_CODE_TRAVEL:
-                    currentYear = data
-                            .getIntExtra(Constants.KEY_YEAR_DESTINATION, 2015);
-                    exchange.setYearIndex(currentYear);
-                    tvCurrentYear.setText(String.valueOf(currentYear));
-                    Log.d("myLogs", "currentYear = " + currentYear + ", lastYear = " + lastYear);
+                    calendarPresent.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
+                    exchange.setYearIndex(calendarPresent.get(Calendar.YEAR));
+                    tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
+                    Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
+                            ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     break;
             }
         }
@@ -82,9 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.main_activity_button_travel:
                 Intent startTravelActivity = new Intent(MainActivity.this, ControlPanelActivity.class);
-                startTravelActivity.putExtra(Constants.KEY_YEAR_PRESENT, currentYear);
-                startTravelActivity.putExtra(Constants.KEY_YEAR_LAST, lastYear);
-                lastYear = currentYear;
+                startTravelActivity.putExtra(Constants.KEY_TIME_PRESENT, calendarPresent.getTimeInMillis());
+                startTravelActivity.putExtra(Constants.KEY_TIME_LAST, calendarLast.getTimeInMillis());
+                calendarLast.setTimeInMillis(calendarPresent.getTimeInMillis());
+
                 startActivityForResult(startTravelActivity,
                         Constants.REQUEST_CODE_TRAVEL);
                 break;
