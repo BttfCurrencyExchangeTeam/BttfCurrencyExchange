@@ -1,12 +1,16 @@
 package com.tixon.backtothefutureexchange;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
+
+import java.util.Calendar;
 
 public class ControlPanelActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,6 +44,13 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
         presentTimePanel.setYear(yearPresent);
         lastTimeDepartedPanel.setYear(yearLast);
+
+        destinationTimePanel.setOnChangeDateClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
     }
 
     @Override
@@ -52,5 +63,25 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
         }
+    }
+
+    private void showDatePickerDialog() {
+        Calendar presentTimeCalendar = Calendar.getInstance();
+        int day = presentTimeCalendar.get(Calendar.DAY_OF_MONTH);
+        int month = presentTimeCalendar.get(Calendar.MONTH);
+        int year = presentTimeCalendar.get(Calendar.YEAR);
+
+        DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newCalendar = Calendar.getInstance();
+                newCalendar.set(year, monthOfYear, dayOfMonth);
+                destinationTimePanel.setDate(newCalendar);
+            }
+        };
+
+        DatePickerDialog dialog = new DatePickerDialog(ControlPanelActivity.this,
+                mDateSetListener, year, month, day);
+        dialog.show();
     }
 }

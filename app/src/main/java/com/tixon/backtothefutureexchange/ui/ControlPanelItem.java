@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.tixon.backtothefutureexchange.Constants;
 import com.tixon.backtothefutureexchange.R;
+
+import java.util.Calendar;
 
 public class ControlPanelItem extends RelativeLayout {
 
@@ -17,6 +20,12 @@ public class ControlPanelItem extends RelativeLayout {
     public static final int RED = 3;
 
     private EditText etMonth, etDay, etYear, etHour, etMinute;
+
+    private String[] months;
+
+    private Calendar calendar;
+
+    //private View.OnClickListener onChangeDateClickListener, onChangeTimeClickListener;
 
     public ControlPanelItem(Context context) {
         super(context);
@@ -36,6 +45,8 @@ public class ControlPanelItem extends RelativeLayout {
     private void init() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.control_panel, this, true);
+
+        months = getResources().getStringArray(R.array.months);
 
         etMonth = (EditText) view.findViewById(R.id.et_month);
         etDay = (EditText) view.findViewById(R.id.et_day);
@@ -74,6 +85,23 @@ public class ControlPanelItem extends RelativeLayout {
 
     public void setYear(int year) {
         etYear.setText(String.valueOf(year));
+    }
+
+    public void setDate(Calendar calendar) {
+        this.calendar = calendar;
+        etMonth.setText(months[calendar.get(Calendar.MONTH)]);
+        etDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        etYear.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+    }
+
+    public Calendar getDate() {
+        return this.calendar;
+    }
+
+    public void setOnChangeDateClickListener(View.OnClickListener listener) {
+        etMonth.setOnClickListener(listener);
+        etDay.setOnClickListener(listener);
+        etYear.setOnClickListener(listener);
     }
 
     //set colors for each editText

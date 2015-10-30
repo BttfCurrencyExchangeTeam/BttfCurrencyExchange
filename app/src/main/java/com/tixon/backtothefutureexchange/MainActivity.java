@@ -12,10 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
+
+    Calendar calendar;
 
     private int currentYear, lastYear;
     private double cash;
@@ -25,13 +29,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
 
         exchange = Exchange.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
-        exchange.setYearIndex(2015);
+        exchange.setYearIndex(calendar.get(Calendar.YEAR));
 
-        currentYear = 2015;
+        currentYear = calendar.get(Calendar.YEAR);
         initViews();
+
+        cash = 1000;
+        exchange.setCurrency(Exchange.CURRENCY_DOLLARS);
+        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf(cash));
     }
 
     private void initViews() {
@@ -49,9 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Constants.TYPEFACE_DIGITS));
 
         tvCurrentYear.setText(String.valueOf(currentYear));
-        cash = 1000;
-        exchange.setCurrency(Exchange.CURRENCY_DOLLARS);
-        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf(cash));
     }
 
     @Override
@@ -91,12 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void showExchangeDialog() {
         AlertDialog.Builder myBuilder = new AlertDialog.Builder(MainActivity.this);
-        myBuilder.setTitle("Выберите валюту");
+        myBuilder.setTitle(getResources().getString(R.string.dialog_choose_currency_title));
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
         setArrayAdapter(arrayAdapter);
 
-        myBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+        myBuilder.setNegativeButton(getResources()
+                .getString(R.string.dialog_choose_currency_negative), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -106,17 +114,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                String name = arrayAdapter.getItem(which);
                 final int currencyIndex = exchange.getAvailableCurrencies()[which];
                 AlertDialog.Builder innerBuilder = new AlertDialog.Builder(MainActivity.this);
                 Log.d("myLogs", "from exchange = " + exchange.getCurrency() + ", currencyIndex = " + currencyIndex);
                 cash = exchange.change(exchange.getCurrency(), currencyIndex, cash);
                 exchange.setCurrency(currencyIndex);
 
-                innerBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                innerBuilder.setPositiveButton(getResources()
+                        .getString(R.string.dialog_choose_currency_positive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf((int) cash));
                         Log.d("myLogs", "message = " + exchange.getCurrencySymbol() + String.valueOf(cash));
                         dialog.dismiss();
                     }
@@ -133,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int currency : currencies) {
             switch (currency) {
                 case Exchange.CURRENCY_DOLLARS:
-                    arrayAdapter.add("Доллары");
+                    arrayAdapter.add(getResources().getString(R.string.currency_dollars));
                     break;
                 case Exchange.CURRENCY_RUBLES:
-                    arrayAdapter.add("Рубли");
+                    arrayAdapter.add(getResources().getString(R.string.currency_rubles));
                     break;
                 case Exchange.CURRENCY_POUNDS:
-                    arrayAdapter.add("Фунты");
+                    arrayAdapter.add(getResources().getString(R.string.currency_pounds));
                     break;
             }
         }

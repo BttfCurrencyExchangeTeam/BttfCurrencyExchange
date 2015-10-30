@@ -23,7 +23,9 @@
             android:textColor="@color/label_text_color"/>
         <EditText
             android:id="@+id/et_month"
+            android:focusable="false"
             android:background="@drawable/et_background"
+            android:inputType="none"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/et_height"
             android:gravity="center_horizontal"
@@ -57,8 +59,9 @@
             android:textColor="@color/label_text_color"/>
         <EditText
             android:id="@+id/et_day"
+            android:focusable="false"
             android:background="@drawable/et_background"
-            android:inputType="number"
+            android:inputType="none"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/et_height"
             android:gravity="center_horizontal"
@@ -92,8 +95,9 @@
             android:textColor="@color/label_text_color"/>
         <EditText
             android:id="@+id/et_year"
+            android:focusable="false"
             android:background="@drawable/et_background"
-            android:inputType="number"
+            android:inputType="none"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/et_height"
             android:gravity="center_horizontal"
@@ -129,8 +133,9 @@
             android:textColor="@color/label_text_color"/>
         <EditText
             android:id="@+id/et_hour"
+            android:focusable="false"
             android:background="@drawable/et_background"
-            android:inputType="number"
+            android:inputType="none"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/et_height"
             android:gravity="center_horizontal"
@@ -164,8 +169,9 @@
             android:textColor="@color/label_text_color"/>
         <EditText
             android:id="@+id/et_minute"
+            android:focusable="false"
             android:background="@drawable/et_background"
-            android:inputType="number"
+            android:inputType="none"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/et_height"
             android:gravity="center_horizontal"

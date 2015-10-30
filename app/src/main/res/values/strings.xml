@@ -8,4 +8,27 @@
         <item>1985</item>
         <item>2015</item>
     </string-array>
+
+    <string-array name="months">
+        <item>JAN</item>
+        <item>FEB</item>
+        <item>MAR</item>
+        <item>APR</item>
+        <item>MAY</item>
+        <item>JUN</item>
+        <item>JUL</item>
+        <item>AUG</item>
+        <item>SEP</item>
+        <item>OCT</item>
+        <item>NOV</item>
+        <item>DEC</item>
+    </string-array>
+
+    <string name="dialog_choose_currency_title">Выберите валюту</string>
+    <string name="dialog_choose_currency_positive">ОК</string>
+    <string name="dialog_choose_currency_negative">Отмера</string>
+
+    <string name="currency_dollars">Доллары</string>
+    <string name="currency_rubles">Рубли</string>
+    <string name="currency_pounds">Фунты</string>
 </resources>
