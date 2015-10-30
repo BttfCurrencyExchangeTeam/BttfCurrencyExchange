@@ -52,6 +52,10 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
         presentTimePanel.setDate(calendarPresent);
         lastTimeDepartedPanel.setDate(calendarLast);
 
+        destinationTimePanel.setPanelName(R.string.destination_panel_name);
+        presentTimePanel.setPanelName(R.string.present_panel_name);
+        lastTimeDepartedPanel.setPanelName(R.string.last_departure_panel_name);
+
         destinationTimePanel.setOnChangeDateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

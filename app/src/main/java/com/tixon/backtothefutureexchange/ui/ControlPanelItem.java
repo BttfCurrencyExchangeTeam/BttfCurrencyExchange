@@ -3,10 +3,12 @@ package com.tixon.backtothefutureexchange.ui;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.Constants;
 import com.tixon.backtothefutureexchange.R;
@@ -20,6 +22,7 @@ public class ControlPanelItem extends RelativeLayout {
     public static final int RED = 3;
 
     private EditText etMonth, etDay, etYear, etHour, etMinute;
+    private TextView tvPanelName;
 
     private String[] months;
 
@@ -52,6 +55,8 @@ public class ControlPanelItem extends RelativeLayout {
         etHour = (EditText) view.findViewById(R.id.et_hour);
         etMinute = (EditText) view.findViewById(R.id.et_minute);
 
+        tvPanelName = (TextView) view.findViewById(R.id.control_panel_tv_panel_name);
+
         etMonth.setTypeface(Typeface.createFromAsset(getResources().getAssets(), Constants.TYPEFACE_DIGITS));
         etDay.setTypeface(Typeface.createFromAsset(getResources().getAssets(), Constants.TYPEFACE_DIGITS));
         etYear.setTypeface(Typeface.createFromAsset(getResources().getAssets(), Constants.TYPEFACE_DIGITS));
@@ -77,22 +82,27 @@ public class ControlPanelItem extends RelativeLayout {
         }
     }
 
-    public int getYear() {
-        return Integer.parseInt(etYear.getText().toString());
-    }
-
-    public void setYear(int year) {
-        etYear.setText(String.valueOf(year));
+    public void setPanelName(int resId) {
+        tvPanelName.setText(getResources().getString(resId));
     }
 
     public void setDate(Calendar calendar) {
         this.calendar = calendar;
         etMonth.setText(months[calendar.get(Calendar.MONTH)]);
-        etDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        etDay.setText(formatNumber(calendar.get(Calendar.DAY_OF_MONTH)));
         etYear.setText(String.valueOf(calendar.get(Calendar.YEAR)));
 
-        etMinute.setText(String.valueOf(calendar.get(Calendar.MINUTE)));
-        etHour.setText(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+        etMinute.setText(formatNumber(calendar.get(Calendar.MINUTE)));
+        etHour.setText(formatNumber(calendar.get(Calendar.HOUR_OF_DAY)));
+    }
+
+    private String formatNumber(int number) {
+        StringBuilder sb = new StringBuilder();
+        if(number / 10 == 0) {
+            sb.append(0);
+        }
+        sb.append(number);
+        return sb.toString();
     }
 
     public Calendar getDate() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BackToTheFutureExchange</string>
+    <string name="app_name">BTTF: Currency Exchange</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="years">
@@ -31,4 +31,9 @@
     <string name="currency_dollars">Доллары</string>
     <string name="currency_rubles">Рубли</string>
     <string name="currency_pounds">Фунты</string>
+
+    <string name="destination_panel_name">destination time</string>
+    <string name="present_panel_name">present time</string>
+    <string name="last_departure_panel_name">last time departed</string>
+
 </resources>
