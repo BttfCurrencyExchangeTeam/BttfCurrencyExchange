@@ -25,8 +25,8 @@
     </string-array>
 
     <string name="dialog_choose_currency_title">Выберите валюту</string>
-    <string name="dialog_choose_currency_positive">ОК</string>
-    <string name="dialog_choose_currency_negative">Отмера</string>
+    <string name="dialog_choose_currency_positive">Ок</string>
+    <string name="dialog_choose_currency_negative">Отмена</string>
 
     <string name="currency_dollars">Доллары</string>
     <string name="currency_rubles">Рубли</string>

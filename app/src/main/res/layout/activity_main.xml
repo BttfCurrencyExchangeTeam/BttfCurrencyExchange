@@ -65,7 +65,7 @@
 
             <Button
                 android:id="@+id/main_activity_button_travel"
-                android:text="Переместиться"
+                android:text="Переместиться во времени"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
