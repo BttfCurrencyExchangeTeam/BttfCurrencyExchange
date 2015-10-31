@@ -23,7 +23,6 @@ public class ControlPanelItem extends RelativeLayout {
 
     private EditText etMonth, etDay, etYear, etHour, etMinute;
     private TextView tvPanelName;
-
     private String[] months;
 
     private Calendar calendar;

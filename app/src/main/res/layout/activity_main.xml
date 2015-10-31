@@ -27,8 +27,8 @@
 
         <TextView
             android:id="@+id/main_activity_tv_money"
-            tools:text="$1000"
-            android:layout_centerVertical="true"
+            tools:text="$1000.00"
+           android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/et_background"
             android:textSize="@dimen/et_text_size"

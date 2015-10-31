@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Новая игра"
+        android:id="@+id/new_game_b1"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:enabled="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Продолжить"
+        android:id="@+id/continue_b2"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:enabled="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Настройки"
+        android:id="@+id/options_b3"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:enabled="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выход"
+        android:id="@+id/exit_b4"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:enabled="true" />
+</LinearLayout>

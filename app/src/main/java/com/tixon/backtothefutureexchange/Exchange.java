@@ -50,11 +50,11 @@ public class Exchange {
     public String getCurrencySymbol() {
         switch (currency) {
             case CURRENCY_DOLLARS:
-                return "$";
+                return "USD";
             case CURRENCY_POUNDS:
-                return "P";
+                return "ФУНТ";
             case CURRENCY_RUBLES:
-                return "R";
+                return "RUB";
             default: return "";
         }
     }
