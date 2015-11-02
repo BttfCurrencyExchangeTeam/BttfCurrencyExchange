@@ -1,5 +1,10 @@
 package com.tixon.backtothefutureexchange;
 
+import android.util.Log;
+
+import java.util.Calendar;
+import java.util.Random;
+
 /**
  * Created by Tixon
  */
@@ -17,47 +22,19 @@ public class Exchange {
     public static final int YEAR_2015 = 3;
 
     private int currency;
+    private double exchangeRate;
+
+    private boolean wasYearChanged = false;
+    private double savedDollarsRate, savedPoundsRate;
+
+    private Calendar date;
 
     //значения массивов - сколько рублей дают за конкретную валюту
     private double[] dollars, pounds;
     //индекс массива с определённым годом (см. res/values/currencies.xml)
     private int yearIndex;
-
-    public void setCurrency(int currencyIndex) {
-        this.currency = currencyIndex;
-    }
-
-    public int getCurrency() {
-        return this.currency;
-    }
-
-    public int[] getAvailableCurrencies() {
-        int[] availableCurrencies = new int[2];
-        boolean isPassed = false;
-        for(int i = 0; i < availableCurrencies.length; i++) {
-            if(i == currency) {
-                isPassed = true;
-            }
-            if(isPassed) {
-                availableCurrencies[i] = i+1;
-            } else {
-                availableCurrencies[i] = i;
-            }
-        }
-        return availableCurrencies;
-    }
-
-    public String getCurrencySymbol() {
-        switch (currency) {
-            case CURRENCY_DOLLARS:
-                return "USD";
-            case CURRENCY_POUNDS:
-                return "ФУНТ";
-            case CURRENCY_RUBLES:
-                return "RUB";
-            default: return "";
-        }
-    }
+    //указывает необходимость точного курса в конкретный год
+    private boolean isExactRate = false;
 
     public static Exchange getInstance(String[] dollars, String[] pounds) {
         Exchange localInstance = instance;
@@ -76,6 +53,49 @@ public class Exchange {
     private Exchange(String[] dollars, String[] pounds) {
         this.dollars = stringToDoubleArray(dollars);
         this.pounds = stringToDoubleArray(pounds);
+        date = Calendar.getInstance();
+    }
+    //задаёт индекс валюты
+    public void setCurrency(int currencyIndex) {
+        this.currency = currencyIndex;
+    }
+
+    public int getCurrency() {
+        return this.currency;
+    }
+    //возвращает текущий курс
+    public double getExchangeRate() {
+        return exchangeRate;
+    }
+
+    //возвращает список доступных для перевода валют
+    public int[] getAvailableCurrencies() {
+        int[] availableCurrencies = new int[2];
+        boolean isPassed = false;
+        for(int i = 0; i < availableCurrencies.length; i++) {
+            if(i == currency) {
+                isPassed = true;
+            }
+            if(isPassed) {
+                availableCurrencies[i] = i+1;
+            } else {
+                availableCurrencies[i] = i;
+            }
+        }
+        return availableCurrencies;
+    }
+
+    //возвращает сокращённое название валюты
+    public String getCurrencySymbol() {
+        switch (currency) {
+            case CURRENCY_DOLLARS:
+                return "USD ";
+            case CURRENCY_POUNDS:
+                return "GBP ";
+            case CURRENCY_RUBLES:
+                return "RUB ";
+            default: return "";
+        }
     }
 
     //задаёт индекс массива для выбора определённого года
@@ -90,23 +110,89 @@ public class Exchange {
         } else if(year > 1985) {
             this.yearIndex = YEAR_2015;
         }
+        //точный курс валют в определённые года,
+        //в остальные - случайный в пределах точных значений
+        isExactRate = year == 1946 || year == 1955 || year == 1985 || year == 2015;
+    }
+
+    public void setDate(Calendar date) {
+        this.date.setTimeInMillis(date.getTimeInMillis());
+    }
+
+    //возвращает значение валюты в конкретном году
+    private double getCurrencyValue(int currencyIndex) {
+        Random decimalRandom = new Random();
+        Random fractionalRandom = new Random();
+        double minCurrency, maxCurrency, exchangeRate;
+        minCurrency = 0;
+        maxCurrency = 0;
+
+        switch(yearIndex) {
+            case YEAR_1946:
+                break;
+            case YEAR_1955:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1946);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1955);
+                break;
+            case YEAR_1985:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1955);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1985);
+                break;
+            case YEAR_2015:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1985);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_2015);
+                break;
+            default: break;
+        }
+        //select min currency
+        if(minCurrency > maxCurrency) {
+            exchangeRate = minCurrency;
+            minCurrency = maxCurrency;
+            maxCurrency = exchangeRate;
+        }
+        Log.d("myLogs", "minCurrency = " + minCurrency + ", maxCurrency = " + maxCurrency);
+        if(isExactRate) {
+            exchangeRate = maxCurrency;
+        } else {
+            exchangeRate = decimalRandom.nextInt((int) maxCurrency + 1) + minCurrency;
+            exchangeRate += (fractionalRandom.nextInt(1001) / 1000d);
+        }
+        Log.d("myLogs", "course = " + exchangeRate);
+        this.exchangeRate = exchangeRate;
+        return exchangeRate;
+    }
+
+    private double getCurrencyByIndexAndYear(int currencyIndex, int yearIndex) {
+        double result = 0;
+        switch(currencyIndex) {
+            case CURRENCY_DOLLARS:
+                result = dollars[yearIndex];
+                break;
+            case CURRENCY_POUNDS:
+                result = pounds[yearIndex];
+                break;
+            default: break;
+        }
+        return result;
     }
 
     //методы преобразования валют
+
     private double rublesFromDollars(double currency) {
-        return dollars[yearIndex] * currency;
+        //return dollars[yearIndex] * currency;
+        return getCurrencyValue(CURRENCY_DOLLARS) * currency;
     }
 
     private double rublesFromPounds(double currency) {
-        return pounds[yearIndex] * currency;
+        return getCurrencyValue(CURRENCY_POUNDS) * currency;
     }
 
     private double dollarsFromRubles(double currency) {
-        return (1/dollars[yearIndex]) * currency;
+        return (1/getCurrencyValue(CURRENCY_DOLLARS)) * currency;
     }
 
     private double poundsFromRubles(double currency) {
-        return (1/pounds[yearIndex]) * currency;
+        return (1/getCurrencyValue(CURRENCY_POUNDS)) * currency;
     }
 
     //доллар - рубль - фунт
@@ -131,7 +217,8 @@ public class Exchange {
     }
 
     public double change(int from, int to, double value) {
-        double result = 0;
+        double result = value; //чтобы в случае перевода, например, из долларов в доллары,
+        //как в случае с покупкой плутония, не получился ноль
         if(from == CURRENCY_DOLLARS && to == CURRENCY_RUBLES) {
             result = rublesFromDollars(value);
         } else if(from == CURRENCY_DOLLARS && to == CURRENCY_POUNDS) {

@@ -19,7 +19,8 @@
         </activity>
 
         <activity
-            android:name=".ControlPanelActivity" />
+            android:name=".ControlPanelActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

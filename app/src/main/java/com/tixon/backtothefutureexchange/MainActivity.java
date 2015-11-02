@@ -14,7 +14,8 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements
+        View.OnClickListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -23,9 +24,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Calendar calendarPresent, calendarLast;
 
-    private double cash;
+    private OnAddPlutoniumListener onAddPlutoniumListener;
 
-    Exchange exchange;
+    private double cash;
+    private Delorean delorean;
+    private Exchange exchange;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         calendar.setTimeInMillis(System.currentTimeMillis());
 
+        delorean = Delorean.getDelorean();
+
         exchange = Exchange.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
         exchange.setYearIndex(calendar.get(Calendar.YEAR));
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cash = 1000;
         exchange.setCurrency(Exchange.CURRENCY_DOLLARS);
         tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf(cash));
+    }
+
+    public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
+        this.onAddPlutoniumListener = onAddPlutoniumListener;
     }
 
     private void initViews() {
@@ -135,10 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.dismiss();
                     }
                 });
-                innerBuilder.setMessage(exchange.getCurrencySymbol() + String.valueOf(cash));
+                innerBuilder.setMessage(exchange.getCurrencySymbol() + String.valueOf(exchange.getExchangeRate()));
                 innerBuilder.show();
             }
         });
+        myBuilder.setCancelable(false);
         myBuilder.show();
     }
 
@@ -158,4 +168,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+    //вычесть из баланса долларовый эквивалент цены за количество плутония
+    //cash -= count * exchange.change(Exchange.CURRENCY_DOLLARS, exchange.getCurrency(), 10000);
 }

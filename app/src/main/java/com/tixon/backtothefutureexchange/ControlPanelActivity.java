@@ -14,12 +14,21 @@ import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
 
 import java.util.Calendar;
 
-public class ControlPanelActivity extends AppCompatActivity implements View.OnClickListener {
+public class ControlPanelActivity extends AppCompatActivity implements
+        View.OnClickListener {
 
     private ControlPanelItem destinationTimePanel, presentTimePanel, lastTimeDepartedPanel;
     private Button bTravel;
 
     private Calendar calendarPresent, calendarLast;
+
+    private Delorean delorean;
+
+    private OnTimeTravelListener onTimeTravelListener;
+
+    public void setOnTimeTravelListener(OnTimeTravelListener onTimeTravelListener) {
+        this.onTimeTravelListener = onTimeTravelListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +37,8 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
+
+        delorean = Delorean.getDelorean();
 
         Intent fromMainActivity = getIntent();
 
@@ -77,6 +88,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
             case R.id.control_panel_button_travel:
                 Intent intent = new Intent();
                 intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate().getTimeInMillis());
+                onTimeTravelListener.onTimeTraveled();
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
@@ -100,6 +112,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
         DatePickerDialog dialog = new DatePickerDialog(ControlPanelActivity.this,
                 mDateSetListener, year, month, day);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -120,6 +133,7 @@ public class ControlPanelActivity extends AppCompatActivity implements View.OnCl
 
         TimePickerDialog dialog = new TimePickerDialog(ControlPanelActivity.this,
                 mTimeSetListener, hour, minute, true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 }
