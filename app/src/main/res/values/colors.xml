@@ -16,4 +16,5 @@
     <color name="label_text_color">#efefef</color>
     <color name="grey_label_background_color">#343434</color>
     <color name="grey_label_text_color">#efefef</color>
+    <color name="main_menu_color">#001fe2</color>
 </resources>
