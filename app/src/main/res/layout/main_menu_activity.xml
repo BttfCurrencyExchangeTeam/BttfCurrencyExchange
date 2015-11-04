@@ -9,71 +9,64 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/new_game_b1"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/continue_b2"
-            android:layout_alignLeft="@+id/continue_b2"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/continue_b2"
-            android:layout_alignStart="@+id/continue_b2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="200dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:text="Новая игра"
-            android:textColor="@color/main_menu_color" />
-
-        <Button
             android:id="@+id/continue_b2"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/new_game_b1"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:enabled="true"
             android:text="Продолжить"
-            android:textColor="@color/main_menu_color" />
+            android:textColor="@color/main_menu_color"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/new_game_b1"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:enabled="true"
+            android:text="Новая игра"
+            android:textColor="@color/main_menu_color"
+            android:layout_below="@+id/continue_b2"
+            android:layout_alignLeft="@+id/continue_b2"
+            android:layout_alignStart="@+id/continue_b2" />
 
         <Button
             android:id="@+id/options_b3"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/continue_b2"
-            android:layout_alignLeft="@+id/continue_b2"
-            android:layout_alignRight="@+id/continue_b2"
-            android:layout_alignStart="@+id/continue_b2"
-            android:layout_below="@+id/continue_b2"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:enabled="true"
             android:text="Настройки"
-            android:textColor="@color/main_menu_color" />
+            android:textColor="@color/main_menu_color"
+            android:layout_below="@+id/new_game_b1"
+            android:layout_alignLeft="@+id/exit_b4"
+            android:layout_alignStart="@+id/exit_b4" />
 
         <Button
             android:id="@+id/exit_b4"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/options_b3"
-            android:layout_alignLeft="@+id/options_b3"
-            android:layout_alignRight="@+id/options_b3"
-            android:layout_alignStart="@+id/options_b3"
-            android:layout_below="@+id/options_b3"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:contextClickable="false"
             android:enabled="true"
             android:text="Выход"
-            android:textColor="@color/main_menu_color" />
+            android:textColor="@color/main_menu_color"
+            android:layout_below="@+id/options_b3"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/main_menu"
+
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/main_menu" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </LinearLayout>
