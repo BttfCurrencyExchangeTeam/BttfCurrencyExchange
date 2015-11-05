@@ -1,72 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/continue_b2"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:enabled="true"
-            android:text="Продолжить"
-            android:textColor="@color/main_menu_color"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/new_game_b1"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:enabled="true"
-            android:text="Новая игра"
-            android:textColor="@color/main_menu_color"
-            android:layout_below="@+id/continue_b2"
-            android:layout_alignLeft="@+id/continue_b2"
-            android:layout_alignStart="@+id/continue_b2" />
-
-        <Button
-            android:id="@+id/options_b3"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:enabled="true"
-            android:text="Настройки"
-            android:textColor="@color/main_menu_color"
-            android:layout_below="@+id/new_game_b1"
-            android:layout_alignLeft="@+id/exit_b4"
-            android:layout_alignStart="@+id/exit_b4" />
-
-        <Button
-            android:id="@+id/exit_b4"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:contextClickable="false"
-            android:enabled="true"
-            android:text="Выход"
-            android:textColor="@color/main_menu_color"
-            android:layout_below="@+id/options_b3"
-            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/main_menu"
-
             android:layout_alignParentBottom="true"
+
+            android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/main_menu" />
+
+        <TextView
+
+            android:id="@+id/ng1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Новая игра"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/main_menu_color"
+            android:textSize="36sp" />
+
+        <TextView
+
+            android:id="@+id/ct2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ng1"
+            android:layout_centerHorizontal="true"
+            android:text="Продолжить"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/main_menu_color"
+            android:textSize="36sp" />
+
+        <TextView
+            android:id="@+id/op3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ct2"
+            android:layout_centerHorizontal="true"
+            android:text="Настройки"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/main_menu_color"
+            android:textSize="36sp" />
+
+        <TextView
+
+            android:id="@+id/ex4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/op3"
+            android:layout_centerHorizontal="true"
+            android:text="Выход"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/main_menu_color"
+            android:textSize="36sp" />
+
     </RelativeLayout>
 </LinearLayout>
