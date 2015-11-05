@@ -17,8 +17,7 @@
             android:layout_alignParentBottom="true"
 
             android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/main_menu" />
+            android:layout_alignParentRight="true"/>
 
         <TextView
 
