@@ -1,5 +1,6 @@
 package com.tixon.backtothefutureexchange;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -24,11 +25,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
     private Delorean delorean;
 
-    private OnTimeTravelListener onTimeTravelListener;
-
-    public void setOnTimeTravelListener(OnTimeTravelListener onTimeTravelListener) {
-        this.onTimeTravelListener = onTimeTravelListener;
-    }
+    private Bank bank = Bank.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +41,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
         calendarPresent.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_PRESENT, System.currentTimeMillis()));
         calendarLast.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
+
         initPanel();
     }
 
@@ -87,8 +85,18 @@ public class ControlPanelActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.control_panel_button_travel:
                 Intent intent = new Intent();
-                intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate().getTimeInMillis());
-                onTimeTravelListener.onTimeTraveled();
+                intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate()
+                        .getTimeInMillis());
+                int destinationMonth, presentMonth, destinationYear, presentYear;
+                destinationMonth = destinationTimePanel.getDate().get(Calendar.MONTH);
+                presentMonth = presentTimePanel.getDate().get(Calendar.MONTH);
+                destinationYear = destinationTimePanel.getDate().get(Calendar.YEAR);
+                presentYear = presentTimePanel.getDate().get(Calendar.YEAR);
+                //чтобы курс изменился, необходимо переместиться по крайней мере на месяц во времени
+                if(Math.abs(destinationMonth - presentMonth) >= 1
+                        || Math.abs(destinationYear - presentYear) >= 1) {
+                    bank.notifyYearChanged();
+                }
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
