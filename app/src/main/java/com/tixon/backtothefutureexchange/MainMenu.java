@@ -1,35 +1,40 @@
 package com.tixon.backtothefutureexchange;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity implements View.OnClickListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        TextView tv1 = (TextView) findViewById(R.id.new_game);
+        TextView new_game = (TextView) findViewById(R.id.new_game);
         Typeface face1 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
-        tv1.setTypeface(face1);
+        new_game.setTypeface(face1);
 
-        TextView tv2 = (TextView) findViewById(R.id.continue_);
+        TextView _continue_ = (TextView) findViewById(R.id.continue_);
         Typeface face2 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
-        tv2.setTypeface(face2);
+        _continue_.setTypeface(face2);
 
-        TextView tv3 = (TextView) findViewById(R.id.options_);
+        TextView _options_ = (TextView) findViewById(R.id.options_);
         Typeface face3 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
-        tv3.setTypeface(face3);
+        _options_.setTypeface(face3);
 
-        TextView tv4 = (TextView) findViewById(R.id.exit_);
+        TextView _exit_ = (TextView) findViewById(R.id.exit_);
         Typeface face4 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
-        tv4.setTypeface(face4);
+        _exit_.setTypeface(face4);
 
+        new_game.setOnClickListener(this);
+        _exit_.setOnClickListener(this);
     }
 
     @Override
@@ -52,5 +57,22 @@ public class MainMenu extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.new_game:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+
+            case R.id.exit_:
+                System.exit(0);
+
+        }
+
     }
 }
