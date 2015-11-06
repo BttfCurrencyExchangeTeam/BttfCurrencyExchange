@@ -1,13 +1,16 @@
 package com.tixon.backtothefutureexchange.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 
 import com.tixon.backtothefutureexchange.Constants;
+import com.tixon.backtothefutureexchange.MainActivity;
 import com.tixon.backtothefutureexchange.R;
 
 public class MainMenu extends AppCompatActivity {
@@ -33,5 +36,16 @@ public class MainMenu extends AppCompatActivity {
         TextView tv3 = (TextView) findViewById(R.id.ex4);
         Typeface face3 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
         tv3.setTypeface(face3);
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startMainActivity = new Intent(MainMenu.this, MainActivity.class);
+            }
+        });
+        setContentView(R.layout.main_menu_activity);
+
     }
+
+
 }
