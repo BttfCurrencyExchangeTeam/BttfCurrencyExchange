@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Новая игра"
+            android:text="NEW GAME"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
             android:textSize="36sp" />
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ng1"
             android:layout_centerHorizontal="true"
-            android:text="Продолжить"
+            android:text="CONTINUE"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
             android:textSize="36sp" />
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ct2"
             android:layout_centerHorizontal="true"
-            android:text="Настройки"
+            android:text="OPTIONS"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
             android:textSize="36sp" />
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/op3"
             android:layout_centerHorizontal="true"
-            android:text="Выход"
+            android:text="EXIT"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
             android:textSize="36sp" />
