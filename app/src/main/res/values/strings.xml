@@ -35,5 +35,13 @@
     <string name="destination_panel_name">destination time</string>
     <string name="present_panel_name">present time</string>
     <string name="last_departure_panel_name">last time departed</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="BTTFCurrencyExchange">BTTF: Currency Exchange</string>
+    <string name="new_game">New Game</string>
+    <string name="_continue">Continue</string>
+    <string name="_options">Options</string>
+    <string name="_exit">Exit</string>
 
 </resources>

@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bttf"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.tixon.backtothefutureexchange.MainMenu">
+
+    <TextView
+        android:id="@+id/new_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="240dp"
+        android:text="@string/new_game"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/main_menu_color"
+        android:textSize="42sp" />
+
+    <TextView
+        android:id="@+id/continue_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/new_game"
+        android:layout_centerHorizontal="true"
+        android:text="@string/_continue"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/main_menu_color"
+        android:textSize="42sp" />
+
+    <TextView
+        android:id="@+id/options_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/continue_"
+        android:layout_centerHorizontal="true"
+        android:text="@string/_options"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/main_menu_color"
+        android:textSize="42sp" />
+
+    <TextView
+        android:id="@+id/exit_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/options_"
+        android:layout_centerHorizontal="true"
+        android:text="@string/_exit"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/main_menu_color"
+        android:textSize="42sp" />
+
+</RelativeLayout>
