@@ -72,6 +72,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
             case R.id.exit_:
                 System.exit(0);
 
+
         }
 
     }
