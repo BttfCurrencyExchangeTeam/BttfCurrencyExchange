@@ -2,6 +2,7 @@ package com.tixon.backtothefutureexchange;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +12,16 @@ import android.widget.TextView;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener {
 
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.main);
+
+        mediaPlayer.start();
 
         TextView new_game = (TextView) findViewById(R.id.new_game);
         Typeface face1 = Typeface.createFromAsset(getAssets(), "ds_digit_font.ttf");
