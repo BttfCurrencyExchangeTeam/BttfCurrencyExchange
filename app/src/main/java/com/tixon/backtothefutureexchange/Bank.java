@@ -8,9 +8,9 @@ import java.util.Random;
 /**
  * Created by Tixon
  */
-public class Exchange {
+public class Bank {
 
-    private static volatile Exchange instance;
+    private static volatile Bank instance;
 
     public static final int CURRENCY_RUBLES = 0;
     public static final int CURRENCY_DOLLARS = 1;
@@ -36,21 +36,21 @@ public class Exchange {
     //указывает необходимость точного курса в конкретный год
     private boolean isExactRate = false;
 
-    public static Exchange getInstance(String[] dollars, String[] pounds) {
-        Exchange localInstance = instance;
+    public static Bank getInstance(String[] dollars, String[] pounds) {
+        Bank localInstance = instance;
 
         if(localInstance == null) {
-            synchronized (Exchange.class) {
+            synchronized (Bank.class) {
                 localInstance = instance;
                 if(localInstance == null) {
-                    localInstance = instance = new Exchange(dollars, pounds);
+                    localInstance = instance = new Bank(dollars, pounds);
                 }
             }
         }
         return localInstance;
     }
 
-    private Exchange(String[] dollars, String[] pounds) {
+    private Bank(String[] dollars, String[] pounds) {
         this.dollars = stringToDoubleArray(dollars);
         this.pounds = stringToDoubleArray(pounds);
         date = Calendar.getInstance();

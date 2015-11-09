@@ -27,8 +27,10 @@ public class MainActivity extends AppCompatActivity implements
     private OnAddPlutoniumListener onAddPlutoniumListener;
 
     private double cash;
+    Purse purse;
+
     private Delorean delorean;
-    private Exchange exchange;
+    private Bank bank;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +44,20 @@ public class MainActivity extends AppCompatActivity implements
 
         delorean = Delorean.getDelorean();
 
-        exchange = Exchange.getInstance(getResources().getStringArray(R.array.dollars),
+        bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
-        exchange.setYearIndex(calendar.get(Calendar.YEAR));
+        bank.setYearIndex(calendar.get(Calendar.YEAR));
 
         calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
         initViews();
 
         cash = 1000;
-        exchange.setCurrency(Exchange.CURRENCY_DOLLARS);
-        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf(cash));
+
+        purse = Purse.getInstance();
+        purse.setDollars(1000);
+
+        bank.setCurrency(Bank.CURRENCY_DOLLARS);
+        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(cash));
     }
 
     public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements
             switch (requestCode) {
                 case Constants.REQUEST_CODE_TRAVEL:
                     calendarPresent.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
-                    exchange.setYearIndex(calendarPresent.get(Calendar.YEAR));
+                    bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
                     tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
@@ -129,22 +135,33 @@ public class MainActivity extends AppCompatActivity implements
         myBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final int currencyIndex = exchange.getAvailableCurrencies()[which];
+                final int currencyIndex = bank.getAvailableCurrencies()[which];
                 AlertDialog.Builder innerBuilder = new AlertDialog.Builder(MainActivity.this);
-                Log.d("myLogs", "from exchange = " + exchange.getCurrency() + ", currencyIndex = " + currencyIndex);
-                cash = exchange.change(exchange.getCurrency(), currencyIndex, cash);
-                exchange.setCurrency(currencyIndex);
+                Log.d("myLogs", "from bank = " + bank.getCurrency() + ", currencyIndex = " + currencyIndex);
+                //cash = bank.change(bank.getCurrency(), currencyIndex, cash);
+                //purse.add(bank.change(bank.getCurrency(), currencyIndex, cash),
+                //        currencyIndex, calendarPresent.get(Calendar.YEAR));
+                purse.change(bank, currencyIndex, calendarPresent.get(Calendar.YEAR), 900);
+
+                bank.setCurrency(currencyIndex);
 
                 innerBuilder.setPositiveButton(getResources()
                         .getString(R.string.dialog_choose_currency_positive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        tvMoney.setText(exchange.getCurrencySymbol() + String.valueOf((int) cash));
-                        Log.d("myLogs", "message = " + exchange.getCurrencySymbol() + String.valueOf(cash));
+
+                        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
+                                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
+
+
+                        Log.d("myLogs", "message = " + bank.getCurrencySymbol() +
+                                String.valueOf(purse.getMoney(bank.getCurrency(),
+                                        calendarPresent.get(Calendar.YEAR))));
+
                         dialog.dismiss();
                     }
                 });
-                innerBuilder.setMessage(exchange.getCurrencySymbol() + String.valueOf(exchange.getExchangeRate()));
+                innerBuilder.setMessage(bank.getCurrencySymbol() + String.valueOf(bank.getExchangeRate()));
                 innerBuilder.show();
             }
         });
@@ -153,21 +170,21 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setArrayAdapter(ArrayAdapter<String> arrayAdapter) {
-        int[] currencies = exchange.getAvailableCurrencies();
+        int[] currencies = bank.getAvailableCurrencies();
         for (int currency : currencies) {
             switch (currency) {
-                case Exchange.CURRENCY_DOLLARS:
+                case Bank.CURRENCY_DOLLARS:
                     arrayAdapter.add(getResources().getString(R.string.currency_dollars));
                     break;
-                case Exchange.CURRENCY_RUBLES:
+                case Bank.CURRENCY_RUBLES:
                     arrayAdapter.add(getResources().getString(R.string.currency_rubles));
                     break;
-                case Exchange.CURRENCY_POUNDS:
+                case Bank.CURRENCY_POUNDS:
                     arrayAdapter.add(getResources().getString(R.string.currency_pounds));
                     break;
             }
         }
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
-    //cash -= count * exchange.change(Exchange.CURRENCY_DOLLARS, exchange.getCurrency(), 10000);
+    //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);
 }

@@ -15,4 +15,6 @@
 
     <dimen name="tv_menu_margin_vertical">5dp</dimen>
     <dimen name="iv_name_margin_top">24dp</dimen>
+
+    <dimen name="currencies_recycler_item_height">72dp</dimen>
 </resources>

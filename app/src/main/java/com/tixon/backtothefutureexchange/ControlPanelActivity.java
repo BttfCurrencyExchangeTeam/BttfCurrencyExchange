@@ -24,12 +24,6 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
     private Delorean delorean;
 
-    private OnTimeTravelListener onTimeTravelListener;
-
-    public void setOnTimeTravelListener(OnTimeTravelListener onTimeTravelListener) {
-        this.onTimeTravelListener = onTimeTravelListener;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
