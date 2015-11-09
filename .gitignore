@@ -1,7 +1,9 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+#Игнорирование всей папки .idea
+/.idea/*
+#Игнорирование файлов .iml
+/**/*.iml
 .DS_Store
 /build
 /captures
