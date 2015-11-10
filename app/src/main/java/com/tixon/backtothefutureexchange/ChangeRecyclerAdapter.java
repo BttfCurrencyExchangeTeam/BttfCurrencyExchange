@@ -60,7 +60,6 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
 
         setFragmentData(fragment);
         fragment.setCurrencyTo(availableCurrencies[selectedPosition]);
-//        onItemCheckedListener.onChange(availableCurrencies[selectedPosition]);
     }
 
     @Override
@@ -110,12 +109,12 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
             Log.d("myLogs", "change item clicked: " + position + ", currency = " + currencies.get(position));
             selectedPosition = position;
             Log.d("myLogs", "year = " + year + ", money = " + purse.getMoney(currencyIndex, year));
-            //setFragmentData(fragment);
             onItemCheckedListener.onChange(availableCurrencies[position]);
             notifyDataSetChanged();
         }
     }
 
+    //устанавливает в FragmentChange для seekBar и textView значения, полученные здесь
     private void setFragmentData(FragmentChange fragment) {
         fragment.seekBar.setMax((int) purse.getMoney(currencyIndex, year));
         fragment.seekBar.setProgress(fragment.seekBar.getMax());

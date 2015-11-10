@@ -30,6 +30,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
     private int moneyToExchange;
     private int currencyTo;
 
+    //onMoneyChangedListener запускается отсюда и действует в MainActivity
     private OnMoneyChangedListener onMoneyChangedListener;
 
     public void setOnMoneyChangedListener(OnMoneyChangedListener listener) {
@@ -56,6 +57,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
                 bank.getCurrency(), calendar.get(Calendar.YEAR), purse);
         adapter.setOnItemCheckedListener(this); //назначение слушателя изменения валюты
 
+        //инициализация recyclerView
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
@@ -64,6 +66,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textView.setText(String.valueOf(progress));
+                //выбранный диапазон денег присваивается переменной moneyToExchange
                 moneyToExchange = progress;
             }
 
@@ -81,16 +84,30 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
         buttonChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**
+                 * обмен валюты
+                 * currencyTo - индекс валюты, в которую меняются деньги
+                 * все индексы валют
+                 * @see Bank#CURRENCY_RUBLES
+                 * @see Bank#CURRENCY_DOLLARS
+                 * @see Bank#CURRENCY_POUNDS
+                 */
                 purse.change(bank, currencyTo, calendar.get(Calendar.YEAR),
                         (double) moneyToExchange);
+                //банк переходит на выбранную валюту для последующих обменов
                 bank.setCurrency(currencyTo);
                 onMoneyChangedListener.onMoneyChanged();
+                //закрытие фрагмента обмена путём очистки backStack
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         return v;
     }
 
+    /**
+     * вызывается при изменении валюты
+     * @see ChangeRecyclerAdapter
+     */
     @Override
     public void onChange(int currencyTo) {
         this.currencyTo = currencyTo;
