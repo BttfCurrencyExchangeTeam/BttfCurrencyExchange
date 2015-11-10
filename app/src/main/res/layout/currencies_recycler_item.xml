@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/currencies_recycler_item_height">
+    android:layout_height="@dimen/currencies_recycler_item_height"
+    android:id="@+id/currencies_recycler_item_frame">
     <ImageView
         android:id="@+id/currencies_recycler_item_imageView"
         android:layout_width="@dimen/currencies_recycler_item_height"

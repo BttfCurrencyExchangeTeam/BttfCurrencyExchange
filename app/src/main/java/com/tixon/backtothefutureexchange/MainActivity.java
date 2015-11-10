@@ -10,15 +10,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements
-        View.OnClickListener {
+        View.OnClickListener, OnMoneyChangedListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
+    FrameLayout container;
 
     Calendar calendar;
 
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private OnAddPlutoniumListener onAddPlutoniumListener;
 
-    private double cash;
+    private FragmentChange fragmentChange;
+
     Purse purse;
 
     private Delorean delorean;
@@ -51,13 +54,14 @@ public class MainActivity extends AppCompatActivity implements
         calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
         initViews();
 
-        cash = 1000;
-
         purse = Purse.getInstance();
         purse.setDollars(1000);
 
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
-        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(cash));
+        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
+                calendarPresent.get(Calendar.YEAR))));
+
+        fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
     }
 
     public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initViews() {
+        container = (FrameLayout) findViewById(R.id.main_container);
+
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);
 
@@ -118,72 +124,24 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void showExchangeDialog() {
-        AlertDialog.Builder myBuilder = new AlertDialog.Builder(MainActivity.this);
-        myBuilder.setTitle(getResources().getString(R.string.dialog_choose_currency_title));
+        fragmentChange.setOnMoneyChangedListener(this);
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice);
-        setArrayAdapter(arrayAdapter);
-
-        myBuilder.setNegativeButton(getResources()
-                .getString(R.string.dialog_choose_currency_negative), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        myBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final int currencyIndex = bank.getAvailableCurrencies()[which];
-                AlertDialog.Builder innerBuilder = new AlertDialog.Builder(MainActivity.this);
-                Log.d("myLogs", "from bank = " + bank.getCurrency() + ", currencyIndex = " + currencyIndex);
-                //cash = bank.change(bank.getCurrency(), currencyIndex, cash);
-                //purse.add(bank.change(bank.getCurrency(), currencyIndex, cash),
-                //        currencyIndex, calendarPresent.get(Calendar.YEAR));
-                purse.change(bank, currencyIndex, calendarPresent.get(Calendar.YEAR), 900);
-
-                bank.setCurrency(currencyIndex);
-
-                innerBuilder.setPositiveButton(getResources()
-                        .getString(R.string.dialog_choose_currency_positive), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
-                                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
-
-
-                        Log.d("myLogs", "message = " + bank.getCurrencySymbol() +
-                                String.valueOf(purse.getMoney(bank.getCurrency(),
-                                        calendarPresent.get(Calendar.YEAR))));
-
-                        dialog.dismiss();
-                    }
-                });
-                innerBuilder.setMessage(bank.getCurrencySymbol() + String.valueOf(bank.getExchangeRate()));
-                innerBuilder.show();
-            }
-        });
-        myBuilder.setCancelable(false);
-        myBuilder.show();
+        try {
+            getSupportFragmentManager().beginTransaction().add(R.id.main_container,
+                    fragmentChange)
+                    .addToBackStack("CHANGE_FRAGMENT")
+                    .commit();
+        } catch (Exception e) {
+            Log.e("myLogs", "FragmentChange adding error: " + e.toString() +
+                    "; see stackTrace below");
+            e.printStackTrace();
+        }
     }
 
-    private void setArrayAdapter(ArrayAdapter<String> arrayAdapter) {
-        int[] currencies = bank.getAvailableCurrencies();
-        for (int currency : currencies) {
-            switch (currency) {
-                case Bank.CURRENCY_DOLLARS:
-                    arrayAdapter.add(getResources().getString(R.string.currency_dollars));
-                    break;
-                case Bank.CURRENCY_RUBLES:
-                    arrayAdapter.add(getResources().getString(R.string.currency_rubles));
-                    break;
-                case Bank.CURRENCY_POUNDS:
-                    arrayAdapter.add(getResources().getString(R.string.currency_pounds));
-                    break;
-            }
-        }
+    @Override
+    public void onMoneyChanged() {
+        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
+                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);

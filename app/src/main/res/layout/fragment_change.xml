@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="#ffffff"
     android:gravity="bottom"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_change_recycler_view"
+        android:layout_above="@+id/fragment_change_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="144dp"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/fragment_change_text_view"
+        tools:text="1000"
+        android:layout_above="@+id/fragment_change_seek_bar"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/fragment_change_seek_bar"
+        android:layout_above="@+id/fragment_change_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/fragment_change_button"
+        android:layout_alignParentBottom="true"
+        android:text="обменять"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
