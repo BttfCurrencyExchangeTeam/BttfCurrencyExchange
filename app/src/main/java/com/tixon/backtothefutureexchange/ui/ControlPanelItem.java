@@ -21,9 +21,15 @@ public class ControlPanelItem extends RelativeLayout {
     public static final int YELLOW = 2;
     public static final int RED = 3;
 
+    public static final int DESTINATION_TIME = 0;
+    public static final int PRESENT_TIME = 1;
+    public static final int LAST_TIME_DEPARTED = 2;
+
     private EditText etMonth, etDay, etYear, etHour, etMinute;
     private TextView tvPanelName;
     private String[] months;
+    private String[] timeTypes;
+    private int[] colors;
 
     private Calendar calendar;
 
@@ -47,6 +53,8 @@ public class ControlPanelItem extends RelativeLayout {
         RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.control_panel, this, true);
 
         months = getResources().getStringArray(R.array.months);
+        timeTypes = getResources().getStringArray(R.array.time_types);
+        colors = getResources().getIntArray(R.array.panel_colors);
 
         etMonth = (EditText) view.findViewById(R.id.et_month);
         etDay = (EditText) view.findViewById(R.id.et_day);
@@ -63,26 +71,13 @@ public class ControlPanelItem extends RelativeLayout {
         etMinute.setTypeface(Typeface.createFromAsset(getResources().getAssets(), Constants.TYPEFACE_DIGITS));
     }
 
-    public void setTextColor(int colorIndex) {
-        switch (colorIndex) {
-            case GREEN:
-                //set green
-                setColorForEditTexts(getResources().getColor(R.color.green));
-                break;
-            case YELLOW:
-                //set yellow
-                setColorForEditTexts(getResources().getColor(R.color.yellow));
-                break;
-            case RED:
-                //set red
-                setColorForEditTexts(getResources().getColor(R.color.red));
-                break;
-            default: break;
-        }
-    }
-
-    public void setPanelName(int resId) {
-        tvPanelName.setText(getResources().getString(resId));
+    /**
+     *
+     * @param timeType: номер панели (настоящее, предполагаемое, последнее посещённое время)
+     */
+    public void setPanelType(int timeType) {
+        tvPanelName.setText(timeTypes[timeType]);
+        setColorForEditTexts(colors[timeType]);
     }
 
     public void setDate(Calendar calendar) {

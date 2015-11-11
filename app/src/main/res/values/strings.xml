@@ -24,6 +24,12 @@
         <item>DEC</item>
     </string-array>
 
+    <string-array name="time_types">
+        <item>destination time</item>
+        <item>present time</item>
+        <item>last time departed</item>
+    </string-array>
+
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>

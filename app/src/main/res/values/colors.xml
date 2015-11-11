@@ -8,6 +8,12 @@
     <color name="yellow">#f7b760</color>
     <color name="red">#ff6203</color>
 
+    <array name="panel_colors">
+        <item>#63f759</item>
+        <item>#f7b760</item>
+        <item>#ff6203</item>
+    </array>
+
     <color name="et_background_color">#343434</color>
     <color name="et_stroke_color">#777777</color>
     <color name="panel_background_color">#9a9a9a</color>

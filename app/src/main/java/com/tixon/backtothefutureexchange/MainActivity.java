@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
+
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements
@@ -21,19 +23,17 @@ public class MainActivity extends AppCompatActivity implements
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
     FrameLayout container;
+    ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
+    private FragmentChange fragmentChange;
 
-    Calendar calendar;
-
-    private Calendar calendarPresent, calendarLast;
+    private Calendar calendar, calendarPresent, calendarLast;
 
     private OnAddPlutoniumListener onAddPlutoniumListener;
 
-    private FragmentChange fragmentChange;
-
-    Purse purse;
-
+    private Purse purse;
     private Delorean delorean;
     private Bank bank;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
+
+        mainPresentTimePanel = (ControlPanelItem) findViewById(R.id.main_activity_present_panel);
+        mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
+        mainPresentTimePanel.setDate(calendarPresent);
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);

@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
             android:padding="4dp"
+            android:layout_alignParentTop="true"
+            android:id="@+id/main_toolbar"
             android:background="@color/panel_background_color"
             android:layout_width="match_parent"
             android:layout_height="56dp">
@@ -43,9 +45,36 @@
                 android:textColor="@color/green" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <ScrollView
+            android:id="@+id/main_scroll_view"
+            android:layout_below="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <!--include layout="@layout/main_content"/-->
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.tixon.backtothefutureexchange.ui.ControlPanelItem
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_activity_present_panel"/>
+
+                <include layout="@layout/purse_header_layout"/>
+
+                <include layout="@layout/purse_items_layout"/>
+            </LinearLayout>
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/main_buttons_layout"
+            android:layout_alignParentBottom="true">
             <ImageView
                 android:id="@+id/main_activity_iv_background"
                 android:layout_width="match_parent"
@@ -77,6 +106,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -49,17 +49,14 @@ public class ControlPanelActivity extends AppCompatActivity implements
         bTravel = (Button) findViewById(R.id.control_panel_button_travel);
         bTravel.setOnClickListener(this);
 
-        destinationTimePanel.setTextColor(ControlPanelItem.GREEN);
-        presentTimePanel.setTextColor(ControlPanelItem.YELLOW);
-        lastTimeDepartedPanel.setTextColor(ControlPanelItem.RED);
+        destinationTimePanel.setPanelType(ControlPanelItem.DESTINATION_TIME);
+        presentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
+        lastTimeDepartedPanel.setPanelType(ControlPanelItem.LAST_TIME_DEPARTED);
 
         destinationTimePanel.setDate(calendarPresent);
         presentTimePanel.setDate(calendarPresent);
         lastTimeDepartedPanel.setDate(calendarLast);
 
-        destinationTimePanel.setPanelName(R.string.destination_panel_name);
-        presentTimePanel.setPanelName(R.string.present_panel_name);
-        lastTimeDepartedPanel.setPanelName(R.string.last_departure_panel_name);
 
         destinationTimePanel.setOnChangeDateClickListener(new View.OnClickListener() {
             @Override

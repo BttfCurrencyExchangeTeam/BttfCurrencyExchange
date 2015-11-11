@@ -17,4 +17,8 @@
     <dimen name="iv_name_margin_top">24dp</dimen>
 
     <dimen name="currencies_recycler_item_height">72dp</dimen>
+
+    <dimen name="purse_header_height">72dp</dimen>
+
+    <dimen name="purse_item_height">64dp</dimen>
 </resources>
