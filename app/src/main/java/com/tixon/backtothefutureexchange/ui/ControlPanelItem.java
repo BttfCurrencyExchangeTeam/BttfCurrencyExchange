@@ -17,9 +17,10 @@ import java.util.Calendar;
 
 public class ControlPanelItem extends RelativeLayout {
 
+    /*deprecated
     public static final int GREEN = 1;
     public static final int YELLOW = 2;
-    public static final int RED = 3;
+    public static final int RED = 3;*/
 
     public static final int DESTINATION_TIME = 0;
     public static final int PRESENT_TIME = 1;
@@ -92,9 +93,11 @@ public class ControlPanelItem extends RelativeLayout {
 
     private String formatNumber(int number) {
         StringBuilder sb = new StringBuilder();
+        //если число однозначное
         if(number / 10 == 0) {
-            sb.append(0);
+            sb.append(0); //в самом начале ставим 0
         }
+        //результат: 01, 02, 23, 30
         sb.append(number);
         return sb.toString();
     }

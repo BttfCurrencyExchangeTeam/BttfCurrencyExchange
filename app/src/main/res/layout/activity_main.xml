@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -48,6 +47,7 @@
         <ScrollView
             android:id="@+id/main_scroll_view"
             android:layout_below="@+id/main_toolbar"
+            android:layout_above="@+id/main_buttons_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -66,19 +66,16 @@
                 <include layout="@layout/purse_header_layout"/>
 
                 <include layout="@layout/purse_items_layout"/>
+
             </LinearLayout>
 
         </ScrollView>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/main_buttons_layout"
             android:layout_alignParentBottom="true">
-            <ImageView
-                android:id="@+id/main_activity_iv_background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"

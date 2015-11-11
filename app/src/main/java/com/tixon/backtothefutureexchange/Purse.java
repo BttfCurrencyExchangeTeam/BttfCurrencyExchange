@@ -3,6 +3,12 @@ package com.tixon.backtothefutureexchange;
 public class Purse {
     private static volatile Purse instance;
 
+    public static final int IMPERIAL_RUBLES = 0;
+    public static final int SOVIET_RUBLES = 1;
+    public static final int RF_RUBLES = 2;
+    public static final int DOLLARS = 3;
+    public static final int POUNDS = 4;
+
     public static Purse getInstance() {
         Purse localInstance = instance;
 

@@ -1,14 +1,15 @@
 package com.tixon.backtothefutureexchange;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,6 +25,11 @@ public class MainActivity extends AppCompatActivity implements
     Button bTravel, bExchange;
     FrameLayout container;
     ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
+
+    RecyclerView purseRecyclerView;
+    LinearLayoutManager layoutManager;
+    PurseItemsRecyclerAdapter adapter;
+
     private FragmentChange fragmentChange;
 
     private Calendar calendar, calendarPresent, calendarLast;
@@ -38,12 +44,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        calendar = Calendar.getInstance();
 
+        calendar = Calendar.getInstance();
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
 
         calendar.setTimeInMillis(System.currentTimeMillis());
+        calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
 
         delorean = Delorean.getDelorean();
 
@@ -51,11 +58,10 @@ public class MainActivity extends AppCompatActivity implements
                 getResources().getStringArray(R.array.pounds));
         bank.setYearIndex(calendar.get(Calendar.YEAR));
 
-        calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
-        initViews();
-
         purse = Purse.getInstance();
         purse.setDollars(1000);
+
+        initViews();
 
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
         tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
@@ -74,6 +80,18 @@ public class MainActivity extends AppCompatActivity implements
         mainPresentTimePanel = (ControlPanelItem) findViewById(R.id.main_activity_present_panel);
         mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
         mainPresentTimePanel.setDate(calendarPresent);
+
+        //purseView = (PurseView) findViewById(R.id.main_activity_purse_view);
+        //purseView.updateMoney(purse);
+
+        purseRecyclerView = (RecyclerView) findViewById(R.id.purse_recycler_view);
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new PurseItemsRecyclerAdapter(this, purse.getPurse());
+        purseRecyclerView.setLayoutManager(layoutManager);
+        purseRecyclerView.setAdapter(adapter);
+        int recyclerViewHeight = getResources().getDimensionPixelSize(R.dimen.purse_item_height) * purse.getPurse().length;
+        purseRecyclerView.getLayoutParams().height = recyclerViewHeight;
+        purseRecyclerView.setHasFixedSize(true);
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);
@@ -140,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements
                     "; see stackTrace below");
             e.printStackTrace();
         }
+    }
+
+    int dpToPx(int dp) {
+        Resources r = getResources();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
     @Override

@@ -4,84 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/purse_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/purse_item_height">
-        <ImageView
-            android:id="@+id/purse_rubles_imperial_image"
-            android:layout_width="@dimen/purse_item_height"
-            android:layout_height="@dimen/purse_item_height" />
-        <TextView
-            android:id="@+id/purse_rubles_imperial_text"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/purse_rubles_imperial_image"
-            android:layout_toEndOf="@+id/purse_rubles_imperial_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/purse_item_height">
-        <ImageView
-            android:id="@+id/purse_rubles_soviet_image"
-            android:layout_width="@dimen/purse_item_height"
-            android:layout_height="@dimen/purse_item_height" />
-        <TextView
-            android:id="@+id/purse_rubles_soviet_text"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/purse_rubles_soviet_image"
-            android:layout_toEndOf="@+id/purse_rubles_soviet_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/purse_item_height">
-        <ImageView
-            android:id="@+id/purse_rubles_rf_image"
-            android:layout_width="@dimen/purse_item_height"
-            android:layout_height="@dimen/purse_item_height" />
-        <TextView
-            android:id="@+id/purse_rubles_rf_text"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/purse_rubles_rf_image"
-            android:layout_toEndOf="@+id/purse_rubles_rf_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/purse_item_height">
-        <ImageView
-            android:id="@+id/purse_dollars_image"
-            android:layout_width="@dimen/purse_item_height"
-            android:layout_height="@dimen/purse_item_height" />
-        <TextView
-            android:id="@+id/purse_dollars_text"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/purse_dollars_image"
-            android:layout_toEndOf="@+id/purse_dollars_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/purse_item_height">
-        <ImageView
-            android:id="@+id/purse_pounds_image"
-            android:layout_width="@dimen/purse_item_height"
-            android:layout_height="@dimen/purse_item_height" />
-        <TextView
-            android:id="@+id/purse_pounds_text"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/purse_pounds_image"
-            android:layout_toEndOf="@+id/purse_pounds_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

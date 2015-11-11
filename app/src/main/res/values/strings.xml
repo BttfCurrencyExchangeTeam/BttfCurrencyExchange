@@ -30,6 +30,14 @@
         <item>last time departed</item>
     </string-array>
 
+    <string-array name="purse_currency_names">
+        <item>Рубль Императорской России</item>
+        <item>Советский рубль</item>
+        <item>Российский рубль</item>
+        <item>Доллар</item>
+        <item>Фунт стерлингов</item>
+    </string-array>
+
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>
