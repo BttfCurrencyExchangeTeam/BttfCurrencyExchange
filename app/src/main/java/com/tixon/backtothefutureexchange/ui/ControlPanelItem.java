@@ -2,6 +2,7 @@ package com.tixon.backtothefutureexchange.ui;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -124,5 +125,26 @@ public class ControlPanelItem extends RelativeLayout {
         etYear.setTextColor(color);
         etHour.setTextColor(color);
         etMinute.setTextColor(color);
+    }
+
+    public void startTimeRoll() {
+        Calendar systemCalendar = Calendar.getInstance();
+        systemCalendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.set(Calendar.SECOND, systemCalendar.get(Calendar.SECOND));
+        final Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                addSecond(calendar);
+                setDate(calendar);
+                Log.d("myLogs", "seconds = " + calendar.get(Calendar.SECOND));
+                h.postDelayed(this, 1000);
+            }
+        }, 1000);
+    }
+
+    private void addSecond(Calendar calendar) {
+        calendar.add(Calendar.SECOND, 1);
     }
 }

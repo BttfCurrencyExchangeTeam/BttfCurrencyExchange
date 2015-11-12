@@ -57,6 +57,8 @@ public class ControlPanelActivity extends AppCompatActivity implements
         presentTimePanel.setDate(calendarPresent);
         lastTimeDepartedPanel.setDate(calendarLast);
 
+        presentTimePanel.startTimeRoll();
+
 
         destinationTimePanel.setOnChangeDateClickListener(new View.OnClickListener() {
             @Override

@@ -20,7 +20,9 @@ import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements
-        View.OnClickListener, OnMoneyChangedListener {
+        View.OnClickListener,
+        OnMoneyChangedListener,
+        OnItemCheckedListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         mainPresentTimePanel = (ControlPanelItem) findViewById(R.id.main_activity_present_panel);
         mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
         mainPresentTimePanel.setDate(calendarPresent);
+        mainPresentTimePanel.startTimeRoll();
 
         //purseView = (PurseView) findViewById(R.id.main_activity_purse_view);
         //purseView.updateMoney(purse);
@@ -178,6 +181,11 @@ public class MainActivity extends AppCompatActivity implements
         tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
                 .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
         purseAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onChange(int currencyTo) {
+
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);
