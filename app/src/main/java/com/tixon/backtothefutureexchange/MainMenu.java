@@ -34,22 +34,21 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener 
         bottom = (ImageView) findViewById(R.id.iv_car);
         bottom.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
+        //инициализация TextView
         tvNew_game = (TextView) findViewById(R.id.new_game);
-        Typeface face1 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        tvNew_game.setTypeface(face1);
-
         tvContinue = (TextView) findViewById(R.id.continue_);
-        Typeface face2 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        tvContinue.setTypeface(face2);
-
         tvOptions = (TextView) findViewById(R.id.options_);
-        Typeface face3 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        tvOptions.setTypeface(face3);
-
         tvExit = (TextView) findViewById(R.id.exit_);
-        Typeface face4 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        tvExit.setTypeface(face4);
 
+
+        //устанавливаем шрифты
+        Typeface digitsTypeFace = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
+        tvNew_game.setTypeface(digitsTypeFace);
+        tvContinue.setTypeface(digitsTypeFace);
+        tvOptions.setTypeface(digitsTypeFace);
+        tvExit.setTypeface(digitsTypeFace);
+
+        //устанавливаем touchListener
         tvNew_game.setOnTouchListener(this);
         tvContinue.setOnTouchListener(this);
         tvOptions.setOnTouchListener(this);
