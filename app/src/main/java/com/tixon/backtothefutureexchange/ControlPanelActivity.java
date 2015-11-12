@@ -89,7 +89,10 @@ public class ControlPanelActivity extends AppCompatActivity implements
     }
 
     private void showDatePickerDialog() {
-        Calendar presentTimeCalendar = presentTimePanel.getDate();
+        //Calendar presentTimeCalendar = presentTimePanel.getDate();
+        Calendar presentTimeCalendar = Calendar.getInstance();
+        presentTimeCalendar.setTimeInMillis(presentTimePanel.getDate().getTimeInMillis());
+
         int day = presentTimeCalendar.get(Calendar.DAY_OF_MONTH);
         int month = presentTimeCalendar.get(Calendar.MONTH);
         int year = presentTimeCalendar.get(Calendar.YEAR);
@@ -97,9 +100,9 @@ public class ControlPanelActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newCalendar = Calendar.getInstance();
-                newCalendar.set(year, monthOfYear, dayOfMonth);
-                destinationTimePanel.setDate(newCalendar);
+                Calendar destinationCalendar = destinationTimePanel.getDate();
+                destinationCalendar.set(year, monthOfYear, dayOfMonth);
+                destinationTimePanel.setDate(destinationCalendar);
             }
         };
 
@@ -110,16 +113,23 @@ public class ControlPanelActivity extends AppCompatActivity implements
     }
 
     private void showTimePickerDialog() {
-        final Calendar presentTimeCalendar = presentTimePanel.getDate();
+        //final Calendar presentTimeCalendar = presentTimePanel.getDate();
+        Calendar presentTimeCalendar = Calendar.getInstance();
+        presentTimeCalendar.setTimeInMillis(presentTimePanel.getDate().getTimeInMillis());
+
         int minute = presentTimeCalendar.get(Calendar.MINUTE);
         int hour = presentTimeCalendar.get(Calendar.HOUR_OF_DAY);
 
         TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                presentTimeCalendar.set(Calendar.MINUTE, minute);
-                presentTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                destinationTimePanel.setDate(presentTimeCalendar);
+                //Calendar destinationCalendar = destinationTimePanel.getDate();
+                Calendar destinationCalendar = Calendar.getInstance();
+                destinationCalendar.setTimeInMillis(destinationTimePanel.getDate().getTimeInMillis());
+
+                destinationCalendar.set(Calendar.MINUTE, minute);
+                destinationCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                destinationTimePanel.setDate(destinationCalendar);
 
             }
         };
