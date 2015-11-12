@@ -32,8 +32,8 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
     }
 
     /**
-     * Constructor for adapter
-     * @param availableCurrencies: get from Bank object when creating the adapter
+     * Constructor for purseAdapter
+     * @param availableCurrencies: get from Bank object when creating the purseAdapter
      */
     public ChangeRecyclerAdapter(FragmentChange fragment, int[] availableCurrencies, int currencyIndex, int year, Purse purse) {
         currencies = new ArrayList<>();

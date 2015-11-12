@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements
 
     RecyclerView purseRecyclerView;
     LinearLayoutManager layoutManager;
-    PurseItemsRecyclerAdapter adapter;
+    PurseItemsRecyclerAdapter purseAdapter;
 
     private FragmentChange fragmentChange;
 
@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements
 
         purseRecyclerView = (RecyclerView) findViewById(R.id.purse_recycler_view);
         layoutManager = new LinearLayoutManager(this);
-        adapter = new PurseItemsRecyclerAdapter(this, purse.getPurse());
+        purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse());
         purseRecyclerView.setLayoutManager(layoutManager);
-        purseRecyclerView.setAdapter(adapter);
+        purseRecyclerView.setAdapter(purseAdapter);
         int recyclerViewHeight = getResources().getDimensionPixelSize(R.dimen.purse_item_height) * purse.getPurse().length;
         purseRecyclerView.getLayoutParams().height = recyclerViewHeight;
         purseRecyclerView.setHasFixedSize(true);
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onMoneyChanged() {
         tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
                 .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
+        purseAdapter.notifyDataSetChanged();
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);

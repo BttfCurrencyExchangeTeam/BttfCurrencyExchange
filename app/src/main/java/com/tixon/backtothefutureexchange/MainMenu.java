@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainMenu extends AppCompatActivity implements View.OnTouchListener {
+public class MainMenu extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     MediaPlayer mediaPlayer;
 
@@ -28,10 +28,12 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener 
 
         //mediaPlayer.start();
 
+        //инициализация ImageView
         top = (ImageView) findViewById(R.id.iv_name);
-        top.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
         bottom = (ImageView) findViewById(R.id.iv_car);
+
+        //antialiasing for ImageView
+        top.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         bottom.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         //инициализация TextView
@@ -39,7 +41,6 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener 
         tvContinue = (TextView) findViewById(R.id.continue_);
         tvOptions = (TextView) findViewById(R.id.options_);
         tvExit = (TextView) findViewById(R.id.exit_);
-
 
         //устанавливаем шрифты
         Typeface digitsTypeFace = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
@@ -53,41 +54,50 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener 
         tvContinue.setOnTouchListener(this);
         tvOptions.setOnTouchListener(this);
         tvExit.setOnTouchListener(this);
+
+        //устанавливаем onClickListener
+        tvNew_game.setOnClickListener(this);
+        tvContinue.setOnClickListener(this);
+        tvOptions.setOnClickListener(this);
+        tvExit.setOnClickListener(this);
+    }
+
+    //функция установки цвета для TextView по касанию
+    private void touch(TextView textView, MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            textView.setTextColor(Color.parseColor("#67abff"));
+        } else if(event.getAction() == MotionEvent.ACTION_UP) {
+            textView.setTextColor(Color.parseColor("#ffffff"));
+            onClick(textView);
+        }
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
             case R.id.new_game:
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    tvNew_game.setTextColor(Color.parseColor("#67abff"));
-                } else if(event.getAction() == MotionEvent.ACTION_UP) {
-                    tvNew_game.setTextColor(Color.parseColor("#ffffff"));
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                }
+                touch(tvNew_game, event);
                 break;
             case R.id.continue_:
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    tvContinue.setTextColor(Color.parseColor("#67abff"));
-                } else if(event.getAction() == MotionEvent.ACTION_UP) {
-                    tvContinue.setTextColor(Color.parseColor("#ffffff"));
-                }
+                touch(tvContinue, event);
                 break;
             case R.id.options_:
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    tvOptions.setTextColor(Color.parseColor("#67abff"));
-                } else if(event.getAction() == MotionEvent.ACTION_UP) {
-                    tvOptions.setTextColor(Color.parseColor("#ffffff"));
-                }
+                touch(tvOptions, event);
                 break;
             case R.id.exit_:
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    tvExit.setTextColor(Color.parseColor("#67abff"));
-                } else if(event.getAction() == MotionEvent.ACTION_UP) {
-                    tvExit.setTextColor(Color.parseColor("#ffffff"));
-                }
+                touch(tvExit, event);
         }
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.new_game:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            default: break;
+        }
     }
 }
