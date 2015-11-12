@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
     FrameLayout container;
+    RelativeLayout purseHeader;
     ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
 
     RecyclerView purseRecyclerView;
@@ -40,10 +42,14 @@ public class MainActivity extends AppCompatActivity implements
     private Delorean delorean;
     private Bank bank;
 
+    private boolean isPurseExpanded;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        isPurseExpanded = true;
 
         calendar = Calendar.getInstance();
         calendarPresent = Calendar.getInstance();
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
+        purseHeader = (RelativeLayout) findViewById(R.id.purse_header_frame);
 
         mainPresentTimePanel = (ControlPanelItem) findViewById(R.id.main_activity_present_panel);
         mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
@@ -149,8 +156,9 @@ public class MainActivity extends AppCompatActivity implements
         fragmentChange.setOnMoneyChangedListener(this);
 
         try {
-            getSupportFragmentManager().beginTransaction().add(R.id.main_container,
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                     fragmentChange)
+                    .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack("CHANGE_FRAGMENT")
                     .commit();
         } catch (Exception e) {

@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/main_activity_present_panel"/>
 
-                <include layout="@layout/purse_header_layout"/>
+                <!--include layout="@layout/purse_header_layout"/-->
 
                 <include layout="@layout/purse_items_layout"/>
 
@@ -71,38 +71,37 @@
 
         </ScrollView>
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/main_buttons_layout"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:gravity="bottom"
             android:layout_alignParentBottom="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:layout_alignParentBottom="true"
-                android:gravity="bottom">
+            <Button
+                android:id="@+id/main_activity_button_exchange"
+                android:text="Обменять"
+                android:background="@drawable/button_background"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/main_activity_button_exchange"
-                    android:text="Обменять валюту"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/main_activity_button_travel"
+                android:text="Переместиться"
+                android:background="@drawable/button_background"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/main_activity_button_travel"
-                    android:text="Переместиться во времени"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 
 </FrameLayout>

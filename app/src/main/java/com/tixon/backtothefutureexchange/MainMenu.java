@@ -1,22 +1,23 @@
 package com.tixon.backtothefutureexchange;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainMenu extends AppCompatActivity implements View.OnClickListener {
+public class MainMenu extends AppCompatActivity implements View.OnTouchListener {
 
     MediaPlayer mediaPlayer;
 
     ImageView top, bottom;
+
+    TextView tvNew_game, tvContinue, tvOptions, tvExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,41 +34,61 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         bottom = (ImageView) findViewById(R.id.iv_car);
         bottom.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        TextView new_game = (TextView) findViewById(R.id.new_game);
+        tvNew_game = (TextView) findViewById(R.id.new_game);
         Typeface face1 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        new_game.setTypeface(face1);
+        tvNew_game.setTypeface(face1);
 
-        TextView _continue_ = (TextView) findViewById(R.id.continue_);
+        tvContinue = (TextView) findViewById(R.id.continue_);
         Typeface face2 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        _continue_.setTypeface(face2);
+        tvContinue.setTypeface(face2);
 
-        TextView _options_ = (TextView) findViewById(R.id.options_);
+        tvOptions = (TextView) findViewById(R.id.options_);
         Typeface face3 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        _options_.setTypeface(face3);
+        tvOptions.setTypeface(face3);
 
-        TextView _exit_ = (TextView) findViewById(R.id.exit_);
+        tvExit = (TextView) findViewById(R.id.exit_);
         Typeface face4 = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
-        _exit_.setTypeface(face4);
+        tvExit.setTypeface(face4);
 
-        new_game.setOnClickListener(this);
-        _exit_.setOnClickListener(this);
+        tvNew_game.setOnTouchListener(this);
+        tvContinue.setOnTouchListener(this);
+        tvOptions.setOnTouchListener(this);
+        tvExit.setOnTouchListener(this);
     }
 
     @Override
-    public void onClick(View v) {
+    public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
             case R.id.new_game:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    tvNew_game.setTextColor(Color.parseColor("#67abff"));
+                } else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    tvNew_game.setTextColor(Color.parseColor("#ffffff"));
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                }
                 break;
-            default:
+            case R.id.continue_:
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    tvContinue.setTextColor(Color.parseColor("#67abff"));
+                } else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    tvContinue.setTextColor(Color.parseColor("#ffffff"));
+                }
                 break;
-
+            case R.id.options_:
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    tvOptions.setTextColor(Color.parseColor("#67abff"));
+                } else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    tvOptions.setTextColor(Color.parseColor("#ffffff"));
+                }
+                break;
             case R.id.exit_:
-                System.exit(0);
-
-
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    tvExit.setTextColor(Color.parseColor("#67abff"));
+                } else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    tvExit.setTextColor(Color.parseColor("#ffffff"));
+                }
         }
-
+        return true;
     }
 }
