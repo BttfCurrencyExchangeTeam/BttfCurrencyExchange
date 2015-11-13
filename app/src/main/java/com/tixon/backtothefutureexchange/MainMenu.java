@@ -17,7 +17,7 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
 
     ImageView top, bottom;
 
-    TextView tvNew_game, tvContinue, tvOptions, tvExit;
+    TextView tvNew_game, tvContinue, tvOptions, tvAbout, tvExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         tvNew_game = (TextView) findViewById(R.id.new_game);
         tvContinue = (TextView) findViewById(R.id.continue_);
         tvOptions = (TextView) findViewById(R.id.options_);
+        tvAbout = (TextView) findViewById(R.id.tv_about);
         tvExit = (TextView) findViewById(R.id.exit_);
 
         //устанавливаем шрифты
@@ -47,18 +48,21 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         tvNew_game.setTypeface(digitsTypeFace);
         tvContinue.setTypeface(digitsTypeFace);
         tvOptions.setTypeface(digitsTypeFace);
+        tvAbout.setTypeface(digitsTypeFace);
         tvExit.setTypeface(digitsTypeFace);
 
-        //устанавливаем touchListener
+        //устанавливаем onTouchListener
         tvNew_game.setOnTouchListener(this);
         tvContinue.setOnTouchListener(this);
         tvOptions.setOnTouchListener(this);
+        tvAbout.setOnTouchListener(this);
         tvExit.setOnTouchListener(this);
 
         //устанавливаем onClickListener
         tvNew_game.setOnClickListener(this);
         tvContinue.setOnClickListener(this);
         tvOptions.setOnClickListener(this);
+        tvAbout.setOnClickListener(this);
         tvExit.setOnClickListener(this);
     }
 
@@ -84,6 +88,9 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
             case R.id.options_:
                 touch(tvOptions, event);
                 break;
+            case R.id.tv_about:
+                touch(tvAbout, event);
+                break;
             case R.id.exit_:
                 touch(tvExit, event);
         }
@@ -96,7 +103,11 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
             case R.id.new_game:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
+            case R.id.tv_about:
+                Intent intentStartAboutActivity = new Intent(this, AboutActivity.class);
+                startActivity(intentStartAboutActivity);
             default: break;
         }
     }

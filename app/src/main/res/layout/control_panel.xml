@@ -195,7 +195,7 @@
     </LinearLayout>
 
     <TextView
-        tools:text="destination time"
+        tools:text="destination initTime"
         android:id="@+id/control_panel_tv_panel_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

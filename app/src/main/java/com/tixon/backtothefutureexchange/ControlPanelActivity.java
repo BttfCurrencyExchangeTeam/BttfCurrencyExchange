@@ -20,7 +20,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
     private ControlPanelItem destinationTimePanel, presentTimePanel, lastTimeDepartedPanel;
     private Button bTravel;
 
-    private Calendar calendarPresent, calendarLast;
+    private Calendar calendarDestination, calendarPresent, calendarLast;
 
     private Delorean delorean;
 
@@ -29,6 +29,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_panel_activity_layout);
 
+        calendarDestination = Calendar.getInstance();
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
 
@@ -36,6 +37,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
         Intent fromMainActivity = getIntent();
 
+        calendarDestination.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_PRESENT, System.currentTimeMillis()));
         calendarPresent.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_PRESENT, System.currentTimeMillis()));
         calendarLast.setTimeInMillis(fromMainActivity.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
         initPanel();
@@ -53,7 +55,8 @@ public class ControlPanelActivity extends AppCompatActivity implements
         presentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
         lastTimeDepartedPanel.setPanelType(ControlPanelItem.LAST_TIME_DEPARTED);
 
-        destinationTimePanel.setDate(calendarPresent);
+        //done: added calendarDestination instead of calendarPresent
+        destinationTimePanel.setDate(calendarDestination);
         presentTimePanel.setDate(calendarPresent);
         lastTimeDepartedPanel.setDate(calendarLast);
 

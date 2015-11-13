@@ -8,4 +8,6 @@ public class Constants {
     public static final String KEY_TIME_LAST = "key_time_last";
 
     public static final int REQUEST_CODE_TRAVEL = 10;
+
+    public static final int CODE_DEPOSIT_NO_EXISTS = -1828;
 }

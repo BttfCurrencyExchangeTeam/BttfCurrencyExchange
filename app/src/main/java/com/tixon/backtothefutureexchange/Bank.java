@@ -2,6 +2,7 @@ package com.tixon.backtothefutureexchange;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -29,6 +30,8 @@ public class Bank {
 
     private Calendar date;
 
+    //депозиты
+    private ArrayList<Deposit> deposits;
     //значения массивов - сколько рублей дают за конкретную валюту
     private double[] dollars, pounds;
     //индекс массива с определённым годом (см. res/values/currencies.xml)
@@ -54,7 +57,9 @@ public class Bank {
         this.dollars = stringToDoubleArray(dollars);
         this.pounds = stringToDoubleArray(pounds);
         date = Calendar.getInstance();
+        deposits = new ArrayList<>();
     }
+
     //задаёт индекс валюты
     public void setCurrency(int currencyIndex) {
         this.currency = currencyIndex;
@@ -233,5 +238,15 @@ public class Bank {
             result = poundsFromRubles(value);
         }
         return result;
+    }
+
+    //deposits
+
+    public void addDeposit(Deposit deposit) {
+        deposits.add(deposit);
+    }
+
+    public Deposit getDeposit(int position) {
+        return deposits.get(position);
     }
 }

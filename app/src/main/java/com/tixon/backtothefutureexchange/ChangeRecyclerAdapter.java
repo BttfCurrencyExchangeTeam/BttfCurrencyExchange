@@ -115,9 +115,10 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
     }
 
     //устанавливает в FragmentChange для seekBar и textView значения, полученные здесь
-    private void setFragmentData(FragmentChange fragment) {
+    public void setFragmentData(FragmentChange fragment) {
         fragment.seekBar.setMax((int) purse.getMoney(currencyIndex, year));
         fragment.seekBar.setProgress(fragment.seekBar.getMax());
+        fragment.moneyToExchange = ((int) purse.getMoney(currencyIndex, year));
         fragment.textView.setText(String.valueOf(purse.getMoney(currencyIndex, year)));
     }
 }

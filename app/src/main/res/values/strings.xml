@@ -25,9 +25,9 @@
     </string-array>
 
     <string-array name="time_types">
-        <item>destination time</item>
-        <item>present time</item>
-        <item>last time departed</item>
+        <item>destination initTime</item>
+        <item>present initTime</item>
+        <item>last initTime departed</item>
     </string-array>
 
     <string-array name="purse_currency_names">
@@ -38,6 +38,8 @@
         <item>Фунт стерлингов</item>
     </string-array>
 
+    <string name="deposit_add_text">Добавить</string>
+
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>
@@ -46,9 +48,9 @@
     <string name="currency_rubles">Рубли</string>
     <string name="currency_pounds">Фунты</string>
 
-    <string name="destination_panel_name">destination time</string>
-    <string name="present_panel_name">present time</string>
-    <string name="last_departure_panel_name">last time departed</string>
+    <string name="destination_panel_name">destination initTime</string>
+    <string name="present_panel_name">present initTime</string>
+    <string name="last_departure_panel_name">last initTime departed</string>
     <string name="title_activity_main_menu">MainMenu</string>
 
     <string name="hello_world">Hello world!</string>
@@ -57,5 +59,10 @@
     <string name="_continue">Continue</string>
     <string name="_options">Options</string>
     <string name="_exit">Exit</string>
+
+    <string name="game_description">Смысл игры заключается в увеличении своего денежного капитала, путешествуя во времени и меняя рубли на валюту, основываясь на нестабильности курса.
+    Действие начинает развиваться в 2015 году, а у персонажа изначально есть только одна тысяча долларов и контейнер с плутонием. Для того, чтобы иметь возможность перемещаться во времени,
+        необходимо докупать плутоний. Также можно вносить депозиты в банк и в будущем получать доход. Диапазон времени для перемещения ограничен 1900 и 2045 годами.</string>
+    <string name="about">About</string>
 
 </resources>

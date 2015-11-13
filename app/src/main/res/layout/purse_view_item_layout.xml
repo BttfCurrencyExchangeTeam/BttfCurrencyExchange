@@ -31,4 +31,8 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <include layout="@layout/divider"
+        android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

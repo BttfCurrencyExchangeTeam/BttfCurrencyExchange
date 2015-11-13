@@ -38,7 +38,7 @@
             android:text="@string/new_game"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
-            android:textSize="42sp" />
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/continue_"
@@ -49,7 +49,7 @@
             android:text="@string/_continue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
-            android:textSize="42sp" />
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/options_"
@@ -60,7 +60,18 @@
             android:text="@string/_options"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
-            android:textSize="42sp" />
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/tv_about"
+            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
+            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/main_menu_color"
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/exit_"
@@ -70,7 +81,7 @@
             android:text="@string/_exit"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
-            android:textSize="42sp" />
+            android:textSize="35sp" />
 
     </LinearLayout>
 

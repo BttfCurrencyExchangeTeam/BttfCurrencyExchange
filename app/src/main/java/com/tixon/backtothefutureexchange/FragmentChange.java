@@ -27,7 +27,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
     static Purse purse;
     static Calendar calendar;
 
-    private int moneyToExchange;
+    public int moneyToExchange;
     private int currencyTo;
 
     //onMoneyChangedListener запускается отсюда и действует в MainActivity
@@ -102,6 +102,12 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.setFragmentData(this);
     }
 
     /**
