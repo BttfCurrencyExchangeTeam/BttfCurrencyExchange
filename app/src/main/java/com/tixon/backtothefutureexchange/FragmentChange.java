@@ -113,6 +113,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
     /**
      * вызывается при изменении валюты
      * @see ChangeRecyclerAdapter
+     * @see OnItemCheckedListener
      */
     @Override
     public void onChange(int currencyTo) {

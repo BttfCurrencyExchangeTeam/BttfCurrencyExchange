@@ -249,4 +249,8 @@ public class Bank {
     public Deposit getDeposit(int position) {
         return deposits.get(position);
     }
+
+    public ArrayList<Deposit> getDeposits() {
+        return deposits;
+    }
 }

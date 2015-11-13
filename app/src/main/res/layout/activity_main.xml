@@ -65,7 +65,21 @@
 
                 <!--include layout="@layout/purse_header_layout"/-->
 
-                <include layout="@layout/purse_items_layout"/>
+                <TextView
+                    android:text="Мои сбережения"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <include layout="@layout/purse_items_layout" />
+
+                <TextView
+                    android:text="Мои вклады"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <include layout="@layout/deposit_items_layout" />
 
             </LinearLayout>
 

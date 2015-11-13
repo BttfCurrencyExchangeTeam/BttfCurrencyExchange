@@ -22,7 +22,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         OnMoneyChangedListener,
-        OnItemCheckedListener {
+        OnItemCheckedListener, OnAddDeposit {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -30,11 +30,13 @@ public class MainActivity extends AppCompatActivity implements
     RelativeLayout purseHeader;
     ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
 
-    RecyclerView purseRecyclerView;
-    LinearLayoutManager layoutManager;
+    RecyclerView purseRecyclerView, depositsRecyclerView;
+    LinearLayoutManager purseLayoutManager, depositsLayoutManager;
     PurseItemsRecyclerAdapter purseAdapter;
+    DepositRecyclerAdapter depositsAdapter;
 
     private FragmentChange fragmentChange;
+    private AddDepositFragment addDepositFragment;
 
     private Calendar calendar, calendarPresent, calendarLast;
 
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements
                 calendarPresent.get(Calendar.YEAR))));
 
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
+        addDepositFragment = AddDepositFragment.newInstance(bank, calendarPresent.getTimeInMillis());
     }
 
     public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
@@ -95,13 +98,24 @@ public class MainActivity extends AppCompatActivity implements
         //purseView.updateMoney(purse);
 
         purseRecyclerView = (RecyclerView) findViewById(R.id.purse_recycler_view);
-        layoutManager = new LinearLayoutManager(this);
+        purseLayoutManager = new LinearLayoutManager(this);
         purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse());
-        purseRecyclerView.setLayoutManager(layoutManager);
+        purseRecyclerView.setLayoutManager(purseLayoutManager);
         purseRecyclerView.setAdapter(purseAdapter);
         int recyclerViewHeight = getResources().getDimensionPixelSize(R.dimen.purse_item_height) * purse.getPurse().length;
         purseRecyclerView.getLayoutParams().height = recyclerViewHeight;
         purseRecyclerView.setHasFixedSize(true);
+
+        depositsRecyclerView = (RecyclerView) findViewById(R.id.deposits_recycler_view);
+        depositsLayoutManager = new LinearLayoutManager(this);
+        depositsAdapter = new DepositRecyclerAdapter(bank.getDeposits(), calendarPresent.getTimeInMillis());
+        depositsRecyclerView.setLayoutManager(depositsLayoutManager);
+        depositsRecyclerView.setAdapter(depositsAdapter);
+        depositsRecyclerView.getLayoutParams().height = getResources()
+                .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
+                + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
+        depositsRecyclerView.setHasFixedSize(true);
+        depositsAdapter.setOnAddDepositListener(this);
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);
@@ -186,6 +200,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onChange(int currencyTo) {
 
+    }
+
+    @Override
+    public void onDepositClick() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, addDepositFragment)
+                .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack("ADD_DEPOSIT_FRAGMENT")
+                .commit();
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);

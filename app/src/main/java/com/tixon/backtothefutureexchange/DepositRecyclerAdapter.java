@@ -17,6 +17,12 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     private static final int DEPOSIT_TYPE = 0;
     private static final int ADD_TYPE = 1;
 
+    private OnAddDeposit onAddDeposit;
+
+    public void setOnAddDepositListener(OnAddDeposit listener) {
+        this.onAddDeposit = listener;
+    }
+
     public DepositRecyclerAdapter(ArrayList<Deposit> deposits, long currentTime) {
         this.deposits = deposits;
         this.currentTime = currentTime;
@@ -64,7 +70,8 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         return DEPOSIT_TYPE;
     }
 
-    public static class DepositViewHolder extends RecyclerView.ViewHolder {
+    public class DepositViewHolder extends RecyclerView.ViewHolder
+    implements View.OnClickListener {
         protected int viewType;
         TextView tvName, tvInitTime, tvInitValue, tvCurrentValue, tvIncome;
         ImageView imageView;
@@ -72,6 +79,7 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         public DepositViewHolder(View itemView, int viewType) {
             super(itemView);
             this.viewType = viewType;
+            itemView.setOnClickListener(this);
 
             tvName = (TextView) itemView.findViewById(R.id.deposit_name);
             tvInitTime = (TextView) itemView.findViewById(R.id.deposit_init_time);
@@ -79,6 +87,16 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
             tvCurrentValue = (TextView) itemView.findViewById(R.id.deposit_current_value);
             tvIncome = (TextView) itemView.findViewById(R.id.deposit_income);
             imageView = (ImageView) itemView.findViewById(R.id.deposit_image);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(viewType == DEPOSIT_TYPE) {
+                //напр. снять со счёта
+            } if(viewType == ADD_TYPE) {
+                //добавить вклад (обращение к вызову фрагмента)
+                onAddDeposit.onDepositClick();
+            }
         }
     }
 }

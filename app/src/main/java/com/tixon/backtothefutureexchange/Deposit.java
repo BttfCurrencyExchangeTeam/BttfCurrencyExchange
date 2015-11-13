@@ -44,7 +44,7 @@ public class Deposit {
             newValue = initValue;
 
             for(int i = 0; i < yearDifference; i++) {
-                newValue += newValue * interest;
+                newValue += newValue * (interest / 100d);
             }
         } else {
             newValue = Constants.CODE_DEPOSIT_NO_EXISTS;
