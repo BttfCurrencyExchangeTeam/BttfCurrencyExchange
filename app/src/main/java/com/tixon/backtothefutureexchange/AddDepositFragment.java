@@ -17,6 +17,12 @@ public class AddDepositFragment extends Fragment {
     private static Bank bank;
     private static long currentTime;
 
+    private OnDepositAddListener onDepositAddListener;
+
+    public void setOnDepositAddListener(OnDepositAddListener listener) {
+        this.onDepositAddListener = listener;
+    }
+
     public static AddDepositFragment newInstance(Bank mBank, long mCurrentTime) {
         bank = mBank;
         currentTime = mCurrentTime;
@@ -34,6 +40,7 @@ public class AddDepositFragment extends Fragment {
             public void onClick(View v) {
                 bank.addDeposit(new Deposit(etName.getText().toString(), currentTime, 500, 22));
                 getActivity().getSupportFragmentManager().popBackStack();
+                onDepositAddListener.onDepositAdd();
             }
         });
         return v;

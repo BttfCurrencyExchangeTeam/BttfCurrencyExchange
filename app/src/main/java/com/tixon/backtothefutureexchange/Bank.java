@@ -181,6 +181,11 @@ public class Bank {
         return result;
     }
 
+    private boolean canChangeWithRubles() {
+        boolean result = false;
+        return result;
+    }
+
     //методы преобразования валют
 
     private double rublesFromDollars(double currency) {

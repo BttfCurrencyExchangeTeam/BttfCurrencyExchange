@@ -22,7 +22,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         OnMoneyChangedListener,
-        OnItemCheckedListener, OnAddDeposit {
+        OnItemCheckedListener, OnAddDepositItemClickListener, OnDepositAddListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements
 
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
         addDepositFragment = AddDepositFragment.newInstance(bank, calendarPresent.getTimeInMillis());
+        addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
     }
 
     public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
         depositsRecyclerView.setHasFixedSize(true);
         depositsAdapter.setOnAddDepositListener(this);
+
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);
@@ -209,6 +211,14 @@ public class MainActivity extends AppCompatActivity implements
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("ADD_DEPOSIT_FRAGMENT")
                 .commit();
+    }
+
+    @Override
+    public void onDepositAdd() {
+        depositsRecyclerView.getLayoutParams().height = getResources()
+                .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
+                + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
+        depositsRecyclerView.setHasFixedSize(true);
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);

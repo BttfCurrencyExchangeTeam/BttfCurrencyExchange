@@ -17,10 +17,10 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     private static final int DEPOSIT_TYPE = 0;
     private static final int ADD_TYPE = 1;
 
-    private OnAddDeposit onAddDeposit;
+    private OnAddDepositItemClickListener onAddDepositItemClickListener;
 
-    public void setOnAddDepositListener(OnAddDeposit listener) {
-        this.onAddDeposit = listener;
+    public void setOnAddDepositListener(OnAddDepositItemClickListener listener) {
+        this.onAddDepositItemClickListener = listener;
     }
 
     public DepositRecyclerAdapter(ArrayList<Deposit> deposits, long currentTime) {
@@ -95,7 +95,7 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
                 //напр. снять со счёта
             } if(viewType == ADD_TYPE) {
                 //добавить вклад (обращение к вызову фрагмента)
-                onAddDeposit.onDepositClick();
+                onAddDepositItemClickListener.onDepositClick();
             }
         }
     }

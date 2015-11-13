@@ -1,5 +1,5 @@
 package com.tixon.backtothefutureexchange;
 
-public interface OnAddDeposit {
+public interface OnAddDepositItemClickListener {
     void onDepositClick();
 }
