@@ -25,9 +25,9 @@
     </string-array>
 
     <string-array name="time_types">
-        <item>destination initTime</item>
-        <item>present initTime</item>
-        <item>last initTime departed</item>
+        <item>destination time</item>
+        <item>present time</item>
+        <item>last time departed</item>
     </string-array>
 
     <string-array name="purse_currency_names">
@@ -38,7 +38,27 @@
         <item>Фунт стерлингов</item>
     </string-array>
 
+    <string-array name="interests_names">
+        <item>7%</item>
+        <item>10%</item>
+        <item>12%</item>
+        <item>13.5%</item>
+        <item>16%</item>
+        <item>22%</item>
+    </string-array>
+
+    <string-array name="deposit_currencies_names">
+        <item>Рубль</item>
+        <item>Доллар</item>
+        <item>Фунт стерлингов</item>
+    </string-array>
+
     <string name="deposit_add_text">Добавить</string>
+    <string name="deposit_currency_text">Валюта</string>
+    <string name="deposit_interest_text">Процентная ставка</string>
+    <string name="deposit_item_initial_value">Первоначальный взнос:</string>
+    <string name="deposit_item_current_value">Состояние вклада:</string>
+    <string name="deposit_item_income">Доход по вкладу:</string>
 
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
@@ -48,9 +68,9 @@
     <string name="currency_rubles">Рубли</string>
     <string name="currency_pounds">Фунты</string>
 
-    <string name="destination_panel_name">destination initTime</string>
-    <string name="present_panel_name">present initTime</string>
-    <string name="last_departure_panel_name">last initTime departed</string>
+    <string name="destination_panel_name">destination time</string>
+    <string name="present_panel_name">present time</string>
+    <string name="last_departure_panel_name">last time departed</string>
     <string name="title_activity_main_menu">MainMenu</string>
 
     <string name="hello_world">Hello world!</string>

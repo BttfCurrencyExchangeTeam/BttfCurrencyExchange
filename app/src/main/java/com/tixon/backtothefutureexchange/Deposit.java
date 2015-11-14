@@ -4,11 +4,14 @@ import java.util.Calendar;
 
 public class Deposit {
     private String name;
+    private int currency;
     private long initTime; //время в мс создания вклада
     private double initValue; //первоначальное значение вклада
     private double interest; //процентная ставка по вкладу
 
+    //int currency,
     public Deposit (String name, long initTime, double initValue, double interest) {
+        this.currency = currency;
         this.name = name;
         this.initTime = initTime;
         this.initValue = initValue;
@@ -16,6 +19,8 @@ public class Deposit {
     }
 
     public String getName() {return name;}
+
+    public int getCurrency() {return currency;}
 
     public double getInterest() {return interest;}
 

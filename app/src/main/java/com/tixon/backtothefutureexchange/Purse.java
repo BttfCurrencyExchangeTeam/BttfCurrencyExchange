@@ -57,6 +57,14 @@ public class Purse {
         purse[4] = pounds;
     }
 
+    public void init() {
+        setDollars(1000);
+        setImperialRubles(0);
+        setSovietRubles(0);
+        setRussianRubles(0);
+        setPounds(0);
+    }
+
     //add
 
     public void addImperialRubles(double rubles) {

@@ -255,7 +255,16 @@ public class Bank {
         return deposits.get(position);
     }
 
+    //long currentTime
     public ArrayList<Deposit> getDeposits() {
+        /*ArrayList<Deposit> resultList = new ArrayList<>();
+        for(Deposit deposit: deposits) {
+            //если время создания вклада меньше настоящего времени currentTime
+            if(deposit.getInitTime() <= currentTime) {
+                resultList.add(deposit);
+            }
+            return resultList;
+        }*/
         return deposits;
     }
 }

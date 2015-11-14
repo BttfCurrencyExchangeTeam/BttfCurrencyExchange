@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
         bank.setYearIndex(calendar.get(Calendar.YEAR));
 
         purse = Purse.getInstance();
-        purse.setDollars(1000);
+        purse.init();
 
         initViews();
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements
                 calendarPresent.get(Calendar.YEAR))));
 
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
-        addDepositFragment = AddDepositFragment.newInstance(bank, calendarPresent.getTimeInMillis());
+        addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
         addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
     }
 
@@ -94,9 +94,6 @@ public class MainActivity extends AppCompatActivity implements
         mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
         mainPresentTimePanel.setDate(calendarPresent);
         mainPresentTimePanel.startTimeRoll();
-
-        //purseView = (PurseView) findViewById(R.id.main_activity_purse_view);
-        //purseView.updateMoney(purse);
 
         purseRecyclerView = (RecyclerView) findViewById(R.id.purse_recycler_view);
         purseLayoutManager = new LinearLayoutManager(this);
@@ -146,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements
                     tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
+                    depositsAdapter.updateCurrentTime(calendarPresent.getTimeInMillis());
+                    depositsAdapter.notifyDataSetChanged();
                     break;
             }
         }

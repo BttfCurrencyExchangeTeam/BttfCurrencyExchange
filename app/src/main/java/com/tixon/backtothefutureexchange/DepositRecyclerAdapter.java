@@ -1,5 +1,6 @@
 package com.tixon.backtothefutureexchange;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,10 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         this.currentTime = currentTime;
     }
 
+    public void updateCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
+    }
+
     @Override
     public DepositViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == DEPOSIT_TYPE) {
@@ -51,9 +56,12 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
             double income = currentValue - initValue;
 
             holder.tvName.setText(name + " (" + interest + "%)");
-            holder.tvInitValue.setText(String.valueOf(initValue));
-            holder.tvCurrentValue.setText(String.valueOf(currentValue));
-            holder.tvIncome.setText(String.valueOf(income));
+            holder.tvInitValue.setText(holder.context.getResources()
+                    .getString(R.string.deposit_item_initial_value) + " " + String.valueOf(initValue));
+            holder.tvCurrentValue.setText(holder.context.getResources()
+                    .getString(R.string.deposit_item_current_value) + " " + String.valueOf(currentValue));
+            holder.tvIncome.setText(holder.context.getResources()
+                    .getString(R.string.deposit_item_income) + " " + String.valueOf(income));
         }
     }
 
@@ -73,12 +81,14 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     public class DepositViewHolder extends RecyclerView.ViewHolder
     implements View.OnClickListener {
         protected int viewType;
+        Context context;
         TextView tvName, tvInitTime, tvInitValue, tvCurrentValue, tvIncome;
         ImageView imageView;
 
         public DepositViewHolder(View itemView, int viewType) {
             super(itemView);
             this.viewType = viewType;
+            context = itemView.getContext();
             itemView.setOnClickListener(this);
 
             tvName = (TextView) itemView.findViewById(R.id.deposit_name);
