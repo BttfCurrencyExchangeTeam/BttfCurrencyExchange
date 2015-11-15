@@ -111,6 +111,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
         DatePickerDialog dialog = new DatePickerDialog(ControlPanelActivity.this,
                 mDateSetListener, year, month, day);
+        dialog.getDatePicker().setMaxDate(Constants.DEC_2045_31);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
