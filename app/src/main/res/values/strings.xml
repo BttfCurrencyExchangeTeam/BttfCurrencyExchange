@@ -47,10 +47,15 @@
         <item>22%</item>
     </string-array>
 
-    <string-array name="deposit_currencies_names">
-        <item>Рубль</item>
+    <string-array name="deposit_currencies_names_before_1998">
         <item>Доллар</item>
         <item>Фунт стерлингов</item>
+    </string-array>
+
+    <string-array name="deposit_currencies_names_after_1998">
+        <item>Доллар</item>
+        <item>Фунт стерлингов</item>
+        <item>Рубль</item>
     </string-array>
 
     <string name="deposit_add_text">Добавить</string>

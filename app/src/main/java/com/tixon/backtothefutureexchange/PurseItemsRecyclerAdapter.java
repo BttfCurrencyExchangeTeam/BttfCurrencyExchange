@@ -32,6 +32,7 @@ public class PurseItemsRecyclerAdapter extends RecyclerView.Adapter<PurseItemsRe
     public void onBindViewHolder(PurseViewHolder holder, int position) {
         holder.tvHowMuch.setText(String.valueOf(purse[position]));
         holder.tvCurrencyName.setText(currencyNames[position]);
+        holder.ivCurrency.setImageResource(getImageResource(position));
     }
 
     @Override
@@ -52,5 +53,17 @@ public class PurseItemsRecyclerAdapter extends RecyclerView.Adapter<PurseItemsRe
             tvHowMuch = (TextView) itemView.findViewById(R.id.purse_item_text);
             ivCurrency = (ImageView) itemView.findViewById(R.id.purse_item_currency_image);
         }
+    }
+
+    private int getImageResource(int position) {
+        int resource = 0;
+        switch (position) {
+            case 0: resource = R.drawable.flag_ru; break;
+            case 1: resource = R.drawable.flag_ussr; break;
+            case 2: resource = R.drawable.flag_ru; break;
+            case 3: resource = R.drawable.flag_us; break;
+            case 4: resource = R.drawable.flag_uk; break;
+        }
+        return resource;
     }
 }

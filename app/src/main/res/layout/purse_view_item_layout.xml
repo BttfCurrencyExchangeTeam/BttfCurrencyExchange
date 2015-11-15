@@ -6,6 +6,7 @@
     android:layout_height="@dimen/purse_item_height">
     <ImageView
         android:id="@+id/purse_item_currency_image"
+        android:scaleType="center"
         android:layout_width="@dimen/purse_item_height"
         android:layout_height="@dimen/purse_item_height" />
 

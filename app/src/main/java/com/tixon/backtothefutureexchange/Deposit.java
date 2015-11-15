@@ -9,8 +9,7 @@ public class Deposit {
     private double initValue; //первоначальное значение вклада
     private double interest; //процентная ставка по вкладу
 
-    //int currency,
-    public Deposit (String name, long initTime, double initValue, double interest) {
+    public Deposit (String name, long initTime, double initValue, double interest, int currencyIndex) {
         this.currency = currency;
         this.name = name;
         this.initTime = initTime;

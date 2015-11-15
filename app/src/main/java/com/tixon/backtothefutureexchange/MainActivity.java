@@ -79,7 +79,14 @@ public class MainActivity extends AppCompatActivity implements
 
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
         addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
-        addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
+        //addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
+
+        addDepositFragment.addOnDepositAddListener(this); //слушатель на кнопку создания депозита
+        addDepositFragment.addOnDepositAddListener(purse);
+
+        //addDepositFragment.setOnMoneyChangedListener(this);
+
+        addDepositFragment.setOnMoneyChangedListener(this); //слушатель изменения значения денег
     }
 
     public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     depositsAdapter.updateCurrentTime(calendarPresent.getTimeInMillis());
                     depositsAdapter.notifyDataSetChanged();
+                    addDepositFragment.updateCurrentTime(calendarPresent.getTimeInMillis());
                     break;
             }
         }
@@ -213,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDepositAdd() {
+    public void onDepositAdd(double howMuch, int currencyIndex, int year) {
         depositsRecyclerView.getLayoutParams().height = getResources()
                 .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);

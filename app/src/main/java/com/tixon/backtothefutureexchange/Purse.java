@@ -1,6 +1,8 @@
 package com.tixon.backtothefutureexchange;
 
-public class Purse {
+import android.util.Log;
+
+public class Purse implements OnDepositAddListener {
     private static volatile Purse instance;
 
     public static final int IMPERIAL_RUBLES = 0;
@@ -174,5 +176,10 @@ public class Purse {
         int currencyFrom = bank.getCurrency();
         double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom, year, howMuch));
         add(changedMoney, currencyTo, year);
+    }
+
+    @Override
+    public void onDepositAdd(double howMuch, int currencyIndex, int year) {
+        Log.d("myLogs", "deposit add caught in purse: " + giveMoney(currencyIndex, year, howMuch));
     }
 }

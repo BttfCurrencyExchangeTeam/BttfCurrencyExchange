@@ -14,7 +14,9 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddDepositFragment extends Fragment {
 
@@ -25,6 +27,22 @@ public class AddDepositFragment extends Fragment {
     Spinner spinnerInterests, spinnerCurrencies;
 
     private static Calendar calendar = Calendar.getInstance();
+
+    private OnMoneyChangedListener onMoneyChangedListener;
+
+    //private List<OnMoneyChangedListener> onMoneyChangedListeners = new ArrayList<>();
+    private List<OnDepositAddListener> onDepositAddListeners = new ArrayList<>();
+
+    public void setOnMoneyChangedListener(OnMoneyChangedListener listener) {
+        this.onMoneyChangedListener = listener;
+    }
+
+    /*public void addOnMoneyChangedListener(OnMoneyChangedListener listener) {
+        onMoneyChangedListeners.add(listener);
+    }*/
+    public void addOnDepositAddListener(OnDepositAddListener listener) {
+        onDepositAddListeners.add(listener);
+    }
 
     ArrayAdapter<?> interestsAdapter, currenciesAdapter;
 
@@ -39,11 +57,11 @@ public class AddDepositFragment extends Fragment {
     private static Purse purse;
     private static long currentTime;
 
-    private OnDepositAddListener onDepositAddListener;
+    //private OnDepositAddListener onDepositAddListener;
 
-    public void setOnDepositAddListener(OnDepositAddListener listener) {
+    /*public void setOnDepositAddListener(OnDepositAddListener listener) {
         this.onDepositAddListener = listener;
-    }
+    }*/
 
     public static AddDepositFragment newInstance(Bank mBank, Purse mPurse, long mCurrentTime) {
         bank = mBank;
@@ -51,6 +69,11 @@ public class AddDepositFragment extends Fragment {
         currentTime = mCurrentTime;
         calendar.setTimeInMillis(mCurrentTime);
         return new AddDepositFragment();
+    }
+
+    public void updateCurrentTime(long mCurrentTime) {
+        currentTime = mCurrentTime;
+        calendar.setTimeInMillis(mCurrentTime);
     }
 
     @Nullable
@@ -64,7 +87,7 @@ public class AddDepositFragment extends Fragment {
         seekBar = (SeekBar) v.findViewById(R.id.add_deposit_fragment_value_seek_bar);
 
         interests = getResources().getStringArray(R.array.interests_names);
-        currencies = getResources().getStringArray(R.array.deposit_currencies_names);
+        currencies = getResources().getStringArray(R.array.deposit_currencies_names_before_1998);
 
         //инициализация выбора процентных ставок
         interestsAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.interests_names, android.R.layout.simple_spinner_item);
@@ -72,13 +95,21 @@ public class AddDepositFragment extends Fragment {
         spinnerInterests.setAdapter(interestsAdapter);
 
         //инициализация выбора валют вклада
-        currenciesAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.deposit_currencies_names,
-                android.R.layout.simple_spinner_item);
+        String[] currenciesNames;
+        if(currentTime < Constants.JAN_1998_1) {
+            currenciesNames = getResources().getStringArray(R.array.deposit_currencies_names_before_1998);
+        } else {
+            currenciesNames = getResources().getStringArray(R.array.deposit_currencies_names_after_1998);
+        }
+        currenciesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, currenciesNames);
+
+        //currenciesAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.deposit_currencies_names,
+        //        android.R.layout.simple_spinner_item);
         currenciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCurrencies.setAdapter(currenciesAdapter);
 
         spinnerInterests.setSelection(0);
-        spinnerCurrencies.setSelection(1);
+        spinnerCurrencies.setSelection(0);
 
         //добавляем onItemSelectedLisntere
         spinnerInterests.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -132,16 +163,27 @@ public class AddDepositFragment extends Fragment {
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bank.addDeposit(new Deposit(etName.getText().toString(), currentTime, moneyToAdd, Constants.interestValues[interestSelectedPosition]));
+                bank.addDeposit(new Deposit(etName.getText().toString(), currentTime, moneyToAdd,
+                        Constants.interestValues[interestSelectedPosition], currencySelectedPosition));
                 getActivity().getSupportFragmentManager().popBackStack();
-                onDepositAddListener.onDepositAdd();
+//                onDepositAddListener.onDepositAdd(moneyToAdd, currencySelectedPosition,
+//                        calendar.get(Calendar.YEAR));
+                notifyDepositAdded(moneyToAdd, currencySelectedPosition,
+                        calendar.get(Calendar.YEAR));
+                onMoneyChangedListener.onMoneyChanged();
             }
         });
         return v;
     }
 
+    private void notifyDepositAdded(double howMuch, int currencyIndex, int year) {
+        for(OnDepositAddListener onDepositAddListener: onDepositAddListeners) {
+            onDepositAddListener.onDepositAdd(howMuch, currencyIndex, year);
+        }
+    }
+
     private int getCurrencyIndexByName(String currencyName) {
-        String[] currencies = getResources().getStringArray(R.array.deposit_currencies_names);
+        String[] currencies = getResources().getStringArray(R.array.deposit_currencies_names_before_1998);
         int index = 0;
         if(currencyName.equals(currencies[0])) {
             index = Bank.CURRENCY_RUBLES;
