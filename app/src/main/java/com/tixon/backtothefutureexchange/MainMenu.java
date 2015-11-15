@@ -24,9 +24,8 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //mediaPlayer = MediaPlayer.create(this, R.raw.main);
-
-        //mediaPlayer.start();
+        mediaPlayer = MediaPlayer.create(this, R.raw.main_theme);
+        mediaPlayer.start();
 
         //инициализация ImageView
         top = (ImageView) findViewById(R.id.iv_name);
@@ -93,6 +92,7 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
                 break;
             case R.id.exit_:
                 touch(tvExit, event);
+                System.exit(0);
         }
         return true;
     }
