@@ -160,6 +160,7 @@ public class AddDepositFragment extends Fragment {
         });
 
         bAdd = (Button) v.findViewById(R.id.add_deposit_fragment_button);
+        //кнопка добавления вклада
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

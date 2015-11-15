@@ -10,7 +10,7 @@ public class Deposit {
     private double interest; //процентная ставка по вкладу
 
     public Deposit (String name, long initTime, double initValue, double interest, int currencyIndex) {
-        this.currency = currency;
+        this.currency = currencyIndex;
         this.name = name;
         this.initTime = initTime;
         this.initValue = initValue;

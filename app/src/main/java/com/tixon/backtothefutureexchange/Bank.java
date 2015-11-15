@@ -13,9 +13,9 @@ public class Bank {
 
     private static volatile Bank instance;
 
-    public static final int CURRENCY_RUBLES = 2;
     public static final int CURRENCY_DOLLARS = 0;
     public static final int CURRENCY_POUNDS = 1;
+    public static final int CURRENCY_RUBLES = 2;
 
     public static final int YEAR_1946 = 0;
     public static final int YEAR_1955 = 1;

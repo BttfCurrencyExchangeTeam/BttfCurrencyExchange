@@ -3,7 +3,6 @@ package com.tixon.backtothefutureexchange;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 public class MainMenu extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
-    MediaPlayer mediaPlayer;
+    //MediaPlayer mediaPlayer;
 
     ImageView top, bottom;
 
@@ -24,8 +23,8 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.main_theme);
-        mediaPlayer.start();
+        //mediaPlayer = MediaPlayer.create(this, R.raw.main_theme);
+        //mediaPlayer.start();
 
         //инициализация ImageView
         top = (ImageView) findViewById(R.id.iv_name);

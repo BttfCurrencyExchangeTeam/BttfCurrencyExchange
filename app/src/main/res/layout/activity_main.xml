@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <include layout="@layout/deposit_items_layout" />
+                <include layout="@layout/deposits_recycler_layout" />
 
             </LinearLayout>
 

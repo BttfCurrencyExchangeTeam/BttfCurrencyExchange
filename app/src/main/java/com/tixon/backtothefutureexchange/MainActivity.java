@@ -22,7 +22,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         OnMoneyChangedListener,
-        OnItemCheckedListener, OnAddDepositItemClickListener, OnDepositAddListener {
+        OnItemCheckedListener, OnAddDepositItemClickListener, OnDepositAddListener, OnMoneyWithdrawListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
         depositsRecyclerView.setHasFixedSize(true);
         depositsAdapter.setOnAddDepositListener(this);
+        depositsAdapter.setOnMoneyWithdrawListener(this);
 
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
@@ -226,6 +227,13 @@ public class MainActivity extends AppCompatActivity implements
                 .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
         depositsRecyclerView.setHasFixedSize(true);
+    }
+
+    @Override
+    public void onMoneyWithdraw(int money, int currencyTo, int year) {
+        //снятие денег с депозита
+        purse.add(money, currencyTo, year);
+        purseAdapter.notifyDataSetChanged();
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);

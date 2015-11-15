@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deposit_frame"
     android:layout_width="match_parent"
     android:layout_height="@dimen/deposit_item_height">
     <ImageView
@@ -49,6 +50,30 @@
             tools:text="Доход по вкладу: 70000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+
+        android:id="@+id/deposit_actions_layout"
+        android:background="@color/colorAccent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_width="120dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/deposit_action_get_money"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/deposit_action_background"
+            android:text="Снять"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
