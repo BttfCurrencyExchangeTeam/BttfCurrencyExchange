@@ -12,29 +12,30 @@
 
     <ImageView
         android:id="@+id/iv_name"
-        android:src="@drawable/bttf_name"
-        android:adjustViewBounds="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/iv_name_margin_top" />
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="@dimen/iv_name_margin_top"
+        android:adjustViewBounds="true"
+        android:src="@drawable/bttf_name" />
 
     <LinearLayout
-        android:layout_below="@+id/iv_name"
-        android:layout_above="@+id/iv_car"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/iv_car"
+        android:layout_below="@+id/iv_name"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:id="@+id/new_game"
-            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
-            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
+            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
             android:text="@string/new_game"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
@@ -42,10 +43,10 @@
 
         <TextView
             android:id="@+id/continue_"
-            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
-            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
+            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
             android:text="@string/_continue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
@@ -53,10 +54,10 @@
 
         <TextView
             android:id="@+id/options_"
-            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
-            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
+            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
             android:text="@string/_options"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
@@ -64,10 +65,10 @@
 
         <TextView
             android:id="@+id/tv_about"
-            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
-            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tv_menu_margin_vertical"
+            android:layout_marginTop="@dimen/tv_menu_margin_vertical"
             android:text="@string/about"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/main_menu_color"
@@ -87,12 +88,12 @@
 
     <ImageView
         android:id="@+id/iv_car"
-        android:src="@drawable/bttf_car"
-        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:adjustViewBounds="true"
+        android:src="@drawable/bttf_car" />
 
 </RelativeLayout>

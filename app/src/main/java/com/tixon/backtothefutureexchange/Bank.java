@@ -20,7 +20,10 @@ public class Bank {
     public static final int YEAR_1946 = 0;
     public static final int YEAR_1955 = 1;
     public static final int YEAR_1985 = 2;
-    public static final int YEAR_2015 = 3;
+    public static final int YEAR_1997 = 3;
+    public static final int YEAR_1998 = 4;
+    public static final int YEAR_2008 = 5;
+    public static final int YEAR_2015 = 6;
 
     private int currency;
     private double exchangeRate;
@@ -112,12 +115,18 @@ public class Bank {
             this.yearIndex = YEAR_1955;
         } else if(year > 1955 && year <= 1985) {
             this.yearIndex = YEAR_1985;
-        } else if(year > 1985) {
+        } else if(year > 1985 && year <= 1997) {
+            this.yearIndex = YEAR_1997;
+        } else if(year > 1997 && year <= 1998) {
+            this.yearIndex = YEAR_1998;
+        } else if(year > 1998 && year <= 2008) {
+            this.yearIndex = YEAR_2008;
+        } else if(year > 2008) {
             this.yearIndex = YEAR_2015;
         }
         //точный курс валют в определённые года,
         //в остальные - случайный в пределах точных значений
-        isExactRate = year == 1946 || year == 1955 || year == 1985 || year == 2015;
+        isExactRate = year == 1946 || year == 1955 || year == 1985 || year == 1997|| year == 1998|| year == 2008 || year == 2015;
     }
 
     public void setDate(Calendar date) {
@@ -143,8 +152,20 @@ public class Bank {
                 minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1955);
                 maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1985);
                 break;
-            case YEAR_2015:
+            case YEAR_1997:
                 minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1985);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1997);
+                break;
+            case YEAR_1998:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1997);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1998);
+                break;
+            case YEAR_2008:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_1998);
+                maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_2008);
+                break;
+            case YEAR_2015:
+                minCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_2008);
                 maxCurrency = getCurrencyByIndexAndYear(currencyIndex, YEAR_2015);
                 break;
             default: break;

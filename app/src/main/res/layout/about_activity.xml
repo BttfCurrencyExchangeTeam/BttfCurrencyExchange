@@ -13,7 +13,8 @@
                 android:text="@string/game_description"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
