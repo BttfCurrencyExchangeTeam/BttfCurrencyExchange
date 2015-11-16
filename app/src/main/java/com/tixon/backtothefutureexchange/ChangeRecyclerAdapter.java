@@ -43,6 +43,14 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
         this.availableCurrencies = availableCurrencies;
         this.currencyIndex = currencyIndex;
         this.purse = purse;
+        setAvailableCurrencies(availableCurrencies);
+
+        setFragmentData(fragment);
+        fragment.setCurrencyTo(availableCurrencies[selectedPosition]);
+    }
+
+    public void setAvailableCurrencies(int[] availableCurrencies) {
+        currencies.clear();
         for(int currency: availableCurrencies) {
             switch (currency) {
                 case Bank.CURRENCY_RUBLES:
@@ -57,9 +65,7 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
                 default: break;
             }
         }
-
-        setFragmentData(fragment);
-        fragment.setCurrencyTo(availableCurrencies[selectedPosition]);
+        notifyDataSetChanged();
     }
 
     @Override

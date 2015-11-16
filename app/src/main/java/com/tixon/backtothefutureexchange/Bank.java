@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Tixon
  */
-public class Bank {
+public class Bank implements OnCurrencyChangedListener {
 
     private static volatile Bank instance;
 
@@ -287,5 +287,10 @@ public class Bank {
             return resultList;
         }*/
         return deposits;
+    }
+
+    @Override
+    public void onCurrencyChanged(int currency) {
+        setCurrency(currency);
     }
 }

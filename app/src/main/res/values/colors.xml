@@ -14,6 +14,8 @@
         <item>#ff6203</item>
     </array>
 
+    <color name="selected_currency_item_color">#bbdefb</color>
+
     <color name="et_background_color">#343434</color>
     <color name="et_stroke_color">#777777</color>
     <color name="panel_background_color">#9a9a9a</color>

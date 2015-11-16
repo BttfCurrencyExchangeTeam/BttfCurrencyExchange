@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class FragmentChange extends Fragment implements OnItemCheckedListener {
+public class FragmentChange extends Fragment implements OnItemCheckedListener, OnCurrencyChangedListener {
     Button buttonChange;
     SeekBar seekBar;
     TextView textView;
@@ -123,5 +123,10 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener {
 
     public void setCurrencyTo(int currencyTo) {
         this.currencyTo = currencyTo;
+    }
+
+    @Override
+    public void onCurrencyChanged(int currency) {
+        adapter.setAvailableCurrencies(bank.getAvailableCurrencies());
     }
 }

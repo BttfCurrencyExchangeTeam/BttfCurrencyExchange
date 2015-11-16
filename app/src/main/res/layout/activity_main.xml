@@ -66,7 +66,7 @@
                 <!--include layout="@layout/purse_header_layout"/-->
 
                 <TextView
-                    android:text="Мои сбережения"
+                    android:text="@string/activity_main_my_purse"
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -74,7 +74,7 @@
                 <include layout="@layout/purse_items_layout" />
 
                 <TextView
-                    android:text="Мои вклады"
+                    android:text="@string/activity_main_my_deposits"
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -90,14 +90,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/main_buttons_layout"
-            android:paddingBottom="16dp"
             android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:gravity="bottom"
             android:layout_alignParentBottom="true">
 
             <Button
                 android:id="@+id/main_activity_button_exchange"
-                android:text="Обменять"
+                android:text="@string/activity_main_button_exchange"
                 android:background="@drawable/button_background"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
@@ -107,7 +107,7 @@
 
             <Button
                 android:id="@+id/main_activity_button_travel"
-                android:text="Переместиться"
+                android:text="@string/activity_main_button_travel"
                 android:background="@drawable/button_background"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"

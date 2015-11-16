@@ -101,17 +101,14 @@ public class AddDepositFragment extends Fragment {
         } else {
             currenciesNames = getResources().getStringArray(R.array.deposit_currencies_names_after_1998);
         }
-        currenciesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, currenciesNames);
-
-        //currenciesAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.deposit_currencies_names,
-        //        android.R.layout.simple_spinner_item);
+        currenciesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, currenciesNames);
         currenciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCurrencies.setAdapter(currenciesAdapter);
 
         spinnerInterests.setSelection(0);
         spinnerCurrencies.setSelection(0);
 
-        //добавляем onItemSelectedLisntere
+        //добавляем onItemSelectedListener
         spinnerInterests.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -167,8 +164,7 @@ public class AddDepositFragment extends Fragment {
                 bank.addDeposit(new Deposit(etName.getText().toString(), currentTime, moneyToAdd,
                         Constants.interestValues[interestSelectedPosition], currencySelectedPosition));
                 getActivity().getSupportFragmentManager().popBackStack();
-//                onDepositAddListener.onDepositAdd(moneyToAdd, currencySelectedPosition,
-//                        calendar.get(Calendar.YEAR));
+                //уведомляет слушателей о том, что был добавлен вклад
                 notifyDepositAdded(moneyToAdd, currencySelectedPosition,
                         calendar.get(Calendar.YEAR));
                 onMoneyChangedListener.onMoneyChanged();

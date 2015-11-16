@@ -22,7 +22,10 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         OnMoneyChangedListener,
-        OnItemCheckedListener, OnAddDepositItemClickListener, OnDepositAddListener, OnMoneyWithdrawListener {
+        OnItemCheckedListener,
+        OnAddDepositItemClickListener,
+        OnDepositAddListener,
+        OnMoneyWithdrawListener {
 
     TextView tvCurrentYear, tvMoney;
     Button bTravel, bExchange;
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements
 
         initViews();
 
+        purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
+
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
         tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
                 calendarPresent.get(Calendar.YEAR))));
@@ -104,7 +109,11 @@ public class MainActivity extends AppCompatActivity implements
 
         purseRecyclerView = (RecyclerView) findViewById(R.id.purse_recycler_view);
         purseLayoutManager = new LinearLayoutManager(this);
-        purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse());
+        purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse(), calendarPresent.getTimeInMillis());
+        //добавление слушателей об изменении валюты в MainActivity -> purseAdapter
+        purseAdapter.addOnCurrencyChangedListener(bank);
+        purseAdapter.addOnCurrencyChangedListener(fragmentChange);
+
         purseRecyclerView.setLayoutManager(purseLayoutManager);
         purseRecyclerView.setAdapter(purseAdapter);
         int recyclerViewHeight = getResources().getDimensionPixelSize(R.dimen.purse_item_height) * purse.getPurse().length;
@@ -151,10 +160,15 @@ public class MainActivity extends AppCompatActivity implements
                     tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
+                    //update deposits adapter time
                     depositsAdapter.updateCurrentTime(calendarPresent.getTimeInMillis());
                     depositsAdapter.notifyDataSetChanged();
+                    //update purse adapter time
+                    purseAdapter.updateTime(calendarPresent.getTimeInMillis());
+                    //update time for add deposit fragment
                     addDepositFragment.updateCurrentTime(calendarPresent.getTimeInMillis());
                     break;
+                default: break;
             }
         }
     }
@@ -174,8 +188,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.main_activity_button_exchange:
                 showExchangeDialog();
                 break;
-            default:
-                break;
+            default: break;
         }
     }
 
@@ -204,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onMoneyChanged() {
         tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
                 .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
+        purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
         purseAdapter.notifyDataSetChanged();
     }
 

@@ -13,6 +13,7 @@ public class Constants {
 
     public static final double[] interestValues = new double[] {7, 10, 12, 13.5, 16, 22};
 
+    public static final long DEC_1922_22 = -1484092800000L;
     public static final long JAN_1998_1 = 883612800000L;
     public static final long DEC_2045_31 = 2398291200000L;
 }

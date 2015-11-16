@@ -58,6 +58,11 @@
         <item>Рубль</item>
     </string-array>
 
+    <string name="activity_main_my_deposits">Мои вклады</string>
+    <string name="activity_main_my_purse">Мои сбережения</string>
+    <string name="activity_main_button_exchange">Обменять</string>
+    <string name="activity_main_button_travel">Переместиться</string>
+
     <string name="deposit_add_text">Добавить</string>
     <string name="deposit_currency_text">Валюта</string>
     <string name="deposit_interest_text">Процентная ставка</string>
