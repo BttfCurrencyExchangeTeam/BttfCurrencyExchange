@@ -8,14 +8,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:padding="4dp"
             android:layout_alignParentTop="true"
             android:id="@+id/main_toolbar"
-            android:background="@color/panel_background_color"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="56dp">
-            <TextView
+            <!--TextView
                 android:id="@+id/main_activity_tv_year"
                 tools:text="2015"
                 android:layout_centerVertical="true"
@@ -28,9 +29,9 @@
                 android:textColor="@color/green"
                 android:maxLength="4"
                 android:ems="3"
-                android:maxEms="3"/>
+                android:maxEms="3"/-->
 
-            <TextView
+            <!--TextView
                 android:id="@+id/main_activity_tv_money"
                 tools:text="$1000.00"
                 android:layout_centerVertical="true"
@@ -41,8 +42,62 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/et_padding"
-                android:textColor="@color/green" />
-        </RelativeLayout>
+                android:textColor="@color/green" /-->
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/iv_toolbar_plutonium"
+
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    tools:ignore="ContentDescription"/>
+                <TextView
+                    android:text="plutonium"
+                    android:id="@+id/tv_toolbar_plutonium"
+                    android:textAppearance="?android:attr/textAppearanceInverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_toolbar_plutonium"
+                    android:layout_toEndOf="@+id/iv_toolbar_plutonium"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/iv_toolbar_fuel"
+                    android:src="@drawable/fuel"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    tools:ignore="ContentDescription"/>
+                <TextView
+                    android:text="fuel"
+                    android:id="@+id/tv_toolbar_fuel"
+                    android:textAppearance="?android:attr/textAppearanceInverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_toolbar_fuel"
+                    android:layout_toEndOf="@+id/iv_toolbar_fuel"/>
+            </RelativeLayout>
+        </LinearLayout>
 
         <ScrollView
             android:id="@+id/main_scroll_view"
@@ -71,6 +126,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <include layout="@layout/divider" />
+
                 <include layout="@layout/purse_items_layout" />
 
                 <TextView
@@ -78,6 +135,8 @@
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <include layout="@layout/divider" />
 
                 <include layout="@layout/deposits_recycler_layout" />
 

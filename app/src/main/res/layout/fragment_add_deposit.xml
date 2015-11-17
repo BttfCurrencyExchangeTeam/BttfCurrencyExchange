@@ -10,7 +10,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/fragment_change_background">
+        android:background="@drawable/fragment_background">
 
         <EditText
             android:id="@+id/add_deposit_fragment_et_name"

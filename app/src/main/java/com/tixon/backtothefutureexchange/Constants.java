@@ -7,6 +7,10 @@ public class Constants {
     public static final String KEY_TIME_PRESENT = "key_time_present";
     public static final String KEY_TIME_LAST = "key_time_last";
 
+    public static final String BACK_STACK_ADD_DEPOSIT = "ADD_DEPOSIT_FRAGMENT";
+    public static final String BACK_STACK_CHANGE = "CHANGE_FRAGMENT";
+    public static final String BACK_STACK_ADD_RESOURCES = "ADD_RESOURCES_FRAGMENT";
+
     public static final int REQUEST_CODE_TRAVEL = 10;
 
     public static final int CODE_DEPOSIT_NO_EXISTS = -1828;

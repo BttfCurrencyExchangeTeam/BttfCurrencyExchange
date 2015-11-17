@@ -33,7 +33,7 @@ public class ControlPanelActivity extends AppCompatActivity implements
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
 
-        delorean = Delorean.getDelorean();
+        delorean = Delorean.getInstance();
 
         Intent fromMainActivity = getIntent();
 

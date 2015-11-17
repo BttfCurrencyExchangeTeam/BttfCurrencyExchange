@@ -79,7 +79,7 @@ public class AddDepositFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.add_deposit_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_deposit, container, false);
         tvValue = (TextView) v.findViewById(R.id.add_deposit_fragment_tv_value);
         etName = (EditText) v.findViewById(R.id.add_deposit_fragment_et_name);
         spinnerInterests = (Spinner) v.findViewById(R.id.add_deposit_fragment_interest_selector);

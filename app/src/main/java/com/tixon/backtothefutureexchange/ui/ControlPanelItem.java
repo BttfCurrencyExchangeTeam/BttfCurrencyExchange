@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -138,7 +137,7 @@ public class ControlPanelItem extends RelativeLayout {
             public void run() {
                 addSecond(calendar);
                 setDate(calendar);
-                Log.d("myLogs", "seconds = " + calendar.get(Calendar.SECOND));
+                //Log.d("myLogs", "seconds = " + calendar.get(Calendar.SECOND));
                 h.postDelayed(this, 1000);
             }
         }, 1000);

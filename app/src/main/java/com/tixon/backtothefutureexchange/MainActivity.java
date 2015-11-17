@@ -1,8 +1,8 @@
 package com.tixon.backtothefutureexchange;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +12,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
 
@@ -27,10 +27,12 @@ public class MainActivity extends AppCompatActivity implements
         OnDepositAddListener,
         OnMoneyWithdrawListener {
 
-    TextView tvCurrentYear, tvMoney;
+    SharedPreferences sp;
+
     Button bTravel, bExchange;
     FrameLayout container;
     RelativeLayout purseHeader;
+    LinearLayout mainToolbar;
     ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
 
     RecyclerView purseRecyclerView, depositsRecyclerView;
@@ -40,10 +42,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private FragmentChange fragmentChange;
     private AddDepositFragment addDepositFragment;
+    private FragmentResources fragmentResources;
 
     private Calendar calendar, calendarPresent, calendarLast;
 
-    private OnAddPlutoniumListener onAddPlutoniumListener;
+    private OnAddResourcesListener onAddResourcesListener;
 
     private Purse purse;
     private Delorean delorean;
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
 
-        delorean = Delorean.getDelorean();
+        delorean = Delorean.getInstance();
 
         bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
@@ -79,11 +82,12 @@ public class MainActivity extends AppCompatActivity implements
         purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
 
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
-        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
-                calendarPresent.get(Calendar.YEAR))));
+        /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
+                calendarPresent.get(Calendar.YEAR))));*/
 
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
         addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
+        fragmentResources = FragmentResources.newInstance();
         //addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
 
         addDepositFragment.addOnDepositAddListener(this); //слушатель на кнопку создания депозита
@@ -94,13 +98,21 @@ public class MainActivity extends AppCompatActivity implements
         addDepositFragment.setOnMoneyChangedListener(this); //слушатель изменения значения денег
     }
 
-    public void setOnAddPlutoniumListener(OnAddPlutoniumListener onAddPlutoniumListener) {
-        this.onAddPlutoniumListener = onAddPlutoniumListener;
+    public void setOnAddResourcesListener(OnAddResourcesListener onAddResourcesListener) {
+        this.onAddResourcesListener = onAddResourcesListener;
     }
 
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
         purseHeader = (RelativeLayout) findViewById(R.id.purse_header_frame);
+        mainToolbar = (LinearLayout) findViewById(R.id.main_toolbar);
+
+        mainToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddResourcesFragment();
+            }
+        });
 
         mainPresentTimePanel = (ControlPanelItem) findViewById(R.id.main_activity_present_panel);
         mainPresentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
@@ -139,14 +151,14 @@ public class MainActivity extends AppCompatActivity implements
         bTravel.setOnClickListener(this);
         bExchange.setOnClickListener(this);
 
-        tvCurrentYear = (TextView) findViewById(R.id.main_activity_tv_year);
+        /*tvCurrentYear = (TextView) findViewById(R.id.main_activity_tv_year);
         tvMoney = (TextView) findViewById(R.id.main_activity_tv_money);
         tvCurrentYear.setTypeface(Typeface.createFromAsset(getResources().getAssets(),
                 Constants.TYPEFACE_DIGITS));
         tvMoney.setTypeface(Typeface.createFromAsset(getResources().getAssets(),
                 Constants.TYPEFACE_DIGITS));
 
-        tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
+        tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));*/
     }
 
     @Override
@@ -157,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements
                 case Constants.REQUEST_CODE_TRAVEL:
                     calendarPresent.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
                     bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
-                    tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
+                    //tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     //update deposits adapter time
@@ -199,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                     fragmentChange)
                     .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack("CHANGE_FRAGMENT")
+                    .addToBackStack(Constants.BACK_STACK_CHANGE)
                     .commit();
         } catch (Exception e) {
             Log.e("myLogs", "FragmentChange adding error: " + e.toString() +
@@ -215,8 +227,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onMoneyChanged() {
-        tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
-                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));
+        /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
+                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));*/
         purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
         purseAdapter.notifyDataSetChanged();
     }
@@ -231,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_container, addDepositFragment)
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("ADD_DEPOSIT_FRAGMENT")
+                .addToBackStack(Constants.BACK_STACK_ADD_DEPOSIT)
                 .commit();
     }
 
@@ -251,4 +263,18 @@ public class MainActivity extends AppCompatActivity implements
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);
+
+    private void showAddResourcesFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, fragmentResources)
+                .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(Constants.BACK_STACK_ADD_RESOURCES)
+                .commit();
+    }
+
+    void saveGame() {
+        sp = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        //сохраняем кошелёк, вклады, время,
+    }
 }
