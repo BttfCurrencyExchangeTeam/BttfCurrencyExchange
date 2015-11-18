@@ -11,6 +11,18 @@ public class Constants {
     public static final String BACK_STACK_CHANGE = "CHANGE_FRAGMENT";
     public static final String BACK_STACK_ADD_RESOURCES = "ADD_RESOURCES_FRAGMENT";
 
+    public static final String KEY_NEW_OR_CONTINUE = "key_new_or_continue";
+    public static final int KEY_NEW = 1;
+    public static final int KEY_CONTINUE = 2;
+
+    public static final String PREFERENCE_CURRENT_TIME = "preference_current_time";
+
+    //bundle
+    public static final String BUNDLE_TIME_PRESENT = "bundle_time_present";
+    public static final String BUNDLE_TIME_DESTINATION = "bundle_time_destination";
+    public static final String BUNDLE_TIME_LAST_DEPARTED = "bundle_time_last_departed";
+    public static final String BUNDLE_CURRENCY_SELECTED = "bundle_currency_selected";
+
     public static final int REQUEST_CODE_TRAVEL = 10;
 
     public static final int CODE_DEPOSIT_NO_EXISTS = -1828;

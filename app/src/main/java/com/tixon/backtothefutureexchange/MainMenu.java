@@ -98,11 +98,15 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
 
     @Override
     public void onClick(View v) {
+        Intent startMainActivityIntent = new Intent(this, MainActivity.class);
         switch (v.getId()) {
             case R.id.new_game:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW);
+                startActivity(startMainActivityIntent);
+                break;
+            case R.id.continue_:
+                startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_CONTINUE);
+                startActivity(startMainActivityIntent);
                 break;
             case R.id.tv_about:
                 Intent intentStartAboutActivity = new Intent(this, AboutActivity.class);

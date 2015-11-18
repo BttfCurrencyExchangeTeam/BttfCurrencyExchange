@@ -3,6 +3,7 @@ package com.tixon.backtothefutureexchange;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,6 +25,9 @@ public class ControlPanelActivity extends AppCompatActivity implements
 
     private Delorean delorean;
 
+    SQLiteDatabase db;
+    DataBaseHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,9 @@ public class ControlPanelActivity extends AppCompatActivity implements
         calendarLast = Calendar.getInstance();
 
         delorean = Delorean.getInstance();
+
+        dbHelper = new DataBaseHelper(this);
+        db = dbHelper.getWritableDatabase();
 
         Intent fromMainActivity = getIntent();
 
