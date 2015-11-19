@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final String LOG_TAG = "myLogs";
+    private static final String LOG_TAG = "myLogsDatabase";
 
     private static final String DB_NAME = "bttf_data_base";
     private static final int DB_VERSION = 1;
@@ -72,7 +72,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             GAME_SAVED_NAME + " text, " + TIME_PRESENT + " integer, " +
             TIME_DESTINATION + " integer, " + TIME_LAST_DEPARTED + " integer, " +
             CURRENCY_SELECTED + " integer" + ");";
-    private static final String CREATE_TABLE_SAVED_GAMES = "create table " + " (" +
+    private static final String CREATE_TABLE_SAVED_GAMES = "create table " + TABLE_SAVED_GAMES + " (" +
             UID + " integer primary key autoincrement, " + GAME_SAVED_TIME + " integer, " +
             GAME_SAVED_NAME + " text" + ");";
 
@@ -82,6 +82,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(LOG_TAG, "onCreate database");
         db.execSQL(CREATE_TABLE_GENERAL);
         db.execSQL(CREATE_TABLE_DEPOSITS);
         db.execSQL(CREATE_TABLE_PURSE);
@@ -97,6 +98,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //add deposits
     public void addDeposits(SQLiteDatabase db, ArrayList<Deposit> deposits, long gameSavedTime) {
         ContentValues cv;
+        long rowsCount = 0;
         for(int i = 0; i < deposits.size(); i++) {
             cv = new ContentValues();
             cv.put(DEPOSIT_NAME, deposits.get(i).getName());
@@ -107,8 +109,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             cv.put(GAME_SAVED_TIME, gameSavedTime);
 
-            db.insert(TABLE_DEPOSITS, null, cv);
+            rowsCount += db.insert(TABLE_DEPOSITS, null, cv);
         }
+        Log.d(LOG_TAG, "addDeposits to database: rowsCount = " + rowsCount);
     }
 
     //add purse
@@ -122,7 +125,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         cv.put(GAME_SAVED_TIME, gameSavedTime);
 
-        db.insert(TABLE_PURSE, null, cv);
+        long rowsCount = db.insert(TABLE_PURSE, null, cv);
+        Log.d(LOG_TAG, "addPurse to database: rowsCount = " + rowsCount);
     }
 
     //add delorean info
@@ -133,7 +137,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         cv.put(GAME_SAVED_TIME, gameSavedTime);
 
-        db.insert(TABLE_DELOREAN, null, cv);
+        long rowsCount = db.insert(TABLE_DELOREAN, null, cv);
+        Log.d(LOG_TAG, "addDelorean to database: rowsCount = " + rowsCount);
     }
 
     //add general info
@@ -147,7 +152,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         cv.put(GAME_SAVED_TIME, gameSavedTime);
 
-        db.insert(TABLE_GENERAL, null, cv);
+        long rowsCount = db.insert(TABLE_GENERAL, null, cv);
+        Log.d(LOG_TAG, "addGeneralData to database: rowsCount = " + rowsCount);
     }
 
     //add saved game info
@@ -155,7 +161,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(GAME_SAVED_TIME, gameSavedTime);
         cv.put(GAME_SAVED_NAME, gameSavedName);
-        db.insert(TABLE_SAVED_GAMES, null, cv);
+        long rowsCount = db.insert(TABLE_SAVED_GAMES, null, cv);
+        Log.d(LOG_TAG, "addSavedGame to database: rowsCount = " + rowsCount);
     }
 
     //READ
@@ -165,6 +172,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ArrayList<Deposit> deposits = new ArrayList<>();
         String selection = GAME_SAVED_TIME + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
+        Log.d(LOG_TAG, "read deposits");
         Cursor c = db.query(TABLE_DEPOSITS, null, selection, selectionArgs, null, null, null);
         if(c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex(DEPOSIT_NAME);
@@ -188,25 +196,58 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public boolean readPurse(SQLiteDatabase db, Purse purse, long gameSavedTime) {
         String selection = GAME_SAVED_TIME + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
+        Log.d(LOG_TAG, "read purse");
         Cursor c = db.query(TABLE_PURSE, null, selection, selectionArgs, null, null, null);
         if(!c.moveToFirst()) {
+            Log.d(LOG_TAG, "read purse: 0 rows found");
             return false;
         } else {
+            int timeColIndex = c.getColumnIndex(GAME_SAVED_TIME);
             int rublesImperialColIndex = c.getColumnIndex(PURSE_RUBLES_IMPERIAL);
             int rublesSovietColIndex = c.getColumnIndex(PURSE_RUBLES_SOVIET);
-            int rublesRfColIndex = c.getColumnIndex(PURSE_RUBLES_SOVIET);
+            int rublesRfColIndex = c.getColumnIndex(PURSE_RUBLES_RF);
             int dollarsColIndex = c.getColumnIndex(PURSE_DOLLARS);
             int poundsColIndex = c.getColumnIndex(PURSE_POUNDS);
 
             do {
-                purse.setImperialRubles(c.getDouble(rublesImperialColIndex));
-                purse.setSovietRubles(c.getDouble(rublesSovietColIndex));
-                purse.setRussianRubles(c.getDouble(rublesRfColIndex));
-                purse.setDollars(c.getDouble(dollarsColIndex));
-                purse.setPounds(c.getDouble(poundsColIndex));
+                double imperialRubles = c.getDouble(rublesImperialColIndex);
+                double sovietRubles = c.getDouble(rublesSovietColIndex);
+                double rfRubles = c.getDouble(rublesRfColIndex);
+                double dollars = c.getDouble(dollarsColIndex);
+                double pounds = c.getDouble(poundsColIndex);
+
+                purse.setImperialRubles(imperialRubles);
+                purse.setSovietRubles(sovietRubles);
+                purse.setRussianRubles(rfRubles);
+                purse.setDollars(dollars);
+                purse.setPounds(pounds);
             } while (c.moveToNext());
         }
         c.close();
+
+        /*Log.d(LOG_TAG, " --- reading all entries --- ");
+        Cursor c1 = db.query(TABLE_PURSE, null, null, null, null, null, null);
+        if(c1.moveToFirst()) {
+            int idColIndex = c1.getColumnIndex(UID);
+            int timeColIndex = c1.getColumnIndex(GAME_SAVED_TIME);
+            int rublesImperialColIndex = c1.getColumnIndex(PURSE_RUBLES_IMPERIAL);
+            int rublesSovietColIndex = c1.getColumnIndex(PURSE_RUBLES_SOVIET);
+            int rublesRfColIndex = c1.getColumnIndex(PURSE_RUBLES_RF);
+            int dollarsColIndex = c1.getColumnIndex(PURSE_DOLLARS);
+            int poundsColIndex = c1.getColumnIndex(PURSE_POUNDS);
+
+            do {
+                Log.d(LOG_TAG, "read purse: id = " + c1.getLong(idColIndex) + ", time = " +
+                        c1.getLong(timeColIndex) + ", rublesImperial = " + c1.getDouble(rublesImperialColIndex) +
+                ", rublesSoviet = " + c1.getDouble(rublesSovietColIndex) + ", rublesRF = " +
+                c1.getDouble(rublesRfColIndex) + ", dollars = " + c1.getDouble(dollarsColIndex) +
+                ", pounds = " + c1.getDouble(poundsColIndex));
+            } while(c1.moveToNext());
+        } else {
+            Log.d(LOG_TAG, "read purse - rows not found");
+        }
+        c1.close();*/
+
         return true;
     }
 
@@ -215,7 +256,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String selection = GAME_SAVED_TIME + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
         Bundle bundle = new Bundle();
-        Cursor c = db.query(TABLE_PURSE, null, selection, selectionArgs, null, null, null);
+        Log.d(LOG_TAG, "read general info");
+        Cursor c = db.query(TABLE_GENERAL, null, selection, selectionArgs, null, null, null);
         if(c.moveToFirst()) {
             int timePresentColIndex = c.getColumnIndex(TIME_PRESENT);
             int timeDestinationColIndex = c.getColumnIndex(TIME_DESTINATION);
@@ -223,10 +265,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             int currencyColIndex = c.getColumnIndex(CURRENCY_SELECTED);
 
             do {
-                bundle.putLong(Constants.BUNDLE_TIME_PRESENT, c.getLong(timePresentColIndex));
-                bundle.putLong(Constants.BUNDLE_TIME_DESTINATION, c.getLong(timeDestinationColIndex));
-                bundle.putLong(Constants.BUNDLE_TIME_LAST_DEPARTED, c.getLong(timeLastDepartedColIndex));
-                bundle.putInt(Constants.BUNDLE_CURRENCY_SELECTED, c.getInt(currencyColIndex));
+                bundle.putLong(Constants.BUNDLE_DB_TIME_PRESENT, c.getLong(timePresentColIndex));
+                bundle.putLong(Constants.BUNDLE_DB_TIME_DESTINATION, c.getLong(timeDestinationColIndex));
+                bundle.putLong(Constants.BUNDLE_DB_TIME_LAST_DEPARTED, c.getLong(timeLastDepartedColIndex));
+                bundle.putInt(Constants.BUNDLE_DB_CURRENCY_SELECTED, c.getInt(currencyColIndex));
             } while(c.moveToNext());
         } else {
             Log.d(LOG_TAG, "read general info: no rows found");
@@ -238,11 +280,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //UPDATE
 
     //update purse
-    public void updatePurse(SQLiteDatabase db, double[] purse, long gameSavedTime) {
+    public long updatePurse(SQLiteDatabase db, double[] purse, long gameSavedTime) {
         String selection = GAME_SAVED_TIME + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
         ContentValues cv = new ContentValues();
-        cv.put(PURSE_RUBLES_IMPERIAL, purse[0]);
+        cv.put(PURSE_RUBLES_IMPERIAL, purse[0]);//144 794 474 60 18
         cv.put(PURSE_RUBLES_SOVIET, purse[1]);
         cv.put(PURSE_RUBLES_RF, purse[2]);
         cv.put(PURSE_DOLLARS, purse[3]);
@@ -250,10 +292,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         long updateCount = db.update(TABLE_PURSE, cv, selection, selectionArgs);
         Log.d(LOG_TAG, "update purse: rows count = " + updateCount);
+        return updateCount;
     }
 
     //update general info
-    public void updateGeneralInfo(SQLiteDatabase db, long presentTime, long destinationTime,
+    public long updateGeneralInfo(SQLiteDatabase db, long presentTime, long destinationTime,
                                   long lastTimeDeparted, int currencySelected, long gameSavedTime) {
         String selection = GAME_SAVED_TIME + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
@@ -265,6 +308,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         long updateCount = db.update(TABLE_GENERAL, cv, selection, selectionArgs);
         Log.d(LOG_TAG, "update general info: rows count = " + updateCount);
+        return updateCount;
     }
 
     //DELETE

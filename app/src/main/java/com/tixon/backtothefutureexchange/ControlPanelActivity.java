@@ -91,6 +91,8 @@ public class ControlPanelActivity extends AppCompatActivity implements
             case R.id.control_panel_button_travel:
                 Intent intent = new Intent();
                 intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate().getTimeInMillis());
+                intent.putExtra(Constants.KEY_TIME_PRESENT, presentTimePanel.getDate().getTimeInMillis());
+                intent.putExtra(Constants.KEY_TIME_LAST, lastTimeDepartedPanel.getDate().getTimeInMillis());
 // onTimeTravelListener.onTimeTraveled();
                 setResult(RESULT_OK, intent);
                 finish();

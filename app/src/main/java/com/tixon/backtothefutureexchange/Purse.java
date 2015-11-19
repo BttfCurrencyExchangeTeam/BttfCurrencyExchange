@@ -178,6 +178,7 @@ public class Purse implements OnDepositAddListener {
         add(changedMoney, currencyTo, year);
     }
 
+    //снимает деньги со счёта
     @Override
     public void onDepositAdd(double howMuch, int currencyIndex, int year) {
         Log.d("myLogs", "deposit add caught in purse: " + giveMoney(currencyIndex, year, howMuch));

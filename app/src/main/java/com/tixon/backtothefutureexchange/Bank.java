@@ -33,13 +33,13 @@ public class Bank implements OnCurrencyChangedListener {
 
     private Calendar date;
 
-    //депозиты
+    //вклады
     private ArrayList<Deposit> deposits;
     //значения массивов - сколько рублей дают за конкретную валюту
     private double[] dollars, pounds;
     //индекс массива с определённым годом (см. res/values/currencies.xml)
     private int yearIndex;
-    //указывает необходимость точного курса в конкретный год
+    //указывает на необходимость использования точного курса в конкретный год
     private boolean isExactRate = false;
 
     public static Bank getInstance(String[] dollars, String[] pounds) {
@@ -272,21 +272,28 @@ public class Bank implements OnCurrencyChangedListener {
         deposits.add(deposit);
     }
 
+    public void setDepositsFromDatabase(ArrayList<Deposit> deposits) {
+        this.deposits = new ArrayList<>();
+        for(Deposit d: deposits) {
+            this.deposits.add(d);
+        }
+    }
+
     public Deposit getDeposit(int position) {
         return deposits.get(position);
     }
 
     //long currentTime
-    public ArrayList<Deposit> getDeposits() {
-        /*ArrayList<Deposit> resultList = new ArrayList<>();
-        for(Deposit deposit: deposits) {
-            //если время создания вклада меньше настоящего времени currentTime
-            if(deposit.getInitTime() <= currentTime) {
-                resultList.add(deposit);
+    public ArrayList<Deposit> getDeposits(long time) {
+        ArrayList<Deposit> resultList = new ArrayList<>();
+        for(int i = 0; i < this.deposits.size(); i++) {
+            if(time >= this.deposits.get(i).getInitTime()) {
+                resultList.add(this.deposits.get(i));
             }
-            return resultList;
-        }*/
-        return deposits;
+        }
+        this.deposits.clear();
+        this.deposits.addAll(resultList);
+        return resultList;
     }
 
     @Override

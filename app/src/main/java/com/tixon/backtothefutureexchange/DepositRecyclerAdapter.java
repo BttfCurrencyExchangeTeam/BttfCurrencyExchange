@@ -46,6 +46,12 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         this.currentTime = currentTime;
     }
 
+    public void updateDeposits(ArrayList<Deposit> deposits) {
+        this.deposits.clear();
+        this.deposits.addAll(deposits);
+        notifyDataSetChanged();
+    }
+
     @Override
     public DepositViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == DEPOSIT_TYPE) {

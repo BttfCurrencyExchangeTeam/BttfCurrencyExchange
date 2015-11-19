@@ -18,10 +18,10 @@ public class Constants {
     public static final String PREFERENCE_CURRENT_TIME = "preference_current_time";
 
     //bundle
-    public static final String BUNDLE_TIME_PRESENT = "bundle_time_present";
-    public static final String BUNDLE_TIME_DESTINATION = "bundle_time_destination";
-    public static final String BUNDLE_TIME_LAST_DEPARTED = "bundle_time_last_departed";
-    public static final String BUNDLE_CURRENCY_SELECTED = "bundle_currency_selected";
+    public static final String BUNDLE_DB_TIME_PRESENT = "bundle_time_present";
+    public static final String BUNDLE_DB_TIME_DESTINATION = "bundle_time_destination";
+    public static final String BUNDLE_DB_TIME_LAST_DEPARTED = "bundle_time_last_departed";
+    public static final String BUNDLE_DB_CURRENCY_SELECTED = "bundle_currency_selected";
 
     public static final int REQUEST_CODE_TRAVEL = 10;
 

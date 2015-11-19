@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements
         OnDepositAddListener,
         OnMoneyWithdrawListener {
 
+    private static final String LOG_TAG = "myLogs";
     SharedPreferences sp;
 
     Button bTravel, bExchange;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements
     private AddDepositFragment addDepositFragment;
     private FragmentResources fragmentResources;
 
-    private Calendar calendar, calendarPresent, calendarLast;
+    private Calendar calendar, calendarPresent, calendarLast, calendarDestination;
 
     private OnAddResourcesListener onAddResourcesListener;
 
@@ -68,46 +69,37 @@ public class MainActivity extends AppCompatActivity implements
 
         isPurseExpanded = true;
 
+        long presentTime = System.currentTimeMillis();
+
         calendar = Calendar.getInstance();
+        calendarDestination = Calendar.getInstance();
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
 
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendarPresent.setTimeInMillis(calendar.getTimeInMillis());
+        calendar.setTimeInMillis(presentTime);
+        calendarPresent.setTimeInMillis(presentTime);
+        calendarDestination.setTimeInMillis(presentTime);
+        calendarLast.setTimeInMillis(presentTime);
 
         delorean = Delorean.getInstance();
         bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
         bank.setYearIndex(calendar.get(Calendar.YEAR));
+        bank.setCurrency(Bank.CURRENCY_DOLLARS);
+                /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
+                calendarPresent.get(Calendar.YEAR))));*/
         purse = Purse.getInstance();
         purse.init(); //set 1000 dollars for start
 
         initViews();
 
-        Intent fromMainMenu = getIntent();
-        long currentSystemTime;
-        switch (fromMainMenu.getIntExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW)) {
-            case Constants.KEY_NEW:
-                currentSystemTime = System.currentTimeMillis();
-                String savedGameName = "my_new_game " + currentSystemTime;
-                dbHelper.addSavedGame(db, currentSystemTime, savedGameName);
-                saveTime(currentSystemTime);
+        //                 установка и настройка адаптеров
 
-                dbHelper.addPurse(db, purse.getPurse(), currentSystemTime);
-                //dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis());
-                break;
-            case Constants.KEY_CONTINUE:
-                currentSystemTime = getSavedTime();
-                dbHelper.readPurse(db, purse, currentSystemTime);
-
-                break;
-        }
-
-        purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse(), calendarPresent.getTimeInMillis());
+        purseAdapter = new PurseItemsRecyclerAdapter(this, purse.getPurse(), presentTime);
         //добавление слушателей об изменении валюты в MainActivity -> purseAdapter
         purseAdapter.addOnCurrencyChangedListener(bank);
         purseAdapter.addOnCurrencyChangedListener(fragmentChange);
-        purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
+        purseAdapter.selectCurrency(bank.getCurrency(), presentTime);
 
         purseRecyclerView.setAdapter(purseAdapter);
         purseRecyclerView.getLayoutParams().height = getResources()
@@ -115,42 +107,92 @@ public class MainActivity extends AppCompatActivity implements
         purseRecyclerView.setHasFixedSize(true);
 
 
-        depositsAdapter = new DepositRecyclerAdapter(bank.getDeposits(), calendarPresent.getTimeInMillis());
+        depositsAdapter = new DepositRecyclerAdapter(bank.getDeposits(presentTime), presentTime);
         depositsRecyclerView.setAdapter(depositsAdapter);
         depositsRecyclerView.getLayoutParams().height = getResources()
-                .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
+                .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits(presentTime).size()
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
         depositsRecyclerView.setHasFixedSize(true);
         depositsAdapter.setOnAddDepositListener(this);
         depositsAdapter.setOnMoneyWithdrawListener(this);
 
+        //        создание или продолжение игры
+
+        Intent fromMainMenu = getIntent();
+        switch (fromMainMenu.getIntExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW)) {
+            case Constants.KEY_NEW:
+                long currentSystemTime;
+                currentSystemTime = System.currentTimeMillis();
+                String savedGameName = "my_new_game " + currentSystemTime;
+                saveTime(currentSystemTime);
+
+                //формирование записей базы данных для сохранения игры
+                dbHelper.addSavedGame(db, currentSystemTime, savedGameName);
+                dbHelper.addDeposits(db, bank.getDeposits(currentSystemTime), currentSystemTime);
+                dbHelper.addPurse(db, purse.getPurse(), currentSystemTime);
+                dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
+                        calendarDestination.getTimeInMillis(), calendarLast.getTimeInMillis(),
+                        bank.getCurrency(), currentSystemTime);
+                break;
+            case Constants.KEY_CONTINUE:
+                long savedTime;
+                Bundle generalInfoBundle;
+                savedTime = getSavedTime();
+                bank.setDepositsFromDatabase(dbHelper.readDeposits(db, savedTime));
+                dbHelper.readPurse(db, purse, savedTime);
+                generalInfoBundle = dbHelper.readGeneralInfo(db, savedTime);
+                //setTimes
+                calendarDestination.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_DESTINATION));
+                calendarPresent.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_PRESENT));
+                calendarLast.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_LAST_DEPARTED));
+                //setCurrencySelection
+                bank.setCurrency(generalInfoBundle.getInt(Constants.BUNDLE_DB_CURRENCY_SELECTED));
+                purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
+                purseAdapter.notifyDataSetChanged();
+
+                //update purse adapter time
+                purseAdapter.updateTime(calendarPresent.getTimeInMillis());
+                break;
+        }
+
         mainPresentTimePanel.setDate(calendarPresent);
         mainPresentTimePanel.startTimeRoll();
 
-        bank.setCurrency(Bank.CURRENCY_DOLLARS);
-        /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
-                calendarPresent.get(Calendar.YEAR))));*/
-
+        //создание фрагментов
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
         addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
         fragmentResources = FragmentResources.newInstance();
-        //addDepositFragment.setOnDepositAddListener(this); //слушатель на кнопку создания депозита
 
         addDepositFragment.addOnDepositAddListener(this); //слушатель на кнопку создания депозита
         addDepositFragment.addOnDepositAddListener(purse);
 
-        //addDepositFragment.setOnMoneyChangedListener(this);
-
         addDepositFragment.setOnMoneyChangedListener(this); //слушатель изменения значения денег
     }
 
+    //                  сохранение игры
     @Override
     protected void onStop() {
         super.onStop();
-        //save game here
         long gameSavedTime = getSavedTime();
+        //перезаписать вклады
         dbHelper.deleteDeposits(db);
-        dbHelper.addDeposits(db, bank.getDeposits(), gameSavedTime);
+        dbHelper.addDeposits(db, bank.getDeposits(mainPresentTimePanel.getDate().getTimeInMillis()),
+                gameSavedTime);
+        //если не получилось обновить сбережения по gameSavedTime
+        if(dbHelper.updatePurse(db, purse.getPurse(), gameSavedTime) == 0) {
+            //то добавить их
+            dbHelper.addPurse(db, purse.getPurse(), gameSavedTime);
+        }
+
+        //если не получилось обновить время и валюту
+        if(dbHelper.updateGeneralInfo(db, calendarPresent.getTimeInMillis(),
+                calendarDestination.getTimeInMillis(),
+                calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime) == 0) {
+            //то добавляем их
+            dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
+                    calendarDestination.getTimeInMillis(),
+                    calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime);
+        }
     }
 
     public void setOnAddResourcesListener(OnAddResourcesListener onAddResourcesListener) {
@@ -194,13 +236,17 @@ public class MainActivity extends AppCompatActivity implements
             switch (requestCode) {
                 case Constants.REQUEST_CODE_TRAVEL:
                     calendarPresent.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
+                    calendarDestination.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
+                    calendarLast.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
+
                     bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
                     //tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     //update deposits adapter time
                     depositsAdapter.updateCurrentTime(calendarPresent.getTimeInMillis());
-                    depositsAdapter.notifyDataSetChanged();
+                    depositsAdapter.updateDeposits(bank.getDeposits(calendarPresent.getTimeInMillis()));
+                    updateDepositsRecyclerHeight();
                     //update purse adapter time
                     purseAdapter.updateTime(calendarPresent.getTimeInMillis());
                     //update time for add deposit fragment
@@ -275,8 +321,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDepositAdd(double howMuch, int currencyIndex, int year) {
+        depositsAdapter.updateDeposits(bank.getDeposits(calendarPresent.getTimeInMillis()));
+        updateDepositsRecyclerHeight();
+
+    }
+
+    private void updateDepositsRecyclerHeight() {
         depositsRecyclerView.getLayoutParams().height = getResources()
-                .getDimensionPixelSize(R.dimen.deposit_item_height) * bank.getDeposits().size()
+                .getDimensionPixelSize(R.dimen.deposit_item_height) *
+                bank.getDeposits(mainPresentTimePanel.getDate().getTimeInMillis()).size()
                 + getResources().getDimensionPixelSize(R.dimen.deposit_add_item_height);
         depositsRecyclerView.setHasFixedSize(true);
     }
@@ -284,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMoneyWithdraw(int money, int currencyTo, int year) {
         //снятие денег с депозита
+        updateDepositsRecyclerHeight();
         purse.add(money, currencyTo, year);
         purseAdapter.notifyDataSetChanged();
     }
@@ -297,6 +351,8 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(Constants.BACK_STACK_ADD_RESOURCES)
                 .commit();
     }
+
+    //сохранение и восстановление системного времени для сохранения и продолжения игры
 
     void saveTime(long time) {
         sp = getPreferences(MODE_PRIVATE);

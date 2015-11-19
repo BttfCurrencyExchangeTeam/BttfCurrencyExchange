@@ -16,6 +16,9 @@
 
     <color name="selected_currency_item_color">#bbdefb</color>
 
+    <color name="button_normal_color">#67abff</color>
+    <color name="button_pressed_color">#0000ff</color>
+
     <color name="et_background_color">#343434</color>
     <color name="et_stroke_color">#777777</color>
     <color name="panel_background_color">#9a9a9a</color>
