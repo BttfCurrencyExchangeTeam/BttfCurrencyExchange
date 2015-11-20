@@ -34,17 +34,9 @@ public class Deposit {
     public double getValue(long currentTime) {
         double newValue;
         int yearDifference;
-        Calendar currentCalendar = Calendar.getInstance();
-        Calendar initCalendar = Calendar.getInstance();
 
-        currentCalendar.setTimeInMillis(currentTime);
-        initCalendar.setTimeInMillis(initTime);
-
-        int currentYear = currentCalendar.get(Calendar.YEAR);
-        int initYear = initCalendar.get(Calendar.YEAR);
-
-        if(currentYear >= initYear) {
-            yearDifference = currentYear - initYear;
+        if(currentTime >= initTime) {
+            yearDifference = (int) yearDifference(currentTime, initTime);
             newValue = initValue;
 
             for(int i = 0; i < yearDifference; i++) {
@@ -54,5 +46,22 @@ public class Deposit {
             newValue = Constants.CODE_DEPOSIT_NO_EXISTS;
         }
         return newValue;
+    }
+
+    private long yearDifference(long currentTime, long initTime) {
+        return (currentTime - initTime) / Constants.ONE_YEAR;
+    }
+
+    private long millisInYear(long time) {
+        long millis = 60 * 60 * 24;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        int year = calendar.get(Calendar.YEAR);
+        if((year % 4 == 0) && (year % 100 != 0) || year % 400 == 0) {
+            millis *= 366; //год високосный
+        } else {
+            millis *= 365; //год невисокосный
+        }
+        return millis;
     }
 }

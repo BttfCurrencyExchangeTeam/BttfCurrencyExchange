@@ -11,8 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecyclerAdapter.DepositViewHolder> {
 
@@ -73,6 +75,9 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
             double initValue = deposits.get(position).getInitValue();
             final double currentValue = deposits.get(position).getValue(currentTime);
             double income = currentValue - initValue;
+            Date initDate = new Date(deposits.get(position).getInitTime());
+            String dateFormatString = "dd.MM.yyyy 'в' hh:mm";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 
             final Calendar currentCalendar  = Calendar.getInstance();
             currentCalendar.setTimeInMillis(currentTime);
@@ -80,6 +85,7 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
             holder.tvName.setText(name + " (" + interest + "%)");
             holder.tvInitValue.setText(holder.context.getResources()
                     .getString(R.string.deposit_item_initial_value) + " " + String.valueOf(initValue));
+            holder.tvInitTime.setText(holder.context.getResources().getString(R.string.deposit_item_initial_time) + " " + dateFormat.format(initDate));
             holder.tvCurrentValue.setText(holder.context.getResources()
                     .getString(R.string.deposit_item_current_value) + " " + String.valueOf(currentValue));
             holder.tvIncome.setText(holder.context.getResources()

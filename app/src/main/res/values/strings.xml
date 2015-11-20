@@ -24,6 +24,21 @@
         <item>DEC</item>
     </string-array>
 
+    <string-array name="months_deposit">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
+
     <string-array name="time_types">
         <item>destination time</item>
         <item>present time</item>
@@ -71,6 +86,7 @@
     <string name="deposit_add_text">Добавить</string>
     <string name="deposit_currency_text">Валюта</string>
     <string name="deposit_interest_text">Процентная ставка</string>
+    <string name="deposit_item_initial_time">Вклад создан</string>
     <string name="deposit_item_initial_value">Первоначальный взнос:</string>
     <string name="deposit_item_current_value">Состояние вклада:</string>
     <string name="deposit_item_income">Доход по вкладу:</string>

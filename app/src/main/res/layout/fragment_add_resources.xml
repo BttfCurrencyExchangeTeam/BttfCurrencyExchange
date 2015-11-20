@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,12 +16,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:text="Ресурс"/>
+            android:text="Выберите ресурс"/>
 
         <Spinner
             android:id="@+id/resources_fragment_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+            <ImageView
+                android:id="@+id/iv_resources_less"
+                android:src="@android:drawable/ic_input_delete"
+                android:background="#400f"
+                android:scaleType="center"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                tools:ignore="ContentDescription"/>
+            <TextView
+                tools:text="Количество плутония: 5"
+                android:id="@+id/tv_resources"
+                android:background="#500f"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/iv_resources_less"
+                android:layout_toEndOf="@+id/iv_resources_less"
+                android:layout_toLeftOf="@+id/iv_resources_more"
+                android:layout_toStartOf="@+id/iv_resources_more"/>
+            <ImageView
+                android:id="@+id/iv_resources_more"
+                android:src="@android:drawable/ic_input_add"
+                android:background="#400f"
+                android:scaleType="center"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                tools:ignore="ContentDescription"/>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/resources_fragment_button_add"

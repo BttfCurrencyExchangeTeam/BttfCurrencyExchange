@@ -32,4 +32,6 @@ public class Constants {
     public static final long DEC_1922_22 = -1484092800000L;
     public static final long JAN_1998_1 = 883612800000L;
     public static final long DEC_2045_31 = 2398291200000L;
+
+    public static final long ONE_YEAR = 60 * 60 * 24 * 365;
 }

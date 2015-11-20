@@ -296,6 +296,12 @@ public class Bank implements OnCurrencyChangedListener {
         return resultList;
     }
 
+    public void clearDeposits() {
+        if(this.deposits != null) {
+            this.deposits.clear();
+        }
+    }
+
     @Override
     public void onCurrencyChanged(int currency) {
         setCurrency(currency);
