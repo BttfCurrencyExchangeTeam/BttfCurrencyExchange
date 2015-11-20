@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#00C853</color>
 
     <color name="green">#63f759</color>
     <color name="yellow">#f7b760</color>
@@ -14,10 +14,10 @@
         <item>#ff6203</item>
     </array>
 
-    <color name="selected_currency_item_color">#bbdefb</color>
+    <color name="selected_currency_item_color">#82b1ff</color>
 
-    <color name="button_normal_color">#67abff</color>
-    <color name="button_pressed_color">#0000ff</color>
+    <color name="button_normal_color">#ffc400</color>
+    <color name="button_pressed_color">#7c4dff</color>
 
     <color name="et_background_color">#343434</color>
     <color name="et_stroke_color">#777777</color>
@@ -28,4 +28,5 @@
     <color name="grey_label_background_color">#343434</color>
     <color name="grey_label_text_color">#efefef</color>
     <color name="main_menu_color">#ffffff</color>
+    <color name="main_menu_pressed_button_color">#9c27b0</color>
 </resources>

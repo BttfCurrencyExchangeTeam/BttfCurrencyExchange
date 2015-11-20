@@ -3,6 +3,7 @@ package com.tixon.backtothefutureexchange;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -67,9 +68,9 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
     //функция установки цвета для TextView по касанию
     private void touch(TextView textView, MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setTextColor(Color.parseColor("#67abff"));
+            textView.setTextColor(getResources().getColor(R.color.main_menu_pressed_button_color));
         } else if(event.getAction() == MotionEvent.ACTION_UP) {
-            textView.setTextColor(Color.parseColor("#ffffff"));
+            textView.setTextColor(getResources().getColor(R.color.main_menu_color));
             onClick(textView);
         }
     }

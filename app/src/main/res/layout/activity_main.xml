@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/panel_background_color">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -127,6 +128,7 @@
                     <!--include layout="@layout/purse_header_layout"/-->
 
                     <TextView
+
                         android:text="@string/activity_main_my_purse"
                         android:gravity="center_horizontal"
                         android:layout_width="match_parent"
