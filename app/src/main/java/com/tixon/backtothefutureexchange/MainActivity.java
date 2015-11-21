@@ -13,12 +13,14 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
+import com.tixon.backtothefutureexchange.ui.Toolbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -34,13 +36,24 @@ public class MainActivity extends AppCompatActivity implements
     Button bTravel, bExchange;
     FrameLayout container;
     RelativeLayout purseHeader;
-    LinearLayout mainToolbar;
+    Toolbar resourcesToolbar;
     ControlPanelItem mainPresentTimePanel; //панель времени, показывает, когда мы в данный момент
     RecyclerView purseRecyclerView, depositsRecyclerView;
 
     LinearLayoutManager purseLayoutManager, depositsLayoutManager;
     PurseItemsRecyclerAdapter purseAdapter;
     DepositRecyclerAdapter depositsAdapter;
+
+    private List<OnTimeTravelListener> onTimeTravelListenersList = new ArrayList<>();
+
+    public void addOnTimeTravelListener(OnTimeTravelListener listener) {
+        onTimeTravelListenersList.add(listener);
+    }
+    public void notifyTimeTravelled() {
+        for(OnTimeTravelListener listener: onTimeTravelListenersList) {
+            listener.onTimeTraveled();
+        }
+    }
 
     private FragmentChange fragmentChange;
     private AddDepositFragment addDepositFragment;
@@ -91,7 +104,16 @@ public class MainActivity extends AppCompatActivity implements
         purse = Purse.getInstance();
         purse.init(); //set 1000 dollars for start
 
+
+
         initViews();
+
+        //добавление слушателей на перемещение во времени
+        addOnTimeTravelListener(delorean);
+        addOnTimeTravelListener(resourcesToolbar);
+
+        resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
+        resourcesToolbar.setFuelNumber(delorean.getFuel());
 
         // установка и настройка адаптеров
 
@@ -213,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
         purseHeader = (RelativeLayout) findViewById(R.id.purse_header_frame);
-        mainToolbar = (LinearLayout) findViewById(R.id.main_toolbar);
+        //mainToolbar = (LinearLayout) findViewById(R.id.main_toolbar);
+        resourcesToolbar = (Toolbar) findViewById(R.id.resources_toolbar);
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
         bExchange = (Button) findViewById(R.id.main_activity_button_exchange);
@@ -232,7 +255,14 @@ public class MainActivity extends AppCompatActivity implements
         bTravel.setOnClickListener(this);
         bExchange.setOnClickListener(this);
 
-        mainToolbar.setOnClickListener(new View.OnClickListener() {
+        /*mainToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddResourcesFragment();
+            }
+        });*/
+
+        resourcesToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddResourcesFragment();
@@ -249,6 +279,9 @@ public class MainActivity extends AppCompatActivity implements
                     calendarPresent.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
                     calendarDestination.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
                     calendarLast.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
+
+                    //onTimeTravel
+                    notifyTimeTravelled();
 
                     bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
                     //tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));

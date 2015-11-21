@@ -1,6 +1,6 @@
 package com.tixon.backtothefutureexchange;
 
-public class Delorean implements OnAddResourcesListener {
+public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     private static volatile Delorean instance;
 
@@ -51,7 +51,13 @@ public class Delorean implements OnAddResourcesListener {
     }
 
     @Override
-    public void onAddFuelListener(double count, int price) {
+    public void onAddFuel(double count, int price) {
 
+    }
+
+    //запускается при перемещении во времени
+    @Override
+    public void onTimeTraveled() {
+        travel();
     }
 }
