@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/panel_background_color">
+    android:background="@color/panel_background_color"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:padding="4dp"
-        android:layout_alignParentTop="true"
         android:id="@+id/main_toolbar"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:background="#A9A9A9"
+        android:orientation="horizontal"
+        android:padding="4dp">
         <!--TextView
             android:id="@+id/main_activity_tv_year"
             tools:text="2015"
@@ -46,54 +46,58 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/iv_toolbar_plutonium"
-
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:src="@drawable/plutonium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="center"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                tools:ignore="ContentDescription"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:scaleType="center"
+                tools:ignore="ContentDescription" />
+
             <TextView
-                android:text="plutonium"
                 android:id="@+id/tv_toolbar_plutonium"
-                android:textAppearance="?android:attr/textAppearanceInverse"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_toolbar_plutonium"
                 android:layout_toRightOf="@+id/iv_toolbar_plutonium"
-                android:layout_toEndOf="@+id/iv_toolbar_plutonium"/>
+                android:text="Плутоний"
+                android:textColor="@color/black_color" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/iv_toolbar_fuel"
-                android:src="@drawable/fuel"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="center"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                tools:ignore="ContentDescription"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:scaleType="center"
+                android:src="@drawable/fuel"
+                tools:ignore="ContentDescription" />
+
             <TextView
-                android:text="fuel"
                 android:id="@+id/tv_toolbar_fuel"
-                android:textAppearance="?android:attr/textAppearanceInverse"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_toolbar_fuel"
                 android:layout_toRightOf="@+id/iv_toolbar_fuel"
-                android:layout_toEndOf="@+id/iv_toolbar_fuel"/>
+                android:text="Топливо"
+                android:textColor="@color/black_color" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -108,41 +112,44 @@
 
             <ScrollView
                 android:id="@+id/main_scroll_view"
-                android:layout_alignParentTop="true"
-                android:layout_above="@+id/main_buttons_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_above="@+id/main_buttons_layout"
+                android:layout_alignParentTop="true">
 
                 <!--include layout="@layout/main_content"/-->
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <com.tixon.backtothefutureexchange.ui.ControlPanelItem
+                        android:id="@+id/main_activity_present_panel"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/main_activity_present_panel"/>
+                        android:layout_height="wrap_content" />
 
                     <!--include layout="@layout/purse_header_layout"/-->
 
                     <TextView
-
-                        android:text="@string/activity_main_my_purse"
-                        android:gravity="center_horizontal"
+                        android:textColor="@color/black_color"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:background="#A9A9A9"
+                        android:gravity="center_horizontal"
+                        android:text="@string/activity_main_my_purse" />
 
                     <include layout="@layout/divider" />
 
                     <include layout="@layout/purse_items_layout" />
 
                     <TextView
-                        android:text="@string/activity_main_my_deposits"
-                        android:gravity="center_horizontal"
+                        android:textColor="@color/black_color"
+                        android:background="#A9A9A9"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/activity_main_my_deposits" />
 
                     <include layout="@layout/divider" />
 
@@ -153,34 +160,34 @@
             </ScrollView>
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/main_buttons_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/main_buttons_layout"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:layout_alignParentBottom="true"
                 android:gravity="bottom"
-                android:layout_alignParentBottom="true">
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
 
                 <Button
                     android:id="@+id/main_activity_button_exchange"
-                    android:text="@string/activity_main_button_exchange"
-                    android:background="@drawable/button_background"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="8dp"
-                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" />
+                    android:background="@drawable/button_background"
+                    android:text="@string/activity_main_button_exchange" />
 
                 <Button
                     android:id="@+id/main_activity_button_travel"
-                    android:text="@string/activity_main_button_travel"
-                    android:background="@drawable/button_background"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="16dp"
-                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" />
+                    android:background="@drawable/button_background"
+                    android:text="@string/activity_main_button_travel" />
 
             </LinearLayout>
         </RelativeLayout>
