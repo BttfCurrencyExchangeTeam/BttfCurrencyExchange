@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class ControlPanelItem extends RelativeLayout {
     public static final int PRESENT_TIME = 1;
     public static final int LAST_TIME_DEPARTED = 2;
 
+    private FrameLayout fieldDate, fieldTime;
     private EditText etMonth, etDay, etYear, etHour, etMinute;
     private TextView tvPanelName;
     private String[] months;
@@ -56,6 +58,9 @@ public class ControlPanelItem extends RelativeLayout {
         months = getResources().getStringArray(R.array.months);
         timeTypes = getResources().getStringArray(R.array.time_types);
         colors = getResources().getIntArray(R.array.panel_colors);
+
+        fieldDate = (FrameLayout) view.findViewById(R.id.field_date);
+        fieldTime = (FrameLayout) view.findViewById(R.id.field_time);
 
         etMonth = (EditText) view.findViewById(R.id.et_month);
         etDay = (EditText) view.findViewById(R.id.et_day);
@@ -107,14 +112,11 @@ public class ControlPanelItem extends RelativeLayout {
     }
 
     public void setOnChangeDateClickListener(View.OnClickListener listener) {
-        etMonth.setOnClickListener(listener);
-        etDay.setOnClickListener(listener);
-        etYear.setOnClickListener(listener);
+        fieldDate.setOnClickListener(listener);
     }
 
     public void setOnChangeTimeClickListener(View.OnClickListener listener) {
-        etHour.setOnClickListener(listener);
-        etMinute.setOnClickListener(listener);
+        fieldTime.setOnClickListener(listener);
     }
 
     //set colors for each editText

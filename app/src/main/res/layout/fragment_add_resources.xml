@@ -12,26 +12,13 @@
         android:padding="16dp"
         android:background="@drawable/fragment_background">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="Выберите ресурс"/>
-
-        <Spinner
-            android:id="@+id/resources_fragment_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="72dp">
             <ImageView
                 android:id="@+id/iv_resources_less"
                 android:src="@android:drawable/ic_input_delete"
-                android:background="#400f"
+                android:background="#55ffffff"
                 android:scaleType="center"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
@@ -41,7 +28,7 @@
             <TextView
                 tools:text="Количество плутония: 5"
                 android:id="@+id/tv_resources"
-                android:background="#500f"
+                android:background="#44ffffff"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -52,7 +39,7 @@
             <ImageView
                 android:id="@+id/iv_resources_more"
                 android:src="@android:drawable/ic_input_add"
-                android:background="#400f"
+                android:background="#55ffffff"
                 android:scaleType="center"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
@@ -60,6 +47,12 @@
                 android:layout_alignParentEnd="true"
                 tools:ignore="ContentDescription"/>
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_resources_all_cash"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/resources_fragment_button_add"

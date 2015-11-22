@@ -78,6 +78,10 @@
         <item>Топливо</item>
     </string-array>
 
+    <string name="plutonium_title">Плутоний</string>
+    <string name="fuel_title">Топливо</string>
+    <string name="add_resources_description">Добавить:</string>
+
     <string name="activity_main_my_deposits">Мои вклады</string>
     <string name="activity_main_my_purse">Мои сбережения</string>
     <string name="activity_main_button_exchange">Обменять</string>

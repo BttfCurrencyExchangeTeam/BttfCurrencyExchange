@@ -21,7 +21,7 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
 
     private int currencyIndex;
     private Purse purse;
-    private int year;
+    private long timeInMillis;
 
     private int[] availableCurrencies;
 
@@ -35,11 +35,11 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
      * Constructor for purseAdapter
      * @param availableCurrencies: get from Bank object when creating the purseAdapter
      */
-    public ChangeRecyclerAdapter(FragmentChange fragment, int[] availableCurrencies, int currencyIndex, int year, Purse purse) {
+    public ChangeRecyclerAdapter(FragmentChange fragment, int[] availableCurrencies, int currencyIndex, long timeInMillis, Purse purse) {
         currencies = new ArrayList<>();
         this.context = fragment.getContext();
         this.fragment = fragment;
-        this.year = year;
+        this.timeInMillis = timeInMillis;
         this.availableCurrencies = availableCurrencies;
         this.currencyIndex = currencyIndex;
         this.purse = purse;
@@ -114,7 +114,7 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
         public void onClick(View v) {
             Log.d("myLogs", "change item clicked: " + position + ", currency = " + currencies.get(position));
             selectedPosition = position;
-            Log.d("myLogs", "year = " + year + ", money = " + purse.getMoney(currencyIndex, year));
+            Log.d("myLogs", "timeInMillis = " + timeInMillis + ", money = " + purse.getMoney(currencyIndex, timeInMillis));
             onItemCheckedListener.onChange(availableCurrencies[position]);
             notifyDataSetChanged();
         }
@@ -122,9 +122,9 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
 
     //устанавливает в FragmentChange для seekBar и textView значения, полученные здесь
     public void setFragmentData(FragmentChange fragment) {
-        fragment.seekBar.setMax((int) purse.getMoney(currencyIndex, year));
+        fragment.seekBar.setMax((int) purse.getMoney(currencyIndex, timeInMillis));
         fragment.seekBar.setProgress(fragment.seekBar.getMax());
-        fragment.moneyToExchange = ((int) purse.getMoney(currencyIndex, year));
-        fragment.textView.setText(String.valueOf(purse.getMoney(currencyIndex, year)));
+        fragment.moneyToExchange = ((int) purse.getMoney(currencyIndex, timeInMillis));
+        fragment.textView.setText(String.valueOf(purse.getMoney(currencyIndex, timeInMillis)));
     }
 }

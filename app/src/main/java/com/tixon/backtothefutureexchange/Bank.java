@@ -129,6 +129,10 @@ public class Bank implements OnCurrencyChangedListener {
         isExactRate = year == 1946 || year == 1955 || year == 1985 || year == 1997|| year == 1998|| year == 2008 || year == 2015;
     }
 
+    public int getYearIndex() {
+        return this.yearIndex;
+    }
+
     public void setDate(Calendar date) {
         this.date.setTimeInMillis(date.getTimeInMillis());
     }
@@ -284,10 +288,10 @@ public class Bank implements OnCurrencyChangedListener {
     }
 
     //long currentTime
-    public ArrayList<Deposit> getDeposits(long time) {
+    public ArrayList<Deposit> getDeposits(long timeInMillis) {
         ArrayList<Deposit> resultList = new ArrayList<>();
         for(int i = 0; i < this.deposits.size(); i++) {
-            if(time >= this.deposits.get(i).getInitTime()) {
+            if(timeInMillis >= this.deposits.get(i).getInitTime()) {
                 resultList.add(this.deposits.get(i));
             }
         }

@@ -97,7 +97,7 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
                     Log.d("myLogs", "action clicked");
                     onMoneyWithdrawListener.onMoneyWithdraw((int) currentValue,
                             deposits.get(position).getCurrency(),
-                            currentCalendar.get(Calendar.YEAR));
+                            currentCalendar.getTimeInMillis());
                     deposits.remove(position);
                     notifyDataSetChanged();
                 }

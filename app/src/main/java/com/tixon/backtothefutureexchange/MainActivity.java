@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.tixon.backtothefutureexchange.fragments.FragmentAddResources;
 import com.tixon.backtothefutureexchange.ui.ControlPanelItem;
 import com.tixon.backtothefutureexchange.ui.Toolbar;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private FragmentChange fragmentChange;
     private AddDepositFragment addDepositFragment;
-    private FragmentResources fragmentResources;
+    private FragmentAddResources fragmentResources;
 
     private Calendar calendar, calendarPresent, calendarLast, calendarDestination;
 
@@ -192,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements
         //создание фрагментов
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
         addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
-        fragmentResources = FragmentResources.newInstance();
 
         //слушатели на нажатие кнопки создания депозита
         addDepositFragment.addOnDepositAddListener(this);
@@ -235,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
         purseHeader = (RelativeLayout) findViewById(R.id.purse_header_frame);
-        //mainToolbar = (LinearLayout) findViewById(R.id.main_toolbar);
         resourcesToolbar = (Toolbar) findViewById(R.id.resources_toolbar);
 
         bTravel = (Button) findViewById(R.id.main_activity_button_travel);
@@ -255,17 +254,21 @@ public class MainActivity extends AppCompatActivity implements
         bTravel.setOnClickListener(this);
         bExchange.setOnClickListener(this);
 
-        /*mainToolbar.setOnClickListener(new View.OnClickListener() {
+        //setToolbarOnClickListener
+        resourcesToolbar.setOnPlutoniumClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddResourcesFragment();
+                //showAddResourcesFragment();
+                Log.d(LOG_TAG, "all cash in dollars = " + purse.getAllCash(bank, calendarPresent.getTimeInMillis()));
+                showAddResourcesFragment(Constants.RESOURCE_TYPE_PLUTONIUM);
             }
-        });*/
+        });
 
-        resourcesToolbar.setOnClickListener(new View.OnClickListener() {
+        resourcesToolbar.setOnFuelClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddResourcesFragment();
+                //showAddResourcesFragment();
+                showAddResourcesFragment(Constants.RESOURCE_TYPE_FUEL);
             }
         });
     }
@@ -284,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements
                     notifyTimeTravelled();
 
                     bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
-                    //tvCurrentYear.setText(String.valueOf(calendarPresent.get(Calendar.YEAR)));
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     //update deposits adapter time
@@ -363,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDepositAdd(double howMuch, int currencyIndex, int year) {
+    public void onDepositAdd(double howMuch, int currencyIndex, long timeInMillis) {
         depositsAdapter.updateDeposits(bank.getDeposits(calendarPresent.getTimeInMillis()));
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
 
@@ -380,20 +382,20 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onMoneyWithdraw(int money, int currencyTo, int year) {
+    public void onMoneyWithdraw(int money, int currencyTo, long timeInMillis) {
         //снятие денег с вклада
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
-        purse.add(money, currencyTo, year);
+        purse.add(money, currencyTo, timeInMillis);
         purseAdapter.notifyDataSetChanged();
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
     //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);
 
-    private void showAddResourcesFragment() {
+    private void showAddResourcesFragment(int resourceType) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_container, fragmentResources)
+                .replace(R.id.main_container, FragmentAddResources
+                        .newInstance(resourceType, calendarPresent.getTimeInMillis()))
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(Constants.BACK_STACK_ADD_RESOURCES)
                 .commit();
     }
 

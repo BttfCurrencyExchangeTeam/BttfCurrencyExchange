@@ -54,7 +54,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
         textView = (TextView) v.findViewById(R.id.fragment_change_text_view);
         recyclerView = (RecyclerView) v.findViewById(R.id.fragment_change_recycler_view);
         adapter = new ChangeRecyclerAdapter(this, bank.getAvailableCurrencies(),
-                bank.getCurrency(), calendar.get(Calendar.YEAR), purse);
+                bank.getCurrency(), calendar.getTimeInMillis(), purse);
         adapter.setOnItemCheckedListener(this); //назначение слушателя изменения валюты
 
         //инициализация recyclerView
@@ -92,7 +92,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
                  * @see Bank#CURRENCY_DOLLARS
                  * @see Bank#CURRENCY_POUNDS
                  */
-                purse.change(bank, currencyTo, calendar.get(Calendar.YEAR),
+                purse.change(bank, currencyTo, calendar.getTimeInMillis(),
                         (double) moneyToExchange);
                 //банк переходит на выбранную валюту для последующих обменов
                 bank.setCurrency(currencyTo);

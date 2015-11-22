@@ -91,14 +91,14 @@ public class Purse implements OnDepositAddListener {
 
     //automatic add
 
-    public void add(double value, int currencyTo, int year) {
+    public void add(double value, int currencyTo, long timeInMillis) {
         switch(currencyTo) {
             case Bank.CURRENCY_RUBLES:
-                if(year >= 1900 && year < 1922) {
+                if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
                     addImperialRubles(value);
-                } else if(year >= 1922 && year <= 1997) {
+                } else if(timeInMillis >= Constants.DEC_1922_22 && timeInMillis <= Constants.JAN_1998_1) {
                     addSovietRubles(value);
-                } else if(year > 1997) {
+                } else if(timeInMillis > Constants.JAN_1998_1) {
                     addRussianRubles(value);
                 }
                 break;
@@ -117,14 +117,14 @@ public class Purse implements OnDepositAddListener {
 
     //give
 
-    private double giveMoney(int currencyIndex, int year, double howMuch) {
+    private double giveMoney(int currencyIndex, long timeInMillis, double howMuch) {
         switch(currencyIndex) {
             case Bank.CURRENCY_RUBLES:
-                if(year >= 1900 && year < 1922) {
+                if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
                     purse[0] -= howMuch;
-                } else if(year >= 1922 && year <= 1997) {
+                } else if(timeInMillis >= Constants.DEC_1922_22 && timeInMillis <= Constants.JAN_1998_1) {
                     purse[1] -= howMuch;
-                } else if(year > 1997) {
+                } else if(timeInMillis > Constants.JAN_1998_1) {
                     purse[2] -= howMuch;
                 }
                 break;
@@ -146,15 +146,15 @@ public class Purse implements OnDepositAddListener {
         return purse;
     }
 
-    public double getMoney(int currencyIndex, int year) {
+    public double getMoney(int currencyIndex, long timeInMillis) {
         double money = 0;
         switch(currencyIndex) {
             case Bank.CURRENCY_RUBLES:
-                if(year >= 1900 && year < 1922) {
+                if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
                     money = purse[0];
-                } else if(year >= 1922 && year <= 1997) {
+                } else if(timeInMillis >= Constants.DEC_1922_22 && timeInMillis <= Constants.JAN_1998_1) {
                     money = purse[1];
-                } else if(year > 1997) {
+                } else if(timeInMillis > Constants.JAN_1998_1) {
                     money = purse[2];
                 }
                 break;
@@ -170,17 +170,40 @@ public class Purse implements OnDepositAddListener {
         return money;
     }
 
+    public double getAllCash(Bank bank, long timeInMillis) {
+        /*Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
+        int year = calendar.get(Calendar.YEAR);
+        bank.setYearIndex(year);*/
+
+        double cash = 0;
+        //получить доллары
+        cash += purse[3];
+        //получить фунты
+        cash += bank.change(Bank.CURRENCY_POUNDS, Bank.CURRENCY_DOLLARS, purse[4]);
+        //получить рубли
+        if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[0]);
+        } else if(timeInMillis >= Constants.DEC_1922_22 && timeInMillis <= Constants.JAN_1998_1) {
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[1]);
+        } else if(timeInMillis > Constants.JAN_1998_1) {
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[2]);
+        }
+        return cash;
+    }
+
     //change
 
-    public void change(Bank bank, int currencyTo, int year, double howMuch) {
+    public void change(Bank bank, int currencyTo, long timeInMillis, double howMuch) {
         int currencyFrom = bank.getCurrency();
-        double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom, year, howMuch));
-        add(changedMoney, currencyTo, year);
+        double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom, timeInMillis, howMuch));
+        add(changedMoney, currencyTo, timeInMillis);
     }
 
     //снимает деньги со счёта
     @Override
-    public void onDepositAdd(double howMuch, int currencyIndex, int year) {
-        Log.d("myLogs", "deposit add caught in purse: " + giveMoney(currencyIndex, year, howMuch));
+    public void onDepositAdd(double howMuch, int currencyIndex, long timeInMillis) {
+        double money = giveMoney(currencyIndex, timeInMillis, howMuch);
+        Log.d("myLogs", "deposit add caught in purse: " + money);
     }
 }

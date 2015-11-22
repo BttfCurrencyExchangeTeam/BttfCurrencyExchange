@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.Delorean;
@@ -15,7 +16,7 @@ public class Toolbar extends LinearLayout implements OnTimeTravelListener {
 
     TextView  tvPlutonium;
     TextView tvFuel;
-    LinearLayout frame;
+    RelativeLayout framePlutonium, frameFuel;
 
     public Toolbar(Context context) {
         super(context);
@@ -39,7 +40,9 @@ public class Toolbar extends LinearLayout implements OnTimeTravelListener {
 
         tvPlutonium = (TextView) v.findViewById(R.id.tv_toolbar_plutonium);
         tvFuel = (TextView) v.findViewById(R.id.tv_toolbar_fuel);
-        frame = (LinearLayout) v.findViewById(R.id.toolbar_frame);
+
+        framePlutonium = (RelativeLayout) v.findViewById(R.id.frame_plutonium);
+        frameFuel = (RelativeLayout) v.findViewById(R.id.frame_fuel);
     }
 
     public void setPlutoniumNumber(int number) {
@@ -52,8 +55,12 @@ public class Toolbar extends LinearLayout implements OnTimeTravelListener {
         tvFuel.setText(s);
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        frame.setOnClickListener(listener);
+    public void setOnPlutoniumClickListener(View.OnClickListener listener) {
+        framePlutonium.setOnClickListener(listener);
+    }
+
+    public void setOnFuelClickListener(View.OnClickListener listener) {
+        frameFuel.setOnClickListener(listener);
     }
 
     //запускается при перемещении во времени

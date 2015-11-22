@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:padding="4dp"
-    android:id="@+id/toolbar_frame"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="56dp">
 
     <RelativeLayout
+        android:id="@+id/frame_plutonium"
+        android:background="@drawable/click_field_background"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -36,6 +37,8 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/frame_fuel"
+        android:background="@drawable/click_field_background"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">

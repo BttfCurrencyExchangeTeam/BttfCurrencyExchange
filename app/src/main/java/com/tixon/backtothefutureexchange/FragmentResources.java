@@ -43,7 +43,6 @@ public class FragmentResources extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_resources, container, false);
         buttonAdd = (Button) v.findViewById(R.id.resources_fragment_button_add);
-        selector = (Spinner) v.findViewById(R.id.resources_fragment_spinner);
         ivLess = (ImageView) v.findViewById(R.id.iv_resources_less);
         ivMore = (ImageView) v.findViewById(R.id.iv_resources_more);
         tv = (TextView) v.findViewById(R.id.tv_resources);

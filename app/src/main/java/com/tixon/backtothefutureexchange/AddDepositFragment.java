@@ -125,7 +125,7 @@ public class AddDepositFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currencySelectedPosition = position;
-                seekBar.setMax((int) purse.getMoney(currencySelectedPosition, calendar.get(Calendar.YEAR)));
+                seekBar.setMax((int) purse.getMoney(currencySelectedPosition, calendar.getTimeInMillis()));
                 seekBar.setProgress(seekBar.getMax());
                 tvValue.setText(String.valueOf(seekBar.getMax()));
             }
@@ -166,16 +166,16 @@ public class AddDepositFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
                 //уведомляет слушателей о том, что был добавлен вклад
                 notifyDepositAdded(moneyToAdd, currencySelectedPosition,
-                        calendar.get(Calendar.YEAR));
+                        calendar.getTimeInMillis());
                 onMoneyChangedListener.onMoneyChanged();
             }
         });
         return v;
     }
 
-    private void notifyDepositAdded(double howMuch, int currencyIndex, int year) {
+    private void notifyDepositAdded(double howMuch, int currencyIndex, long timeInMillis) {
         for(OnDepositAddListener onDepositAddListener: onDepositAddListeners) {
-            onDepositAddListener.onDepositAdd(howMuch, currencyIndex, year);
+            onDepositAddListener.onDepositAdd(howMuch, currencyIndex, timeInMillis);
         }
     }
 
