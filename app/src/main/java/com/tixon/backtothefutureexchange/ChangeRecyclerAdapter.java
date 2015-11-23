@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAdapter.ChangeViewHolder> {
+public class ChangeRecyclerAdapter extends RecyclerView
+        .Adapter<ChangeRecyclerAdapter.ChangeViewHolder> implements OnMoneyRangeChangedListener {
 
+    private static final String LOG_TAG = "myLogs";
     private ArrayList<String> currencies;
     private Context context;
     private FragmentChange fragment;
@@ -81,16 +83,39 @@ public class ChangeRecyclerAdapter extends RecyclerView.Adapter<ChangeRecyclerAd
         holder.position = position;
         //setting selection frame
         if(position == selectedPosition) {
-            holder.frame.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+            holder.frame.setBackgroundResource(R.color.yellow);
         } else {
-            holder.frame.setBackgroundColor(context.getResources()
-                    .getColor(android.R.color.transparent));
+            holder.frame.setBackgroundResource(android.R.color.transparent);
         }
     }
 
     @Override
     public int getItemCount() {
         return currencies.size();
+    }
+
+    //OnMoneyRangeChangedListener method
+    @Override
+    public void onMoneyRangeChanged(int moneyToExchange, Bank bank) {
+        for(int i = 0; i < currencies.size(); i++) {
+            String currency = currencies.get(i);
+            if(currency.contains(":")) {
+                currency = currency.substring(0, currency.indexOf(":"));
+            }
+            currency += ": ";
+            currency += String.valueOf(bank.change(bank.getCurrency(), availableCurrencies[i], moneyToExchange));
+            int dotIndex = currency.indexOf(".");
+
+            try {
+                currency = currency.substring(0, dotIndex + 3);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "error: onMoneyRangeChanged, currency substring: " + e.toString());
+                e.printStackTrace();
+            }
+
+            currencies.set(i, currency);
+        }
+        notifyDataSetChanged();
     }
 
     /**

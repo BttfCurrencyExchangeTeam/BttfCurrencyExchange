@@ -9,7 +9,8 @@ public class Constants {
 
     public static final String BACK_STACK_ADD_DEPOSIT = "ADD_DEPOSIT_FRAGMENT";
     public static final String BACK_STACK_CHANGE = "CHANGE_FRAGMENT";
-    public static final String BACK_STACK_ADD_RESOURCES = "ADD_RESOURCES_FRAGMENT";
+    public static final String BACK_STACK_ADD_PLUTONIUM = "ADD_PLUTONIUM_FRAGMENT";
+    public static final String BACK_STACK_ADD_FUEL = "ADD_FUEL_FRAGMENT";
 
     public static final String KEY_NEW_OR_CONTINUE = "key_new_or_continue";
     public static final int KEY_NEW = 1;
@@ -42,7 +43,7 @@ public class Constants {
     public static final int RESOURCE_TYPE_PLUTONIUM = 1;
     public static final int RESOURCE_TYPE_FUEL = 2;
 
-    public static final int PLUTONIUM_PRICE = 1000;
+    public static final int PLUTONIUM_PRICE = 10000; //цена за плутоний в долларах
 
     //секунды * минуты * часы * дни * 1000 = мс в году
     public static final long ONE_YEAR = 60l * 60l * 24l * 365l * 1000l;

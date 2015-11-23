@@ -49,7 +49,7 @@
         <item>Рубль Императорской России</item>
         <item>Советский рубль</item>
         <item>Российский рубль</item>
-        <item>Доллар</item>
+        <item>Доллар США</item>
         <item>Фунт стерлингов</item>
     </string-array>
 
@@ -63,12 +63,12 @@
     </string-array>
 
     <string-array name="deposit_currencies_names_before_1998">
-        <item>Доллар</item>
+        <item>Доллар США</item>
         <item>Фунт стерлингов</item>
     </string-array>
 
     <string-array name="deposit_currencies_names_after_1998">
-        <item>Доллар</item>
+        <item>Доллар США</item>
         <item>Фунт стерлингов</item>
         <item>Рубль</item>
     </string-array>
@@ -102,9 +102,9 @@
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>
 
-    <string name="currency_dollars">Доллары</string>
+    <string name="currency_dollars">Доллары США</string>
     <string name="currency_rubles">Рубли</string>
-    <string name="currency_pounds">Фунты</string>
+    <string name="currency_pounds">Фунты стерлингов</string>
 
     <string name="destination_panel_name">destination time</string>
     <string name="present_panel_name">present time</string>

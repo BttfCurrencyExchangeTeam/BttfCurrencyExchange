@@ -33,6 +33,14 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
         return fuel;
     }
 
+    public void setPlutonium(int plutonium) {
+        this.plutonium = plutonium;
+    }
+
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
+    }
+
     //переместиться во времени
     //на одно перемещение расходуется один контейнер с плутонием
     public void travel() {

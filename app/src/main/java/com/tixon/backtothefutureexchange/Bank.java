@@ -276,7 +276,7 @@ public class Bank implements OnCurrencyChangedListener {
         deposits.add(deposit);
     }
 
-    public void setDepositsFromDatabase(ArrayList<Deposit> deposits) {
+    public void setDeposits(ArrayList<Deposit> deposits) {
         this.deposits = new ArrayList<>();
         for(Deposit d: deposits) {
             this.deposits.add(d);
@@ -301,9 +301,7 @@ public class Bank implements OnCurrencyChangedListener {
     }
 
     public void clearDeposits() {
-        if(this.deposits != null) {
-            this.deposits.clear();
-        }
+        this.deposits = new ArrayList<>();
     }
 
     @Override

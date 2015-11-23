@@ -277,7 +277,40 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return bundle;
     }
 
+    //read Delorean
+    public void readDelorean(SQLiteDatabase db, Delorean delorean, long gameSavedTime) {
+        String selection = GAME_SAVED_TIME + " = ?";
+        String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
+        Log.d(LOG_TAG, "read delorean");
+        Cursor c = db.query(TABLE_DELOREAN, null, selection, selectionArgs, null, null, null);
+        if(c.moveToFirst()) {
+            int plutoniumColIndex = c.getColumnIndex(DELOREAN_PLUTONIUM);
+            int fuelColIndex = c.getColumnIndex(DELOREAN_FUEL);
+
+            do {
+                delorean.setPlutonium(c.getInt(plutoniumColIndex));
+                delorean.setFuel(c.getDouble(fuelColIndex));
+            } while(c.moveToNext());
+        } else {
+            Log.d(LOG_TAG, "read delorean: no rows found");
+        }
+        c.close();
+    }
+
     //UPDATE
+
+    //update Delorean
+    public long updateDelorean(SQLiteDatabase db, Delorean delorean, long gameSavedTime) {
+        String selection = GAME_SAVED_TIME + " = ?";
+        String[] selectionArgs = new String[] {String.valueOf(gameSavedTime)};
+        ContentValues cv = new ContentValues();
+        cv.put(DELOREAN_PLUTONIUM, delorean.getPlutonium());
+        cv.put(DELOREAN_FUEL, delorean.getFuel());
+
+        long updateCount = db.update(TABLE_DELOREAN, cv, selection, selectionArgs);
+        Log.d(LOG_TAG, "update delorean: rows count = " + updateCount);
+        return updateCount;
+    }
 
     //update purse
     public long updatePurse(SQLiteDatabase db, double[] purse, long gameSavedTime) {

@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecyclerAdapter.DepositViewHolder> {
 
@@ -24,12 +25,30 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     private static final int DEPOSIT_TYPE = 0;
     private static final int ADD_TYPE = 1;
 
+    private Bank bank;
+
     private OnAddDepositItemClickListener onAddDepositItemClickListener;
 
     private OnMoneyWithdrawListener onMoneyWithdrawListener;
 
     public void setOnMoneyWithdrawListener(OnMoneyWithdrawListener listener) {
         this.onMoneyWithdrawListener = listener;
+    }
+
+    private interface OnPanelClickListener {
+        void onPanelClick();
+    }
+
+    private List<OnPanelClickListener> onPanelClickListeners = new ArrayList<>();
+
+    private void addOnPanelClickListener(OnPanelClickListener listener) {
+        onPanelClickListeners.add(listener);
+    }
+
+    private void notifyOnPanelClicked() {
+        for(OnPanelClickListener listener: onPanelClickListeners) {
+            listener.onPanelClick();
+        }
     }
 
 
@@ -39,9 +58,11 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         this.onAddDepositItemClickListener = listener;
     }
 
-    public DepositRecyclerAdapter(ArrayList<Deposit> deposits, long currentTime) {
-        this.deposits = deposits;
+    public DepositRecyclerAdapter(Bank bank, long currentTime) {
+        this.bank = bank;
         this.currentTime = currentTime;
+
+        deposits = bank.getDeposits(currentTime);
     }
 
     public void updateCurrentTime(long currentTime) {
@@ -58,7 +79,9 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     public DepositViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == DEPOSIT_TYPE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.deposit_item_layout, parent, false);
-            return new DepositViewHolder(v, viewType);
+            DepositViewHolder viewHolder = new DepositViewHolder(v, viewType);
+            addOnPanelClickListener(viewHolder);
+            return viewHolder;
         }
         if(viewType == ADD_TYPE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.deposit_add_item_layout, parent, false);
@@ -95,11 +118,14 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
                 @Override
                 public void onClick(View v) {
                     Log.d("myLogs", "action clicked");
-                    onMoneyWithdrawListener.onMoneyWithdraw((int) currentValue,
-                            deposits.get(position).getCurrency(),
-                            currentCalendar.getTimeInMillis());
+                    Deposit tempDeposit = deposits.get(position);
                     deposits.remove(position);
+                    bank.setDeposits(deposits);
+                    onMoneyWithdrawListener.onMoneyWithdraw((int) currentValue,
+                            tempDeposit.getCurrency(),
+                            currentCalendar.getTimeInMillis());
                     notifyDataSetChanged();
+                    notifyOnPanelClicked(); //уведомить viewHolder-ов - слушателей о нажатии
                 }
             });
         }
@@ -119,7 +145,7 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
     }
 
     public class DepositViewHolder extends RecyclerView.ViewHolder
-    implements View.OnClickListener {
+    implements View.OnClickListener, OnPanelClickListener {
         protected int viewType;
         boolean actionPanelIsVisible = false;
         Context context;
@@ -165,6 +191,12 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
                 //добавить вклад (обращение к вызову фрагмента)
                 onAddDepositItemClickListener.onDepositClick();
             }
+        }
+
+        @Override
+        public void onPanelClick() {
+            actionPanel.setVisibility(View.GONE);
+            actionPanelIsVisible = false;
         }
     }
 }
