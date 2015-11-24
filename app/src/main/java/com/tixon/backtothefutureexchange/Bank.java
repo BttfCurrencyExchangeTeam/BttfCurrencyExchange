@@ -120,6 +120,17 @@ public class Bank implements OnCurrencyChangedListener {
         }
     }
 
+    public int getTimeIndex(long timeInMillis) {
+        int index = 0;
+        for(int i = 1; i < Constants.TIMES.length; i++) {
+            if((timeInMillis > Constants.TIMES[i-1]) && (timeInMillis <= Constants.TIMES[i])) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     //задаёт индекс массива для выбора определённого года
     //из табло выбора временного интервала
     public void setYearIndex(int year) {

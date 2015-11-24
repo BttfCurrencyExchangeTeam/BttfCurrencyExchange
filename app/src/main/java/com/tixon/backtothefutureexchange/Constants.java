@@ -39,7 +39,8 @@ public class Constants {
     //                                     2398280400000
 
     public static final long[] TIMES = new long[] {
-            -2209003200000l, //1900 01.01
+            //-2209003200000l, //1900 01.01
+            -2209089600000l, //1899 31.12
             -1704164400000l, //1916 01.01
             -1641006000000l, //1918 01.01
             -1451703600000l, //1924 01.01
@@ -64,6 +65,14 @@ public class Constants {
             1735678800000l, //2025 01.01
             2061579600000l, //2025 01.05
             2398280400000l //2045 31.12
+    };
+
+    public static final double[] DOLLARS = new double[] {
+
+    };
+
+    public static final double[] POUNDS = new double[] {
+
     };
 
     public static final String KEY_RESOURCE_TYPE = "key_resource_type";
