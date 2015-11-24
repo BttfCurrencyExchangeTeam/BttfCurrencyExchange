@@ -17,7 +17,7 @@ import com.tixon.backtothefutureexchange.Purse;
 import com.tixon.backtothefutureexchange.R;
 
 public class FragmentAddResources extends Fragment {
-    private TextView tvResources, tvAllCash;
+    private TextView tvResources, tvAllCash, tvPrice;
     private ImageView ivLess, ivMore;
     private Button bAdd;
     private int resourceType;
@@ -49,6 +49,8 @@ public class FragmentAddResources extends Fragment {
 
         tvResources = (TextView) v.findViewById(R.id.tv_resources);
         tvAllCash = (TextView) v.findViewById(R.id.tv_resources_all_cash);
+        tvPrice = (TextView) v.findViewById(R.id.tv_resources_price);
+
         ivLess = (ImageView) v.findViewById(R.id.iv_resources_less);
         ivMore = (ImageView) v.findViewById(R.id.iv_resources_more);
         bAdd = (Button) v.findViewById(R.id.resources_fragment_button_add);
@@ -76,6 +78,7 @@ public class FragmentAddResources extends Fragment {
                             plutoniumCount--;
                             price = Constants.PLUTONIUM_PRICE * plutoniumCount;
                             tvResources.setText(addResourcesText + " " + plutoniumCount);
+                            tvPrice.setText(getResources().getString(R.string.resources_price) + " $" + price);
                         }
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
@@ -96,9 +99,10 @@ public class FragmentAddResources extends Fragment {
                         plutoniumCount++;
                         price = Constants.PLUTONIUM_PRICE * plutoniumCount;
                         tvResources.setText(addResourcesText + " " + plutoniumCount);
+                        tvPrice.setText(getResources().getString(R.string.resources_price) + " $" + price);
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
-                        fuelCount++;
+                        fuelCount += 0.1;
                         tvResources.setText(addResourcesText + " " + fuelCount);
                         break;
                 }
