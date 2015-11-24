@@ -170,17 +170,17 @@ public class Purse implements OnDepositAddListener {
         return money;
     }
 
+    /**
+     * Получить все сбережения в долларах
+     * @param bank: объект банка
+     * @param timeInMillis: текущее время
+     * @return все накопленные сбережения, преобразованные в доллары
+     */
     public double getAllCash(Bank bank, long timeInMillis) {
-        /*Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timeInMillis);
-        int year = calendar.get(Calendar.YEAR);
-        bank.setYearIndex(year);*/
-
         double cash = 0;
         //получить доллары
         cash += purse[3];
         //получить фунты
-        //todo: исправить change с millis
         cash += bank.change(Bank.CURRENCY_POUNDS, Bank.CURRENCY_DOLLARS, purse[4], timeInMillis);
         //получить рубли
         if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
@@ -197,7 +197,6 @@ public class Purse implements OnDepositAddListener {
 
     public void change(Bank bank, int currencyTo, long timeInMillis, double howMuch) {
         int currencyFrom = bank.getCurrency();
-        //todo: исправить change с millis
         double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom,
                 timeInMillis, howMuch), timeInMillis);
         add(changedMoney, currencyTo, timeInMillis);
