@@ -35,24 +35,29 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         this.onMoneyWithdrawListener = listener;
     }
 
+    //интерфейс для уведомления всех viewHolder-ов о том, что деньги с вклада были сняты
+    //и во всех viewHolder-ах панели снятия денег должны быть закрыты
     private interface OnPanelClickListener {
         void onPanelClick();
     }
 
+    //list для хранения слушателей клика на панель снятия денег
     private List<OnPanelClickListener> onPanelClickListeners = new ArrayList<>();
 
+    /**
+     * присваивается каждому новому viewHolder-у в onCreateViewHolder
+     * @see DepositRecyclerAdapter#onCreateViewHolder(ViewGroup, int)
+     */
     private void addOnPanelClickListener(OnPanelClickListener listener) {
         onPanelClickListeners.add(listener);
     }
 
+    //уведомление всех слушателей о нажатии на панель снятия денег
     private void notifyOnPanelClicked() {
         for(OnPanelClickListener listener: onPanelClickListeners) {
             listener.onPanelClick();
         }
     }
-
-
-
 
     public void setOnAddDepositListener(OnAddDepositItemClickListener listener) {
         this.onAddDepositItemClickListener = listener;
@@ -178,7 +183,6 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
         @Override
         public void onClick(View v) {
             if(viewType == DEPOSIT_TYPE) {
-                //напр. снять со счёта
                 if(!actionPanelIsVisible) {
                     actionPanel.setVisibility(View.VISIBLE);
                     actionPanelIsVisible = true;

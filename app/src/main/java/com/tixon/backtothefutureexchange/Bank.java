@@ -63,6 +63,20 @@ public class Bank implements OnCurrencyChangedListener {
         deposits = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param t1: время начала периода
+     * @param t2: время конца периода
+     * @param c1: валюта в начале периода
+     * @param c2: валюта в конце периода
+     * @param timeArg: текущий момент времени
+     * @return валюта в текущий момент времени
+     */
+    private double interpolate(long t1, long t2,
+                               double c1, double c2, long timeArg) {
+        return (timeArg * (c2 - c1) + (c1 * t2 - t1 * c2)) / (t2 - t1);
+    }
+
     //задаёт индекс валюты
     public void setCurrency(int currencyIndex) {
         this.currency = currencyIndex;
