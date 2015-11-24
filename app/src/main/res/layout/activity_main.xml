@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/panel_background_color">
+    android:background="@color/panel_background_color"
+   >
 
     <com.tixon.backtothefutureexchange.ui.Toolbar
         android:id="@+id/resources_toolbar"

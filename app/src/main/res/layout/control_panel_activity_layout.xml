@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black_color">
 
     <com.tixon.backtothefutureexchange.ui.ControlPanelItem
         android:id="@+id/destination_time_panel"
@@ -24,8 +25,16 @@
         android:background="@drawable/button_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
         android:text="Переместиться во времени" />
+
+    <ImageView
+        android:src="@drawable/bttf_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
