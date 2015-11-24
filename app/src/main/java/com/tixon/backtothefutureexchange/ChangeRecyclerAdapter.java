@@ -18,7 +18,7 @@ public class ChangeRecyclerAdapter extends RecyclerView
     private static final String LOG_TAG = "myLogs";
     private ArrayList<String> currencies;
     private Context context;
-    private FragmentChange fragment;
+    FragmentChange fragment;
     private int selectedPosition = 0;
 
     private int currencyIndex;
@@ -96,14 +96,15 @@ public class ChangeRecyclerAdapter extends RecyclerView
 
     //OnMoneyRangeChangedListener method
     @Override
-    public void onMoneyRangeChanged(int moneyToExchange, Bank bank) {
+    public void onMoneyRangeChanged(int moneyToExchange, Bank bank, long timeInMillis) {
+        //todo: исправить change с millis (здесь исправлять ещё и метод в интерфейсе)
         for(int i = 0; i < currencies.size(); i++) {
             String currency = currencies.get(i);
             if(currency.contains(":")) {
                 currency = currency.substring(0, currency.indexOf(":"));
             }
             currency += ": ";
-            currency += String.valueOf(bank.change(bank.getCurrency(), availableCurrencies[i], moneyToExchange));
+            currency += String.valueOf(bank.change(bank.getCurrency(), availableCurrencies[i], moneyToExchange, timeInMillis));
             int dotIndex = currency.indexOf(".");
 
             try {

@@ -180,14 +180,15 @@ public class Purse implements OnDepositAddListener {
         //получить доллары
         cash += purse[3];
         //получить фунты
-        cash += bank.change(Bank.CURRENCY_POUNDS, Bank.CURRENCY_DOLLARS, purse[4]);
+        //todo: исправить change с millis
+        cash += bank.change(Bank.CURRENCY_POUNDS, Bank.CURRENCY_DOLLARS, purse[4], timeInMillis);
         //получить рубли
         if(timeInMillis >= Constants.JAN_1900_1 && timeInMillis < Constants.DEC_1922_22) {
-            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[0]);
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[0], timeInMillis);
         } else if(timeInMillis >= Constants.DEC_1922_22 && timeInMillis <= Constants.JAN_1998_1) {
-            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[1]);
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[1], timeInMillis);
         } else if(timeInMillis > Constants.JAN_1998_1) {
-            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[2]);
+            cash += bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS, purse[2], timeInMillis);
         }
         return cash;
     }
@@ -196,7 +197,9 @@ public class Purse implements OnDepositAddListener {
 
     public void change(Bank bank, int currencyTo, long timeInMillis, double howMuch) {
         int currencyFrom = bank.getCurrency();
-        double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom, timeInMillis, howMuch));
+        //todo: исправить change с millis
+        double changedMoney = bank.change(currencyFrom, currencyTo, giveMoney(currencyFrom,
+                timeInMillis, howMuch), timeInMillis);
         add(changedMoney, currencyTo, timeInMillis);
     }
 

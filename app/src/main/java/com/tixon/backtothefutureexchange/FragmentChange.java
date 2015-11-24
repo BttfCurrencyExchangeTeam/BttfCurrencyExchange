@@ -88,7 +88,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
                 textView.setText(getCurrencyName(bank.getCurrency()) + ": " + progress);
                 //выбранный диапазон денег присваивается переменной moneyToExchange
                 moneyToExchange = progress;
-                onMoneyRangeChangedListener.onMoneyRangeChanged(moneyToExchange, bank);
+                onMoneyRangeChangedListener.onMoneyRangeChanged(moneyToExchange, bank, calendar.getTimeInMillis());
             }
 
             @Override
@@ -129,7 +129,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
     public void onResume() {
         super.onResume();
         adapter.setFragmentData(this);
-        adapter.onMoneyRangeChanged(seekBar.getProgress(), bank);
+        adapter.onMoneyRangeChanged(seekBar.getProgress(), bank, calendar.getTimeInMillis());
     }
 
     /**
@@ -140,7 +140,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
     @Override
     public void onChange(int currencyTo) {
         this.currencyTo = currencyTo;
-        adapter.onMoneyRangeChanged(seekBar.getProgress(), bank);
+        adapter.onMoneyRangeChanged(seekBar.getProgress(), bank, calendar.getTimeInMillis());
         Log.d("myLogs", "FragmentChange, onChangeListener: currencyTo = " + currencyTo);
     }
 

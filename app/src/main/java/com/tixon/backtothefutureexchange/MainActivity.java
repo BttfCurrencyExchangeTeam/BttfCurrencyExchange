@@ -92,7 +92,10 @@ public class MainActivity extends AppCompatActivity implements
         delorean = Delorean.getInstance();
         bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
-        bank.setYearIndex(calendar.get(Calendar.YEAR));
+        //bank.setYearIndex(calendar.get(Calendar.YEAR));
+        //todo: изменено
+        //bank.setTimeRange(calendar.getTimeInMillis());
+
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
                 /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
                 calendarPresent.get(Calendar.YEAR))));*/
@@ -300,7 +303,9 @@ public class MainActivity extends AppCompatActivity implements
                     //onTimeTravel
                     notifyTimeTravelled();
 
-                    bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
+                    //bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
+                    //todo: изменено
+                    //bank.setTimeRange(calendarPresent.getTimeInMillis());
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     //обновить время в адаптере вкладов
