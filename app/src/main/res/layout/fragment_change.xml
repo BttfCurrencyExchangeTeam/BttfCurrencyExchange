@@ -31,7 +31,9 @@
 
         <Button
             android:id="@+id/fragment_change_button"
-            android:text="обменять"
+            android:text="@string/fragment_change_button_text"
+            android:layout_margin="16dp"
+            android:background="@drawable/button_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

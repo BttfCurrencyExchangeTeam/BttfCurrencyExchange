@@ -16,7 +16,10 @@
 
     <color name="selected_currency_item_color">#82b1ff</color>
     <color name="button_normal_color">#DAA520</color>
+    <color name="button_disabled_color">#ffcc80</color>
     <color name="button_pressed_color">#7c4dff</color>
+
+    <color name="fragment_change_selector_color">#DAA520</color>
 
     <color name="et_background_color">#343434</color>
     <color name="et_stroke_color">#777777</color>

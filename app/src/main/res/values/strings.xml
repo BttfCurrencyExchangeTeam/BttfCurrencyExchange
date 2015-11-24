@@ -95,6 +95,7 @@
     <string name="deposit_item_initial_value">Первоначальный взнос:</string>
     <string name="deposit_item_current_value">Состояние вклада:</string>
     <string name="deposit_item_income">Доход по вкладу:</string>
+    <string name="deposit_button_add_text">создать вклад</string>
 
     <string name="plutonium_count">Плутоний:</string>
     <string name="fuel_count">Топливо:</string>
@@ -102,6 +103,7 @@
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>
+    <string name="fragment_change_button_text">обменять валюту</string>
 
     <string name="currency_dollars">Доллары США</string>
     <string name="currency_rubles">Рубли</string>

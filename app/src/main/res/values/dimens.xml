@@ -13,6 +13,8 @@
     <dimen name="et_margin_side">10dp</dimen>
     <dimen name="tv_margin_top">5dp</dimen>
 
+    <dimen name="button_corner_radius">24dp</dimen>
+
     <dimen name="tv_menu_margin_vertical">5dp</dimen>
     <dimen name="iv_name_margin_top">24dp</dimen>
 

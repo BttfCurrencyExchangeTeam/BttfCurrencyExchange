@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:padding="16dp"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
@@ -15,6 +14,9 @@
         <EditText
             android:id="@+id/add_deposit_fragment_et_name"
             android:hint="Название вклада"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
@@ -23,6 +25,8 @@
         <TextView
             android:text="@string/deposit_currency_text"
             android:gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -32,12 +36,16 @@
             android:background="@drawable/click_field_background"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:text="@string/deposit_interest_text"
             android:gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -47,12 +55,16 @@
             android:background="@drawable/click_field_background"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/add_deposit_fragment_tv_value"
             tools:text="1000"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -60,12 +72,16 @@
         <SeekBar
             android:id="@+id/add_deposit_fragment_value_seek_bar"
             android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/add_deposit_fragment_button"
-            android:text="создать"
+            android:text="@string/deposit_button_add_text"
+            android:background="@drawable/button_background"
             android:layout_width="match_parent"
+            android:layout_margin="16dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

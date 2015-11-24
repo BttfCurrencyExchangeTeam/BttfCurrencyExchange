@@ -87,6 +87,10 @@ public class FragmentAddResources extends Fragment {
         ivMore = (ImageView) v.findViewById(R.id.iv_resources_more);
         bAdd = (Button) v.findViewById(R.id.resources_fragment_button_add);
 
+        if(plutoniumCount == 0) {
+            bAdd.setEnabled(false);
+        }
+
         final Delorean delorean = Delorean.getInstance();
         final Bank bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
@@ -116,6 +120,9 @@ public class FragmentAddResources extends Fragment {
                             tvResources.setText(addResourcesText + " " + plutoniumCount);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
                                     " $" + price);
+                            if(plutoniumCount == 0) {
+                                bAdd.setEnabled(false);
+                            }
                         }
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
@@ -133,8 +140,10 @@ public class FragmentAddResources extends Fragment {
             public void onClick(View v) {
                 switch (resourceType) {
                     case Constants.RESOURCE_TYPE_PLUTONIUM:
+                        bAdd.setEnabled(true);
                         if (price > cash) {
                             tvError.setVisibility(View.VISIBLE);
+                            bAdd.setEnabled(false);
                         } else {
                             plutoniumCount++;
                             price = Constants.PLUTONIUM_PRICE * plutoniumCount;
@@ -144,6 +153,7 @@ public class FragmentAddResources extends Fragment {
                             tvError.setVisibility(View.GONE);
                             if (price > cash) {
                                 tvError.setVisibility(View.VISIBLE);
+                                bAdd.setEnabled(false);
                             }
                         }
                         break;

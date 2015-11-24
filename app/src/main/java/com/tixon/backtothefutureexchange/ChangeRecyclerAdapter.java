@@ -83,7 +83,7 @@ public class ChangeRecyclerAdapter extends RecyclerView
         holder.position = position;
         //setting selection frame
         if(position == selectedPosition) {
-            holder.frame.setBackgroundResource(R.color.yellow);
+            holder.frame.setBackgroundResource(R.color.fragment_change_selector_color);
         } else {
             holder.frame.setBackgroundResource(android.R.color.transparent);
         }
