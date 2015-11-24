@@ -193,6 +193,51 @@ public class Purse implements OnDepositAddListener {
         return cash;
     }
 
+    /**
+     * Выдать наличные с приоритетами доллар -> фунт -> рубль
+     * @param value: сколько долларов нужно выдать
+     * @param bank: объект банка
+     * @param timeInMillis: текущее время
+     */
+    public void giveCash(double value, Bank bank, long timeInMillis) {
+        //сначала взять все доллары
+        double dollars = getMoney(Bank.CURRENCY_DOLLARS, timeInMillis);
+        double poundsDollars = bank.change(Bank.CURRENCY_POUNDS, Bank.CURRENCY_DOLLARS,
+                getMoney(Bank.CURRENCY_POUNDS, timeInMillis), timeInMillis);
+        /*double rublesDollars = bank.change(Bank.CURRENCY_RUBLES, Bank.CURRENCY_DOLLARS,
+                getMoney(Bank.CURRENCY_RUBLES, timeInMillis), timeInMillis);*/
+        //если требуется меньше, чем есть долларов (или столько же)
+        if(value <= dollars) {
+            //отдать сколько нужно
+            giveMoney(Bank.CURRENCY_DOLLARS, timeInMillis, value);
+        } else {
+            //если требуется больше, чем есть долларов
+            giveMoney(Bank.CURRENCY_DOLLARS, timeInMillis, dollars);
+            value -= dollars;
+
+            //если что-то осталось, переходим к фунтам
+            if(value > 0) {
+                if(value <= poundsDollars) {
+                    //отдать сколько нужно (переводим долларовое value в фунты и отдаём)
+                    giveMoney(Bank.CURRENCY_POUNDS, timeInMillis, bank.change(Bank.CURRENCY_DOLLARS,
+                            Bank.CURRENCY_POUNDS, value, timeInMillis));
+                } else {
+                    //если требуется больше, чем есть фунтов
+                    giveMoney(Bank.CURRENCY_POUNDS, timeInMillis, getMoney(Bank.CURRENCY_POUNDS,
+                            timeInMillis));
+                    value -= poundsDollars;
+
+                    //если что-то осталось, переходим к рублям
+                    if(value > 0) {
+                        giveMoney(Bank.CURRENCY_RUBLES, timeInMillis,
+                                bank.change(Bank.CURRENCY_DOLLARS, Bank.CURRENCY_RUBLES, value,
+                                        timeInMillis));
+                    }
+                }
+            }
+        }
+    }
+
     //change
 
     public void change(Bank bank, int currencyTo, long timeInMillis, double howMuch) {

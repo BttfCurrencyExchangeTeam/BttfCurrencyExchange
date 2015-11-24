@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements
         OnItemCheckedListener,
         OnAddDepositItemClickListener,
         OnDepositAddListener,
-        OnMoneyWithdrawListener {
+        OnMoneyWithdrawListener,
+        OnAddResourcesListener{
 
     private static final String LOG_TAG = "myLogs";
     SharedPreferences sp;
@@ -56,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private FragmentChange fragmentChange;
     private AddDepositFragment addDepositFragment;
-    private FragmentAddResources fragmentResources;
+    //private FragmentAddResources fragmentResources;
 
     private Calendar calendar, calendarPresent, calendarLast, calendarDestination;
-
-    private OnAddResourcesListener onAddResourcesListener;
 
     private Purse purse;
     private Delorean delorean;
@@ -248,10 +247,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public void setOnAddResourcesListener(OnAddResourcesListener onAddResourcesListener) {
-        this.onAddResourcesListener = onAddResourcesListener;
-    }
-
     private void initViews() {
         container = (FrameLayout) findViewById(R.id.main_container);
         purseHeader = (RelativeLayout) findViewById(R.id.purse_header_frame);
@@ -426,9 +421,12 @@ public class MainActivity extends AppCompatActivity implements
         } else if(resourceType == Constants.RESOURCE_TYPE_FUEL) {
             backStackEntryName = Constants.BACK_STACK_ADD_FUEL;
         }
+        FragmentAddResources fragmentAddResources = FragmentAddResources.newInstance(resourceType, calendarPresent.getTimeInMillis());
+        fragmentAddResources.addOnAddResourcesListener(this); //добавить это activity как слушателя
+        //fragmentAddResources.addOnAddResourcesListener(delorean); //добавить слушателя delorean
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_container, FragmentAddResources
-                        .newInstance(resourceType, calendarPresent.getTimeInMillis()))
+                .replace(R.id.main_container, fragmentAddResources)
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(backStackEntryName)
                 .commit();
@@ -446,5 +444,19 @@ public class MainActivity extends AppCompatActivity implements
     long getSavedTime() {
         sp = getPreferences(MODE_PRIVATE);
         return sp.getLong(Constants.PREFERENCE_CURRENT_TIME, 0);
+    }
+
+    //добавление ресурсов
+    @Override
+    public void onAddPlutonium(int count, double price) {
+        purse.giveCash(price, bank, calendarPresent.getTimeInMillis());
+        purseAdapter.notifyDataSetChanged();
+        delorean.addPlutonium(count);
+        resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
+    }
+
+    @Override
+    public void onAddFuel(double count) {
+
     }
 }

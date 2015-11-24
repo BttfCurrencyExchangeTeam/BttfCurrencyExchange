@@ -40,6 +40,7 @@ public class Constants {
 
     public static final long[] TIMES = new long[] {
             //-2209003200000l, //1900 01.01
+            //http://currentmillis.com
             -2209089600000l, //1899 31.12
             -1704164400000l, //1916 01.01
             -1641006000000l, //1918 01.01

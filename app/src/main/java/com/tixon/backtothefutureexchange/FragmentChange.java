@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class FragmentChange extends Fragment implements OnItemCheckedListener, OnCurrencyChangedListener {
+public class FragmentChange extends Fragment
+        implements OnItemCheckedListener,
+        OnCurrencyChangedListener {
     Button buttonChange;
     SeekBar seekBar;
     TextView textView;
@@ -118,7 +120,7 @@ public class FragmentChange extends Fragment implements OnItemCheckedListener, O
                 //банк переходит на выбранную валюту для последующих обменов
                 bank.setCurrency(currencyTo);
                 onMoneyChangedListener.onMoneyChanged();
-                //закрытие фрагмента обмена путём очистки backStack
+                //закрытие фрагмента
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });

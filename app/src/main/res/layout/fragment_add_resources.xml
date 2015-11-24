@@ -49,13 +49,24 @@
         </RelativeLayout>
 
         <TextView
+            tools:text="Цена за ресурс"
             android:id="@+id/tv_resources_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal" />
 
         <TextView
+            tools:text="Все доступные средства"
             android:id="@+id/tv_resources_all_cash"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Не хватает денег для покупки"
+            android:id="@+id/tv_resources_error"
+            android:textColor="#ffe500"
+            android:visibility="gone"
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -97,7 +97,6 @@ public class ChangeRecyclerAdapter extends RecyclerView
     //OnMoneyRangeChangedListener method
     @Override
     public void onMoneyRangeChanged(int moneyToExchange, Bank bank, long timeInMillis) {
-        //todo: исправить change с millis (здесь исправлять ещё и метод в интерфейсе)
         for(int i = 0; i < currencies.size(); i++) {
             String currency = currencies.get(i);
             if(currency.contains(":")) {
