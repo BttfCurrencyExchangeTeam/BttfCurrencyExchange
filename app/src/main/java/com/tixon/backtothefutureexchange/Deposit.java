@@ -43,7 +43,7 @@ public class Deposit {
                 newValue += newValue * (interest / 100d);
             }
         } else {
-            newValue = Constants.CODE_DEPOSIT_NO_EXISTS;
+            newValue = 0;
         }
         return newValue;
     }

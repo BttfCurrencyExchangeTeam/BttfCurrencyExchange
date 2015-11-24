@@ -61,7 +61,7 @@ public class PurseItemsRecyclerAdapter extends RecyclerView.Adapter<PurseItemsRe
 
     @Override
     public void onBindViewHolder(PurseViewHolder holder, int position) {
-        holder.tvHowMuch.setText(String.valueOf(purse[position]));
+        holder.tvHowMuch.setText(formatString(purse[position]));
         holder.tvCurrencyName.setText(currencyNames[position]);
         holder.ivCurrency.setImageResource(getImageResource(position));
         holder.position = position;
@@ -164,5 +164,15 @@ public class PurseItemsRecyclerAdapter extends RecyclerView.Adapter<PurseItemsRe
         notifyDataSetChanged();
     }
 
-
+    private String formatString(double number) {
+        String sNumber = String.valueOf(number);
+        int dotIndex = sNumber.indexOf(".");
+        int digitsAfterDot = 2;
+        try {
+            sNumber = sNumber.substring(0, dotIndex + digitsAfterDot + 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sNumber;
+    }
 }

@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements
         fragmentChange.setOnMoneyChangedListener(this);
 
         try {
+            getSupportFragmentManager().popBackStack();
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                     fragmentChange)
                     .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -358,11 +359,6 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
-
-    /*int dpToPx(int dp) {
-        Resources r = getResources();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-    }*/
 
     @Override
     public void onMoneyChanged() {
@@ -378,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDepositClick() {
+        getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_container, addDepositFragment)
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -421,6 +418,7 @@ public class MainActivity extends AppCompatActivity implements
         } else if(resourceType == Constants.RESOURCE_TYPE_FUEL) {
             backStackEntryName = Constants.BACK_STACK_ADD_FUEL;
         }
+        getSupportFragmentManager().popBackStack();
         FragmentAddResources fragmentAddResources = FragmentAddResources.newInstance(resourceType, calendarPresent.getTimeInMillis());
         fragmentAddResources.addOnAddResourcesListener(this); //добавить это activity как слушателя
         //fragmentAddResources.addOnAddResourcesListener(delorean); //добавить слушателя delorean

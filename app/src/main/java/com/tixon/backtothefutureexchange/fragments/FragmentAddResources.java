@@ -104,7 +104,7 @@ public class FragmentAddResources extends Fragment {
         //установить текст
         tvResources.setText(addResourcesText + " " + 0);
         tvAllCash.setText(getResources().getString(R.string.resources_all_cash) +
-                " $" + String.valueOf(cash));
+                " $" + formatString(cash));
 
         ivLess.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +181,20 @@ public class FragmentAddResources extends Fragment {
             }
         });
 
+
+
         return v;
+    }
+
+    private String formatString(double number) {
+        String sNumber = String.valueOf(number);
+        int dotIndex = sNumber.indexOf(".");
+        int digitsAfterDot = 2;
+        try {
+            sNumber = sNumber.substring(0, dotIndex + digitsAfterDot + 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sNumber;
     }
 }

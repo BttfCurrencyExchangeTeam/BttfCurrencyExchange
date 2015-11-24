@@ -88,9 +88,9 @@
     <string name="activity_main_button_exchange">Обменять</string>
     <string name="activity_main_button_travel">Переместиться</string>
 
-    <string name="deposit_add_text">Добавить</string>
-    <string name="deposit_currency_text">Валюта</string>
-    <string name="deposit_interest_text">Процентная ставка</string>
+    <string name="deposit_add_text">Добавить вклад</string>
+    <string name="deposit_currency_text">Выберите валюту</string>
+    <string name="deposit_interest_text">Выберите процентную ставку</string>
     <string name="deposit_item_initial_time">Вклад создан</string>
     <string name="deposit_item_initial_value">Первоначальный взнос:</string>
     <string name="deposit_item_current_value">Состояние вклада:</string>

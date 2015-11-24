@@ -72,6 +72,8 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
 
     public void updateCurrentTime(long currentTime) {
         this.currentTime = currentTime;
+        deposits = bank.getDeposits(currentTime);
+        notifyDataSetChanged();
     }
 
     public void updateDeposits(ArrayList<Deposit> deposits) {
