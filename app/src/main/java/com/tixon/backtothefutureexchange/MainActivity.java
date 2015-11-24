@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private FragmentChange fragmentChange;
     private AddDepositFragment addDepositFragment;
-    //private FragmentAddResources fragmentResources;
 
-    private Calendar calendar, calendarPresent, calendarLast, calendarDestination;
+    private Calendar calendarPresent, calendarLast, calendarDestination;
+    Calendar calendar;
 
     private Purse purse;
     private Delorean delorean;

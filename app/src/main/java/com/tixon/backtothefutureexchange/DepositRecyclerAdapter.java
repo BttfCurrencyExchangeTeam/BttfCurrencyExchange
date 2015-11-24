@@ -112,12 +112,12 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
 
             holder.tvName.setText(name + " (" + interest + "%)");
             holder.tvInitValue.setText(holder.context.getResources()
-                    .getString(R.string.deposit_item_initial_value) + " " + String.valueOf(initValue));
+                    .getString(R.string.deposit_item_initial_value) + " " + formatString(initValue));
             holder.tvInitTime.setText(holder.context.getResources().getString(R.string.deposit_item_initial_time) + " " + dateFormat.format(initDate));
             holder.tvCurrentValue.setText(holder.context.getResources()
-                    .getString(R.string.deposit_item_current_value) + " " + String.valueOf(currentValue));
+                    .getString(R.string.deposit_item_current_value) + " " + formatString(currentValue));
             holder.tvIncome.setText(holder.context.getResources()
-                    .getString(R.string.deposit_item_income) + " " + String.valueOf(income));
+                    .getString(R.string.deposit_item_income) + " " + formatString(income));
 
             holder.actionPanel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,6 +134,18 @@ public class DepositRecyclerAdapter extends RecyclerView.Adapter<DepositRecycler
                 }
             });
         }
+    }
+
+    private String formatString(double number) {
+        String sNumber = String.valueOf(number);
+        int dotIndex = sNumber.indexOf(".");
+        int digitsAfterDot = 2;
+        try {
+            sNumber = sNumber.substring(0, dotIndex + digitsAfterDot + 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sNumber;
     }
 
     @Override

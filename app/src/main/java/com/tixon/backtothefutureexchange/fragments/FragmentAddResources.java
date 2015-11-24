@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentAddResources extends Fragment {
-    private TextView tvResources, tvAllCash, tvPrice, tvError;
-    private ImageView ivLess, ivMore;
-    private Button bAdd;
+    TextView tvResources, tvAllCash, tvPrice, tvError;
+    ImageView ivLess, ivMore;
+    Button bAdd;
     private int resourceType;
     private int plutoniumCount = 0;
     private double fuelCount = 0;
 
     private double cash, price;
 
-    private long currentTime;
+    long currentTime;
 
     private String addResourcesText;
 
