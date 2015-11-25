@@ -192,6 +192,13 @@ public class MainActivity extends AppCompatActivity implements
         addDepositFragment.setOnMoneyChangedListener(this);
     }
 
+    //todo: сохранение данных
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
     //сохранение игры в onStop
     @Override
     protected void onStop() {
