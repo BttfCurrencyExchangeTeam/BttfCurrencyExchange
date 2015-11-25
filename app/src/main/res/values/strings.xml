@@ -131,7 +131,7 @@
 
     <!--  Уровни -->
     <string name="dialog_level_up_title_text">Уровень</string>
-    <string name="message_level_1">Заработайте сто тысяч рублей!</string>
+    <string name="message_level_1">Накопите сто тысяч рублей!</string>
     <string name="message_level_2">Поздравляем, Ваш капитал превышает 100 000 рублей. Желаем удачи!</string>
     <string name="message_level_3">Грандиозно! Вы миллионер! Желаем дальнейших успехов!</string>
     <string name="message_win">Это триумф! Вы стали миллиардером!</string>
