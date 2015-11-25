@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements
         OnAddDepositItemClickListener,
         OnDepositAddListener,
         OnMoneyWithdrawListener,
-        OnAddResourcesListener{
+        OnAddResourcesListener,
+        OnLevelIncreasedListener {
 
     private static final String LOG_TAG = "myLogs";
     SharedPreferences sp;
@@ -53,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements
         for(OnTimeTravelListener listener: onTimeTravelListenersList) {
             listener.onTimeTraveled();
         }
+    }
+
+    //onLevelIncreased listener
+    private OnLevelIncreasedListener onLevelIncreasedListener;
+
+    public void setOnLevelIncreasedListener(OnLevelIncreasedListener listener) {
+        this.onLevelIncreasedListener = listener;
     }
 
     private FragmentChange fragmentChange;
@@ -146,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements
                 String savedGameName = "my_new_game " + currentSystemTime;
                 saveTime(currentSystemTime);
                 bank.clearDeposits();
+                delorean.init();
+                resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
+                resourcesToolbar.setFuelNumber(delorean.getFuel());
 
                 //формирование записей базы данных для сохранения игры
                 //сохранение системного времени как ключа
@@ -332,9 +343,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     startActivityForResult(startTravelActivity,
                             Constants.REQUEST_CODE_TRAVEL);
-                } /*else {
-                    //сообщить о нехватке плутония
-                }*/
+                }
                 break;
             case R.id.main_activity_button_exchange:
                 showExchangeDialog();
@@ -403,11 +412,17 @@ public class MainActivity extends AppCompatActivity implements
         //снятие денег с вклада
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
         purse.add(money, currencyTo, timeInMillis);
-        //todo добавление денег
+        //todo добавление денег - для уровня
+        //увеличиваем уровень в зависимости от количества денег
+        if(purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 100000
+                && purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000) {
+            onLevelIncreasedListener.onLevelIncreased();
+        } else if(purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000
+                && purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000000) {
+            onLevelIncreasedListener.onLevelIncreased();
+        }
         purseAdapter.notifyDataSetChanged();
     }
-    //вычесть из баланса долларовый эквивалент цены за количество плутония
-    //cash -= count * bank.change(Bank.CURRENCY_DOLLARS, bank.getCurrency(), 10000);
 
     private void showAddResourcesFragment(int resourceType) {
         String backStackEntryName = "";
@@ -457,5 +472,11 @@ public class MainActivity extends AppCompatActivity implements
         purseAdapter.notifyDataSetChanged();
         delorean.addFuel(count);
         resourcesToolbar.setFuelNumber(delorean.getFuel());
+    }
+
+    @Override
+    public void onLevelIncreased() {
+        int level = delorean.getLevel();
+
     }
 }

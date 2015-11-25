@@ -6,8 +6,10 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     private int plutonium;
     private int fuel;
+    private int level;
 
-    private Delorean() {
+    public void init() {
+        level = 1;
         plutonium = 5;
         fuel = 2000;
     }
@@ -47,6 +49,14 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     public void addFuel(int fuel) {
         this.fuel += fuel;
+    }
+
+    public void increaseLevel() {
+        level++;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     //переместиться во времени

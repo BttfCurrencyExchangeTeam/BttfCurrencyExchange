@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,16 +12,29 @@
 
     <com.tixon.backtothefutureexchange.ui.ControlPanelItem
         android:id="@+id/present_time_panel"
+        android:layout_below="@+id/destination_time_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.tixon.backtothefutureexchange.ui.ControlPanelItem
         android:id="@+id/last_time_departed_panel"
+        android:layout_below="@+id/present_time_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ImageView
+        android:layout_below="@+id/last_time_departed_panel"
+        android:layout_above="@+id/control_panel_button_travel"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/bttf_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivControlPanelActivity"
+        android:layout_gravity="center_horizontal" />
+
     <Button
         android:id="@+id/control_panel_button_travel"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/button_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,11 +43,6 @@
         android:layout_marginRight="36dp"
         android:text="Переместиться во времени" />
 
-    <ImageView
-        android:src="@drawable/bttf_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_gravity="center_horizontal" />
 
-</LinearLayout>
+
+</RelativeLayout>
