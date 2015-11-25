@@ -1,5 +1,7 @@
 package com.tixon.backtothefutureexchange;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -113,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements
 
         //инициализация элементов разметки
         initViews();
+
+        //добавления слушателя на повышение уровня
+        setOnLevelIncreasedListener(this);
 
         //добавление слушателей на перемещение во времени
         addOnTimeTravelListener(delorean);
@@ -372,6 +377,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMoneyChanged() {
         purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
+        //увеличиваем уровень в зависимости от количества денег
+        double allCash = purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis());
+        if(allCash >= Constants.MONEY_LEVEL_1
+                && allCash < Constants.MONEY_LEVEL_2) {
+            onLevelIncreasedListener.onLevelIncreased();
+        } else if(allCash >= Constants.MONEY_LEVEL_2
+                && allCash < Constants.MONEY_LEVEL_3) {
+            onLevelIncreasedListener.onLevelIncreased();
+        }
     }
 
     @Override
@@ -414,11 +428,12 @@ public class MainActivity extends AppCompatActivity implements
         purse.add(money, currencyTo, timeInMillis);
         //todo добавление денег - для уровня
         //увеличиваем уровень в зависимости от количества денег
-        if(purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 100000
-                && purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000) {
+        double allCash = purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis());
+        if(allCash >= Constants.MONEY_LEVEL_1
+                && allCash < Constants.MONEY_LEVEL_2) {
             onLevelIncreasedListener.onLevelIncreased();
-        } else if(purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000
-                && purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis()) >= 1000000000) {
+        } else if(allCash >= Constants.MONEY_LEVEL_2
+                && allCash < Constants.MONEY_LEVEL_3) {
             onLevelIncreasedListener.onLevelIncreased();
         }
         purseAdapter.notifyDataSetChanged();
@@ -474,9 +489,32 @@ public class MainActivity extends AppCompatActivity implements
         resourcesToolbar.setFuelNumber(delorean.getFuel());
     }
 
+    public void showLevelIncreasedDialog(int level) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Повышение уровня: " + level);
+        dialogBuilder.setMessage("Поздравляем!");
+        dialogBuilder.setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+
     @Override
     public void onLevelIncreased() {
         int level = delorean.getLevel();
+        showLevelIncreasedDialog(level);
+        switch (level) {
+            case 1:
 
+                break;
+            case 2:
+                break;
+        }
+
+        delorean.increaseLevel();
     }
 }

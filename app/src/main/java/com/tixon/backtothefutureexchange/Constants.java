@@ -74,12 +74,17 @@ public class Constants {
 
     };
 
+    public static final int MONEY_LEVEL_1 = 100000;
+    public static final int MONEY_LEVEL_2 = 1000000;
+    public static final int MONEY_LEVEL_3 = 1000000000;
+
+
     public static final String KEY_RESOURCE_TYPE = "key_resource_type";
     public static final String KEY_RESOURCES_PRESENT_TIME = "key_resources_present_time";
     public static final int RESOURCE_TYPE_PLUTONIUM = 1;
     public static final int RESOURCE_TYPE_FUEL = 2;
 
-    public static final int PLUTONIUM_PRICE = 10000; //цена за единицу плутония в долларах
+    public static final int PLUTONIUM_PRICE = 25000; //цена за единицу плутония в долларах
     public static final int FUEL_PRICE = 1; //цена за литр топлива в долларах
 
     //секунды * минуты * часы * дни * 1000 = мс в году
