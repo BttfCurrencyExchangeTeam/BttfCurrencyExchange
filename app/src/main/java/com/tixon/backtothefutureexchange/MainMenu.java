@@ -1,9 +1,7 @@
 package com.tixon.backtothefutureexchange;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -17,7 +15,7 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
 
     ImageView top, bottom;
 
-    TextView tvNew_game, tvContinue, tvOptions, tvAbout, tvExit;
+    TextView tvNew_game, tvContinue, tvAbout, tvExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,6 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         //инициализация TextView
         tvNew_game = (TextView) findViewById(R.id.new_game);
         tvContinue = (TextView) findViewById(R.id.continue_);
-        tvOptions = (TextView) findViewById(R.id.options_);
         tvAbout = (TextView) findViewById(R.id.tv_about);
         tvExit = (TextView) findViewById(R.id.exit_);
 
@@ -46,21 +43,18 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         Typeface digitsTypeFace = Typeface.createFromAsset(getAssets(), Constants.TYPEFACE_DIGITS);
         tvNew_game.setTypeface(digitsTypeFace);
         tvContinue.setTypeface(digitsTypeFace);
-        tvOptions.setTypeface(digitsTypeFace);
         tvAbout.setTypeface(digitsTypeFace);
         tvExit.setTypeface(digitsTypeFace);
 
         //устанавливаем onTouchListener
         tvNew_game.setOnTouchListener(this);
         tvContinue.setOnTouchListener(this);
-        tvOptions.setOnTouchListener(this);
         tvAbout.setOnTouchListener(this);
         tvExit.setOnTouchListener(this);
 
         //устанавливаем onClickListener
         tvNew_game.setOnClickListener(this);
         tvContinue.setOnClickListener(this);
-        tvOptions.setOnClickListener(this);
         tvAbout.setOnClickListener(this);
         tvExit.setOnClickListener(this);
     }
@@ -83,9 +77,6 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
                 break;
             case R.id.continue_:
                 touch(tvContinue, event);
-                break;
-            case R.id.options_:
-                touch(tvOptions, event);
                 break;
             case R.id.tv_about:
                 touch(tvAbout, event);
