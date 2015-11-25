@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="#00A86B"/>
+            <solid android:color="@color/fragment_background_color"/>
         </shape>
     </item>
 </selector>

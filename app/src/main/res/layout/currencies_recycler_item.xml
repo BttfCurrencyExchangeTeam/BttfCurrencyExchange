@@ -4,14 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/currencies_recycler_item_height"
     android:id="@+id/currencies_recycler_item_frame">
-    <ImageView
-        android:id="@+id/currencies_recycler_item_imageView"
-        android:layout_width="@dimen/currencies_recycler_item_height"
-        android:layout_height="@dimen/currencies_recycler_item_height" />
     <TextView
         android:id="@+id/currencies_recycler_item_textView"
-        android:layout_toRightOf="@+id/currencies_recycler_item_imageView"
-        android:layout_toEndOf="@+id/currencies_recycler_item_imageView"
+        android:layout_marginLeft="24dp"
         android:layout_centerVertical="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="Рубли"

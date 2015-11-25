@@ -90,12 +90,15 @@
 
     <string name="deposit_add_text">Добавить вклад</string>
     <string name="deposit_currency_text">Выберите валюту</string>
-    <string name="deposit_interest_text">Выберите процентную ставку</string>
+    <string name="deposit_interest_text">Процентная ставка:</string>
     <string name="deposit_item_initial_time">Вклад создан</string>
     <string name="deposit_item_initial_value">Первоначальный взнос:</string>
     <string name="deposit_item_current_value">Состояние вклада:</string>
     <string name="deposit_item_income">Доход по вкладу:</string>
     <string name="deposit_button_add_text">создать вклад</string>
+
+    <string name="deposit_insert_name_text">Введите название</string>
+    <string name="deposit_insert_name_action_text">Ввести</string>
 
     <string name="plutonium_count">Плутоний:</string>
     <string name="fuel_count">Топливо:</string>

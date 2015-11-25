@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/deposit_add_item_image"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_more"
         android:scaleType="center"
         android:layout_width="@dimen/deposit_add_item_height"
         android:layout_height="@dimen/deposit_add_item_height" />

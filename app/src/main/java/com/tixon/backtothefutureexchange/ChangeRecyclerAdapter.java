@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -123,7 +122,6 @@ public class ChangeRecyclerAdapter extends RecyclerView
      */
     public class ChangeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView currencyName;
-        public ImageView currencyImage;
         public RelativeLayout frame;
         public int position;
 
@@ -132,7 +130,6 @@ public class ChangeRecyclerAdapter extends RecyclerView
             itemView.setOnClickListener(this);
             frame = (RelativeLayout) itemView.findViewById(R.id.currencies_recycler_item_frame);
             currencyName = (TextView) itemView.findViewById(R.id.currencies_recycler_item_textView);
-            currencyImage = (ImageView) itemView.findViewById(R.id.currencies_recycler_item_imageView);
         }
 
         @Override
@@ -145,11 +142,23 @@ public class ChangeRecyclerAdapter extends RecyclerView
         }
     }
 
+    private String getCurrencyName(int currency) {
+        switch (currency) {
+            case Bank.CURRENCY_RUBLES:
+                return fragment.getResources().getString(R.string.currency_rubles);
+            case Bank.CURRENCY_DOLLARS:
+                return fragment.getResources().getString(R.string.currency_dollars);
+            case Bank.CURRENCY_POUNDS:
+                return fragment.getResources().getString(R.string.currency_pounds);
+            default: return "";
+        }
+    }
+
     //устанавливает в FragmentChange для seekBar и textView значения, полученные здесь
     public void setFragmentData(FragmentChange fragment) {
         fragment.seekBar.setMax((int) purse.getMoney(currencyIndex, timeInMillis));
         fragment.seekBar.setProgress(fragment.seekBar.getMax());
         fragment.moneyToExchange = ((int) purse.getMoney(currencyIndex, timeInMillis));
-        fragment.textView.setText(String.valueOf(purse.getMoney(currencyIndex, timeInMillis)));
+        //fragment.textView.setText(String.valueOf(purse.getMoney(currencyIndex, timeInMillis)));
     }
 }

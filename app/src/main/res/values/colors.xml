@@ -21,6 +21,9 @@
 
     <color name="deposit_panel_color">#00C853</color>
 
+    <color name="fragment_background_color">#00A86B</color>
+    <color name="fragment_add_resources_buttons_color">#8bc34a</color>
+
     <color name="fragment_change_selector_color">#DAA520</color>
 
     <color name="et_background_color">#343434</color>

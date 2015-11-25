@@ -28,7 +28,8 @@ public class Constants {
 
     public static final int CODE_DEPOSIT_NO_EXISTS = -1828;
 
-    public static final double[] interestValues = new double[] {7, 10, 12, 13.5, 16, 22};
+    public static final double[] interestValues = new double[] {7, 10, 12};
+    public static final double INTEREST = 10d;
 
     public static final long JAN_1900_1 = -2208999600000L;
     //                                    -2208999600000

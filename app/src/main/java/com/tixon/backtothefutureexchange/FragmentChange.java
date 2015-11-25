@@ -77,6 +77,8 @@ public class FragmentChange extends Fragment
                 bank.getCurrency(), calendar.getTimeInMillis(), purse);
         adapter.setOnItemCheckedListener(this); //назначение слушателя изменения валюты
 
+        textView.setText(getCurrencyName(bank.getCurrency()) + ": " + purse.getMoney(bank.getCurrency(), calendar.getTimeInMillis()));
+
         //инициализация recyclerView
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setAdapter(adapter);
@@ -143,6 +145,7 @@ public class FragmentChange extends Fragment
     public void onChange(int currencyTo) {
         this.currencyTo = currencyTo;
         adapter.onMoneyRangeChanged(seekBar.getProgress(), bank, calendar.getTimeInMillis());
+        //textView.setText(getCurrencyName(currencyTo) + ": " + purse.getMoney(currencyTo, calendar.getTimeInMillis()));
         Log.d("myLogs", "FragmentChange, onChangeListener: currencyTo = " + currencyTo);
     }
 

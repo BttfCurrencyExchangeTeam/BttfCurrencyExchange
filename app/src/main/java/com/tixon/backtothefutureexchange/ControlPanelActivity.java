@@ -19,11 +19,8 @@ public class ControlPanelActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     private ControlPanelItem destinationTimePanel, presentTimePanel, lastTimeDepartedPanel;
-    private Button bTravel;
 
     private Calendar calendarDestination, calendarPresent, calendarLast;
-
-    private Delorean delorean;
 
     SQLiteDatabase db;
     DataBaseHelper dbHelper;
@@ -36,8 +33,6 @@ public class ControlPanelActivity extends AppCompatActivity implements
         calendarDestination = Calendar.getInstance();
         calendarPresent = Calendar.getInstance();
         calendarLast = Calendar.getInstance();
-
-        delorean = Delorean.getInstance();
 
         dbHelper = new DataBaseHelper(this);
         db = dbHelper.getWritableDatabase();
@@ -55,14 +50,13 @@ public class ControlPanelActivity extends AppCompatActivity implements
         presentTimePanel = (ControlPanelItem) findViewById(R.id.present_time_panel);
         lastTimeDepartedPanel = (ControlPanelItem) findViewById(R.id.last_time_departed_panel);
 
-        bTravel = (Button) findViewById(R.id.control_panel_button_travel);
+        Button bTravel = (Button) findViewById(R.id.control_panel_button_travel);
         bTravel.setOnClickListener(this);
 
         destinationTimePanel.setPanelType(ControlPanelItem.DESTINATION_TIME);
         presentTimePanel.setPanelType(ControlPanelItem.PRESENT_TIME);
         lastTimeDepartedPanel.setPanelType(ControlPanelItem.LAST_TIME_DEPARTED);
 
-        //done: added calendarDestination instead of calendarPresent
         destinationTimePanel.setDate(calendarDestination);
         presentTimePanel.setDate(calendarPresent);
         lastTimeDepartedPanel.setDate(calendarLast);
@@ -93,7 +87,6 @@ public class ControlPanelActivity extends AppCompatActivity implements
                 intent.putExtra(Constants.KEY_TIME_DESTINATION, destinationTimePanel.getDate().getTimeInMillis());
                 intent.putExtra(Constants.KEY_TIME_PRESENT, presentTimePanel.getDate().getTimeInMillis());
                 intent.putExtra(Constants.KEY_TIME_LAST, lastTimeDepartedPanel.getDate().getTimeInMillis());
-// onTimeTravelListener.onTimeTraveled();
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
@@ -101,7 +94,6 @@ public class ControlPanelActivity extends AppCompatActivity implements
     }
 
     private void showDatePickerDialog() {
-        //Calendar presentTimeCalendar = presentTimePanel.getDate();
         Calendar presentTimeCalendar = Calendar.getInstance();
         presentTimeCalendar.setTimeInMillis(presentTimePanel.getDate().getTimeInMillis());
 
@@ -126,9 +118,8 @@ public class ControlPanelActivity extends AppCompatActivity implements
     }
 
     private void showTimePickerDialog() {
-        //final Calendar presentTimeCalendar = presentTimePanel.getDate();
         Calendar presentTimeCalendar = Calendar.getInstance();
-        presentTimeCalendar.setTimeInMillis(presentTimePanel.getDate().getTimeInMillis());
+        presentTimeCalendar.setTimeInMillis(destinationTimePanel.getDate().getTimeInMillis());
 
         int minute = presentTimeCalendar.get(Calendar.MINUTE);
         int hour = presentTimeCalendar.get(Calendar.HOUR_OF_DAY);
@@ -136,7 +127,6 @@ public class ControlPanelActivity extends AppCompatActivity implements
         TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                //Calendar destinationCalendar = destinationTimePanel.getDate();
                 Calendar destinationCalendar = Calendar.getInstance();
                 destinationCalendar.setTimeInMillis(destinationTimePanel.getDate().getTimeInMillis());
 

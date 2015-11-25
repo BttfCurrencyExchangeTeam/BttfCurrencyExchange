@@ -115,7 +115,7 @@ public class FragmentAddResources extends Fragment {
                             plutoniumCount--;
                             price = Constants.PLUTONIUM_PRICE * plutoniumCount;
                             if (!(price > cash)) {
-                                tvError.setVisibility(View.GONE);
+                                tvError.setVisibility(View.INVISIBLE);
                             }
                             tvResources.setText(addResourcesText + " " + plutoniumCount);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
@@ -150,7 +150,7 @@ public class FragmentAddResources extends Fragment {
                             tvResources.setText(addResourcesText + " " + plutoniumCount);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
                                     " $" + price);
-                            tvError.setVisibility(View.GONE);
+                            tvError.setVisibility(View.INVISIBLE);
                             if (price > cash) {
                                 tvError.setVisibility(View.VISIBLE);
                                 bAdd.setEnabled(false);

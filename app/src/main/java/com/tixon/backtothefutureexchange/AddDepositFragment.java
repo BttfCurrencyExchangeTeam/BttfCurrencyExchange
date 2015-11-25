@@ -2,7 +2,9 @@ package com.tixon.backtothefutureexchange;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +19,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class AddDepositFragment extends Fragment {
 
+    private static final String LOG_TAG = "myLogs";
     EditText etName;
-    TextView tvValue;
+    TextView tvValue, tvInterest;
     Button bAdd;
     SeekBar seekBar;
-    Spinner spinnerInterests, spinnerCurrencies;
+    Spinner spinnerCurrencies;
 
     private static Calendar calendar = Calendar.getInstance();
 
@@ -48,10 +52,9 @@ public class AddDepositFragment extends Fragment {
 
     String[] interests, currencies;
 
-    private double moneyToAdd = 0;
+    private double moneyToAdd = 0, interest;
 
-    private int interestSelectedPosition = 0, currencySelectedPosition = 0;
-    private String selectedCurrencyName;
+    private int currencySelectedPosition = 0;
 
     private static Bank bank;
     private static Purse purse;
@@ -76,23 +79,38 @@ public class AddDepositFragment extends Fragment {
         calendar.setTimeInMillis(mCurrentTime);
     }
 
+    private double generateRandomInterest() {
+        int min = 0;
+        int max = 2;
+        Random random = new Random();
+        double interest = Constants.interestValues[random.nextInt((max - min) + 1) + min];
+        Log.d(LOG_TAG, "random interest (7, 10, 12) = " + interest);
+        return interest;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_deposit, container, false);
         tvValue = (TextView) v.findViewById(R.id.add_deposit_fragment_tv_value);
+        tvInterest = (TextView) v.findViewById(R.id.tv_interest);
         etName = (EditText) v.findViewById(R.id.add_deposit_fragment_et_name);
-        spinnerInterests = (Spinner) v.findViewById(R.id.add_deposit_fragment_interest_selector);
+        //spinnerInterests = (Spinner) v.findViewById(R.id.add_deposit_fragment_interest_selector);
         spinnerCurrencies = (Spinner) v.findViewById(R.id.add_deposit_fragment_currency_selector);
         seekBar = (SeekBar) v.findViewById(R.id.add_deposit_fragment_value_seek_bar);
 
         interests = getResources().getStringArray(R.array.interests_names);
         currencies = getResources().getStringArray(R.array.deposit_currencies_names_before_1998);
 
+        interest = generateRandomInterest();
+
+        tvInterest.setText(getResources().getString(R.string.deposit_interest_text) +
+                " " + interest);
+
         //инициализация выбора процентных ставок
         interestsAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.interests_names, android.R.layout.simple_spinner_item);
         interestsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerInterests.setAdapter(interestsAdapter);
+        //spinnerInterests.setAdapter(interestsAdapter);
 
         //инициализация выбора валют вклада
         String[] currenciesNames;
@@ -105,11 +123,11 @@ public class AddDepositFragment extends Fragment {
         currenciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCurrencies.setAdapter(currenciesAdapter);
 
-        spinnerInterests.setSelection(0);
+        //spinnerInterests.setSelection(0);
         spinnerCurrencies.setSelection(0);
 
         //добавляем onItemSelectedListener
-        spinnerInterests.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*spinnerInterests.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 interestSelectedPosition = position;
@@ -117,9 +135,8 @@ public class AddDepositFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
-        });
+        });*/
 
         spinnerCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -132,11 +149,10 @@ public class AddDepositFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        //seekbar
+        //seekBar listener
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -161,13 +177,26 @@ public class AddDepositFragment extends Fragment {
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bank.addDeposit(new Deposit(etName.getText().toString(), currentTime, moneyToAdd,
-                        Constants.interestValues[interestSelectedPosition], currencySelectedPosition));
-                getActivity().getSupportFragmentManager().popBackStack();
-                //уведомляет слушателей о том, что был добавлен вклад
-                notifyDepositAdded(moneyToAdd, currencySelectedPosition,
-                        calendar.getTimeInMillis());
-                onMoneyChangedListener.onMoneyChanged();
+                if(!emptyOrSpacesOnly(etName.getText().toString())) {
+                    bank.addDeposit(new Deposit(etName.getText().toString(), currentTime,
+                            moneyToAdd, interest, currencySelectedPosition));
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    //уведомляет слушателей о том, что был добавлен вклад
+                    notifyDepositAdded(moneyToAdd, currencySelectedPosition,
+                            calendar.getTimeInMillis());
+                    onMoneyChangedListener.onMoneyChanged();
+                } else {
+                    Snackbar.make(v, R.string.deposit_insert_name_text, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.deposit_insert_name_action_text, new
+                                    View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            etName.setText("");
+                                            etName.requestFocus();
+                                            etName.setActivated(true);
+                                        }
+                    }).show();
+                }
             }
         });
         return v;
@@ -177,6 +206,13 @@ public class AddDepositFragment extends Fragment {
         for(OnDepositAddListener onDepositAddListener: onDepositAddListeners) {
             onDepositAddListener.onDepositAdd(howMuch, currencyIndex, timeInMillis);
         }
+    }
+
+    private boolean emptyOrSpacesOnly(String s) {
+        while(s.contains(" ")) {
+            s = s.replace(" ", "");
+        }
+        return s.length() == 0;
     }
 
     private int getCurrencyIndexByName(String currencyName) {
