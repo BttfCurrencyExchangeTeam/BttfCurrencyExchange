@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.Bank;
 import com.tixon.backtothefutureexchange.Constants;
-import com.tixon.backtothefutureexchange.Delorean;
 import com.tixon.backtothefutureexchange.OnAddResourcesListener;
 import com.tixon.backtothefutureexchange.Purse;
 import com.tixon.backtothefutureexchange.R;
@@ -20,27 +19,23 @@ import com.tixon.backtothefutureexchange.R;
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.tixon.backtothefutureexchange.Delorean;
+
 public class FragmentAddResources extends Fragment {
     TextView tvResources, tvAllCash, tvPrice, tvError;
     ImageView ivLess, ivMore;
     Button bAdd;
     private int resourceType;
     private int plutoniumCount = 0;
-    private double fuelCount = 0;
+    private int fuelCount = 0;
 
     private double cash, price;
 
     long currentTime;
 
-    private String addResourcesText;
-
-    /*private OnAddResourcesListener onAddResourcesListener;*/
+    private String addResourcesText, measureText;
 
     private List<OnAddResourcesListener> onAddResourcesListeners = new ArrayList<>();
-
-    /*public void setOnAddResourcesListener(OnAddResourcesListener listener) {
-        this.onAddResourcesListener = listener;
-    }*/
 
     public void addOnAddResourcesListener(OnAddResourcesListener listener) {
         onAddResourcesListeners.add(listener);
@@ -52,9 +47,9 @@ public class FragmentAddResources extends Fragment {
         }
     }
 
-    public void notifyOnFuelAdded(double count, double price) {
+    public void notifyOnFuelAdded(int count, double price) {
         for(OnAddResourcesListener listener: onAddResourcesListeners) {
-            listener.onAddFuel(count);
+            listener.onAddFuel(count, price);
         }
     }
 
@@ -87,11 +82,11 @@ public class FragmentAddResources extends Fragment {
         ivMore = (ImageView) v.findViewById(R.id.iv_resources_more);
         bAdd = (Button) v.findViewById(R.id.resources_fragment_button_add);
 
-        if(plutoniumCount == 0) {
+        if(plutoniumCount == 0 || fuelCount == 0) {
             bAdd.setEnabled(false);
         }
 
-        final Delorean delorean = Delorean.getInstance();
+        //final Delorean delorean = Delorean.getInstance();
         final Bank bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
         final Purse purse = Purse.getInstance();
@@ -99,10 +94,19 @@ public class FragmentAddResources extends Fragment {
         resourceType = getArguments().getInt(Constants.KEY_RESOURCE_TYPE);
         currentTime = getArguments().getLong(Constants.KEY_RESOURCES_PRESENT_TIME);
 
+        switch (resourceType) {
+            case Constants.RESOURCE_TYPE_PLUTONIUM:
+                measureText = getString(R.string.plutonium_measure);
+                break;
+            case Constants.RESOURCE_TYPE_FUEL:
+                measureText = getString(R.string.fuel_measure);
+                break;
+        }
+
         cash = purse.getAllCash(bank, currentTime);
 
         //установить текст
-        tvResources.setText(addResourcesText + " " + 0);
+        tvResources.setText(addResourcesText + " " + 0 + " " + measureText);
         tvAllCash.setText(getResources().getString(R.string.resources_all_cash) +
                 " $" + formatString(cash));
 
@@ -117,7 +121,8 @@ public class FragmentAddResources extends Fragment {
                             if (!(price > cash)) {
                                 tvError.setVisibility(View.INVISIBLE);
                             }
-                            tvResources.setText(addResourcesText + " " + plutoniumCount);
+                            tvResources.setText(addResourcesText + " " + plutoniumCount + " "
+                                    + measureText);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
                                     " $" + price);
                             if(plutoniumCount == 0) {
@@ -127,8 +132,18 @@ public class FragmentAddResources extends Fragment {
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
                         if (fuelCount > 0) {
-                            fuelCount -= 0.1;
-                            tvResources.setText(addResourcesText + " " + fuelCount);
+                            fuelCount -= 100;
+                            price = Constants.FUEL_PRICE * fuelCount / 1000d;
+                            if(!(price > cash)) {
+                                tvError.setVisibility(View.INVISIBLE);
+                            }
+                            tvResources.setText(addResourcesText + " " + fuelCount + " "
+                                    + measureText);
+                            tvPrice.setText(getResources().getString(R.string.resources_price) +
+                                    " $" + price);
+                            if(fuelCount == 0) {
+                                bAdd.setEnabled(false);
+                            }
                         }
                         break;
                 }
@@ -147,7 +162,7 @@ public class FragmentAddResources extends Fragment {
                         } else {
                             plutoniumCount++;
                             price = Constants.PLUTONIUM_PRICE * plutoniumCount;
-                            tvResources.setText(addResourcesText + " " + plutoniumCount);
+                            tvResources.setText(addResourcesText + " " + plutoniumCount + " " + measureText);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
                                     " $" + price);
                             tvError.setVisibility(View.INVISIBLE);
@@ -158,8 +173,22 @@ public class FragmentAddResources extends Fragment {
                         }
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
-                        fuelCount += 0.1;
-                        tvResources.setText(addResourcesText + " " + fuelCount);
+                        bAdd.setEnabled(true);
+                        if (price > cash) {
+                            tvError.setVisibility(View.VISIBLE);
+                            bAdd.setEnabled(false);
+                        } else {
+                            fuelCount += 100;
+                            price = Constants.FUEL_PRICE * fuelCount / 1000d;
+                            tvResources.setText(addResourcesText + " " + fuelCount + " " + measureText);
+                            tvPrice.setText(getResources().getString(R.string.resources_price) +
+                                    " $" + price);
+                            tvError.setVisibility(View.INVISIBLE);
+                            if (price > cash) {
+                                tvError.setVisibility(View.VISIBLE);
+                                bAdd.setEnabled(false);
+                            }
+                        }
                         break;
                 }
             }
@@ -175,7 +204,9 @@ public class FragmentAddResources extends Fragment {
                         getActivity().getSupportFragmentManager().popBackStack();
                         break;
                     case Constants.RESOURCE_TYPE_FUEL:
-
+                        //уведомить слушателей (MainActivity, Delorean) о добавлении топлива
+                        notifyOnFuelAdded(fuelCount, price);
+                        getActivity().getSupportFragmentManager().popBackStack();
                         break;
                 }
             }

@@ -103,6 +103,9 @@
     <string name="plutonium_count">Плутоний:</string>
     <string name="fuel_count">Топливо:</string>
 
+    <string name="plutonium_measure">ед.</string>
+    <string name="fuel_measure">мл</string>
+
     <string name="dialog_choose_currency_title">Выберите валюту</string>
     <string name="dialog_choose_currency_positive">Ок</string>
     <string name="dialog_choose_currency_negative">Отмена</string>

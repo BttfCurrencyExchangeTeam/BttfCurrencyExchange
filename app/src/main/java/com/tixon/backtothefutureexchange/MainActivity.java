@@ -362,8 +362,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onMoneyChanged() {
-        /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf((int) purse
-                .getMoney(bank.getCurrency(), calendarPresent.get(Calendar.YEAR))));*/
         purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
     }
 
@@ -384,7 +382,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDepositAdd(double howMuch, int currencyIndex, long timeInMillis) {
-        //depositsAdapter.updateDeposits(bank.getDeposits(calendarPresent.getTimeInMillis()));
         depositsAdapter.updateDeposits(bank.getDeposits(timeInMillis));
         depositsAdapter.notifyDataSetChanged();
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
@@ -406,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements
         //снятие денег с вклада
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
         purse.add(money, currencyTo, timeInMillis);
+        //todo добавление денег
         purseAdapter.notifyDataSetChanged();
     }
     //вычесть из баланса долларовый эквивалент цены за количество плутония
@@ -454,7 +452,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onAddFuel(double count) {
-
+    public void onAddFuel(int count, double price) {
+        purse.giveCash(price, bank, calendarPresent.getTimeInMillis());
+        purseAdapter.notifyDataSetChanged();
+        delorean.addFuel(count);
+        resourcesToolbar.setFuelNumber(delorean.getFuel());
     }
 }

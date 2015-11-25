@@ -46,12 +46,14 @@ public class Toolbar extends LinearLayout implements OnTimeTravelListener {
     }
 
     public void setPlutoniumNumber(int number) {
-        String s = getResources().getString(R.string.plutonium_count) + " " + number;
+        String s = getResources().getString(R.string.plutonium_count) + " " + number + " "
+                + getResources().getString(R.string.plutonium_measure);
         tvPlutonium.setText(s);
     }
 
     public void setFuelNumber(double number) {
-        String s = getResources().getString(R.string.fuel_count) + " " + number;
+        String s = getResources().getString(R.string.fuel_count) + " " + number + " "
+                + getResources().getString(R.string.fuel_measure);
         tvFuel.setText(s);
     }
 

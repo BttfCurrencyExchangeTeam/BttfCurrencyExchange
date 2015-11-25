@@ -26,10 +26,7 @@ public class Constants {
 
     public static final int REQUEST_CODE_TRAVEL = 10;
 
-    public static final int CODE_DEPOSIT_NO_EXISTS = -1828;
-
     public static final double[] interestValues = new double[] {7, 10, 12};
-    public static final double INTEREST = 10d;
 
     public static final long JAN_1900_1 = -2208999600000L;
     //                                    -2208999600000
@@ -82,7 +79,8 @@ public class Constants {
     public static final int RESOURCE_TYPE_PLUTONIUM = 1;
     public static final int RESOURCE_TYPE_FUEL = 2;
 
-    public static final int PLUTONIUM_PRICE = 10000; //цена за плутоний в долларах
+    public static final int PLUTONIUM_PRICE = 10000; //цена за единицу плутония в долларах
+    public static final int FUEL_PRICE = 1; //цена за литр топлива в долларах
 
     //секунды * минуты * часы * дни * 1000 = мс в году
     public static final long ONE_YEAR = 60l * 60l * 24l * 365l * 1000l;

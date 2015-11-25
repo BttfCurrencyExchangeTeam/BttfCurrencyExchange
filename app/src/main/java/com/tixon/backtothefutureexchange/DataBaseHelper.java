@@ -289,7 +289,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             do {
                 delorean.setPlutonium(c.getInt(plutoniumColIndex));
-                delorean.setFuel(c.getDouble(fuelColIndex));
+                delorean.setFuel(c.getInt(fuelColIndex));
             } while(c.moveToNext());
         } else {
             Log.d(LOG_TAG, "read delorean: no rows found");

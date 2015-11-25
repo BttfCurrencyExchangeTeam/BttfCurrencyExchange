@@ -5,11 +5,11 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
     private static volatile Delorean instance;
 
     private int plutonium;
-    private double fuel;
+    private int fuel;
 
     private Delorean() {
         plutonium = 5;
-        fuel = 2d;
+        fuel = 2000;
     }
 
     public static Delorean getInstance() {
@@ -37,7 +37,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
         this.plutonium = plutonium;
     }
 
-    public void setFuel(double fuel) {
+    public void setFuel(int fuel) {
         this.fuel = fuel;
     }
 
@@ -45,7 +45,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
         this.plutonium += plutonium;
     }
 
-    public void addFuel(double fuel) {
+    public void addFuel(int fuel) {
         this.fuel += fuel;
     }
 
@@ -53,7 +53,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
     //на одно перемещение расходуется один контейнер с плутонием
     public void travel() {
         this.plutonium--;
-        this.fuel -= 0.1;
+        this.fuel -= 100;
     }
 
     /**
@@ -66,7 +66,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
     }
 
     @Override
-    public void onAddFuel(double count) {
+    public void onAddFuel(int count, double price) {
 
     }
 
