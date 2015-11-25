@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tixon.backtothefutureexchange.Bank;
 import com.tixon.backtothefutureexchange.Constants;
+import com.tixon.backtothefutureexchange.Delorean;
 import com.tixon.backtothefutureexchange.OnAddResourcesListener;
 import com.tixon.backtothefutureexchange.Purse;
 import com.tixon.backtothefutureexchange.R;
@@ -86,7 +87,7 @@ public class FragmentAddResources extends Fragment {
             bAdd.setEnabled(false);
         }
 
-        //final Delorean delorean = Delorean.getInstance();
+        final Delorean delorean = Delorean.getInstance();
         final Bank bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
         final Purse purse = Purse.getInstance();
@@ -117,7 +118,8 @@ public class FragmentAddResources extends Fragment {
                     case Constants.RESOURCE_TYPE_PLUTONIUM:
                         if (plutoniumCount > 0) {
                             plutoniumCount--;
-                            price = Constants.PLUTONIUM_PRICE * plutoniumCount;
+                            int level = delorean.getLevel();
+                            price = Constants.PLUTONIUM_PRICE * plutoniumCount * level;
                             if (!(price > cash)) {
                                 tvError.setVisibility(View.INVISIBLE);
                             }
@@ -161,7 +163,8 @@ public class FragmentAddResources extends Fragment {
                             bAdd.setEnabled(false);
                         } else {
                             plutoniumCount++;
-                            price = Constants.PLUTONIUM_PRICE * plutoniumCount;
+                            int level = delorean.getLevel();
+                            price = Constants.PLUTONIUM_PRICE * plutoniumCount * level;
                             tvResources.setText(addResourcesText + " " + plutoniumCount + " " + measureText);
                             tvPrice.setText(getResources().getString(R.string.resources_price) +
                                     " $" + price);

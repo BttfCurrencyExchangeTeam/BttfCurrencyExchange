@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.tixon.backtothefutureexchange.ui.Toolbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements
     LinearLayoutManager purseLayoutManager, depositsLayoutManager;
     PurseItemsRecyclerAdapter purseAdapter;
     DepositRecyclerAdapter depositsAdapter;
+
+    private boolean level1done = false, level2done = false, level3done = false;
 
     private List<OnTimeTravelListener> onTimeTravelListenersList = new ArrayList<>();
 
@@ -101,13 +105,7 @@ public class MainActivity extends AppCompatActivity implements
         delorean = Delorean.getInstance();
         bank = Bank.getInstance(getResources().getStringArray(R.array.dollars),
                 getResources().getStringArray(R.array.pounds));
-        //bank.setYearIndex(calendar.get(Calendar.YEAR));
-        //todo: изменено
-        //bank.setTimeRange(calendar.getTimeInMillis());
-
         bank.setCurrency(Bank.CURRENCY_DOLLARS);
-                /*tvMoney.setText(bank.getCurrencySymbol() + String.valueOf(purse.getMoney(bank.getCurrency(),
-                calendarPresent.get(Calendar.YEAR))));*/
         purse = Purse.getInstance();
 
         //установить стартовую сумму в $1000
@@ -156,52 +154,25 @@ public class MainActivity extends AppCompatActivity implements
             case Constants.KEY_NEW:
                 long currentSystemTime;
                 currentSystemTime = System.currentTimeMillis();
-                String savedGameName = "my_new_game " + currentSystemTime;
-                saveTime(currentSystemTime);
-                bank.clearDeposits();
-                delorean.init();
-                resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
-                resourcesToolbar.setFuelNumber(delorean.getFuel());
-
+                //создание новой игры
                 //формирование записей базы данных для сохранения игры
-                //сохранение системного времени как ключа
-                dbHelper.addSavedGame(db, currentSystemTime, savedGameName);
-                //удалить вклады
-                dbHelper.deleteDeposits(db);
-                //добавить вклады
-                dbHelper.addDeposits(db, bank.getDeposits(currentSystemTime), currentSystemTime);
-                //добавить личные сбережения
-                dbHelper.addPurse(db, purse.getPurse(), currentSystemTime);
-                //добавить общую информацию
-                dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
-                        calendarDestination.getTimeInMillis(), calendarLast.getTimeInMillis(),
-                        bank.getCurrency(), currentSystemTime);
-                //добавить данные Delorean
-                dbHelper.addDelorean(db, delorean, currentSystemTime);
+                TaskStartNewGame taskStartNewGame = new TaskStartNewGame();
+                taskStartNewGame.execute(currentSystemTime);
                 break;
             case Constants.KEY_CONTINUE:
                 long savedTime = getSavedTime();
-                Bundle generalInfoBundle;
-                //считать вклады
-                bank.setDeposits(dbHelper.readDeposits(db, savedTime));
-                //считать сбережения
-                dbHelper.readPurse(db, purse, savedTime);
-                //считать общую информацию
-                generalInfoBundle = dbHelper.readGeneralInfo(db, savedTime);
-                //считать данные Delorean
-                dbHelper.readDelorean(db, delorean, savedTime);
-                //установить игровое время
-                calendarDestination.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_DESTINATION));
-                calendarPresent.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_PRESENT));
-                calendarLast.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_LAST_DEPARTED));
-                //установить выбранную валюту
-                bank.setCurrency(generalInfoBundle.getInt(Constants.BUNDLE_DB_CURRENCY_SELECTED));
-                purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
-
-                updateDepositsRecyclerHeight(savedTime);
-
-                //обновить время в адаптере сбережений
-                purseAdapter.updateTime(calendarPresent.getTimeInMillis());
+                Log.d(LOG_TAG, "savedTime = " + savedTime);
+                if(savedTime != Constants.SAVED_TIME_DEFAULT) {
+                    //продолжение игры со считанными параметрами
+                    TaskReadGameData taskReadGameData = new TaskReadGameData();
+                    taskReadGameData.execute(savedTime);
+                } else {
+                    //если параметров нет, начать новую игру
+                    // и сформировать таблицы
+                    currentSystemTime = System.currentTimeMillis();
+                    TaskStartNewGame taskAnywayStartNewGame = new TaskStartNewGame();
+                    taskAnywayStartNewGame.execute(currentSystemTime);
+                }
                 break;
         }
 
@@ -210,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements
 
         //создание фрагментов
         fragmentChange = FragmentChange.newInstance(bank, purse, calendarPresent);
-        addDepositFragment = AddDepositFragment.newInstance(bank, purse, calendarPresent.getTimeInMillis());
+        addDepositFragment = AddDepositFragment.newInstance(bank, purse,
+                calendarPresent.getTimeInMillis(), generateRandomInterest());
 
         //слушатели на нажатие кнопки создания вклада
         addDepositFragment.addOnDepositAddListener(this);
@@ -225,31 +197,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
         long gameSavedTime = getSavedTime();
-        //перезаписать вклады
-        dbHelper.deleteDeposits(db);
-        dbHelper.addDeposits(db, bank.getDeposits(mainPresentTimePanel.getDate().getTimeInMillis()),
-                gameSavedTime);
-        //если не получилось обновить сбережения по gameSavedTime
-        if(dbHelper.updatePurse(db, purse.getPurse(), gameSavedTime) == 0) {
-            //то добавить их
-            dbHelper.addPurse(db, purse.getPurse(), gameSavedTime);
-        }
-
-        //если не получилось обновить время и валюту
-        if(dbHelper.updateGeneralInfo(db, calendarPresent.getTimeInMillis(),
-                calendarDestination.getTimeInMillis(),
-                calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime) == 0) {
-            //то добавляем их
-            dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
-                    calendarDestination.getTimeInMillis(),
-                    calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime);
-        }
-
-        //если не получилось обновить данные Delorian
-        if(dbHelper.updateDelorean(db, delorean, gameSavedTime) == 0) {
-            //то добавляем их
-            dbHelper.addDelorean(db, delorean, gameSavedTime);
-        }
+        //обновление данных игры
+        TaskUpdateGameData taskUpdateGameData = new TaskUpdateGameData();
+        taskUpdateGameData.execute(gameSavedTime, mainPresentTimePanel.getDate().getTimeInMillis());
     }
 
     @Override
@@ -311,12 +261,9 @@ public class MainActivity extends AppCompatActivity implements
                     calendarDestination.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_DESTINATION, System.currentTimeMillis()));
                     calendarLast.setTimeInMillis(data.getLongExtra(Constants.KEY_TIME_LAST, System.currentTimeMillis()));
 
-                    //onTimeTravel
+                    //уведомить о перемещении во времени
                     notifyTimeTravelled();
 
-                    //bank.setYearIndex(calendarPresent.get(Calendar.YEAR));
-                    //todo: изменено
-                    //bank.setTimeRange(calendarPresent.getTimeInMillis());
                     Log.d("myLogs", "currentYear = " + calendarPresent.get(Calendar.YEAR) +
                             ", lastYear = " + calendarLast.get(Calendar.YEAR));
                     //обновить время в адаптере вкладов
@@ -378,14 +325,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onMoneyChanged() {
         purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
         //увеличиваем уровень в зависимости от количества денег
-        double allCash = purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis());
-        if(allCash >= Constants.MONEY_LEVEL_1
-                && allCash < Constants.MONEY_LEVEL_2) {
-            onLevelIncreasedListener.onLevelIncreased();
-        } else if(allCash >= Constants.MONEY_LEVEL_2
-                && allCash < Constants.MONEY_LEVEL_3) {
-            onLevelIncreasedListener.onLevelIncreased();
-        }
+        levelUp(calendarPresent.getTimeInMillis());
     }
 
     @Override
@@ -426,17 +366,31 @@ public class MainActivity extends AppCompatActivity implements
         //снятие денег с вклада
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
         purse.add(money, currencyTo, timeInMillis);
-        //todo добавление денег - для уровня
         //увеличиваем уровень в зависимости от количества денег
-        double allCash = purse.getAllCash(bank, mainPresentTimePanel.getDate().getTimeInMillis());
-        if(allCash >= Constants.MONEY_LEVEL_1
-                && allCash < Constants.MONEY_LEVEL_2) {
-            onLevelIncreasedListener.onLevelIncreased();
-        } else if(allCash >= Constants.MONEY_LEVEL_2
-                && allCash < Constants.MONEY_LEVEL_3) {
-            onLevelIncreasedListener.onLevelIncreased();
-        }
+        levelUp(timeInMillis);
         purseAdapter.notifyDataSetChanged();
+    }
+
+    private void levelUp(long timeInMillis) {
+        double rubles;
+        if(timeInMillis >= Constants.JAN_1998_1) {
+            rubles = purse.getMoney(Bank.CURRENCY_RUBLES, timeInMillis);
+            if(((rubles >= Constants.MONEY_LEVEL_1) && (rubles < Constants.MONEY_LEVEL_2)) && !level1done) {
+                onLevelIncreasedListener.onLevelIncreased();
+            } else if(((rubles >= Constants.MONEY_LEVEL_2) && (rubles < Constants.MONEY_LEVEL_3)) && !level2done) {
+                onLevelIncreasedListener.onLevelIncreased();
+            } else if((rubles >= Constants.MONEY_LEVEL_3) && !level3done) {
+                onLevelIncreasedListener.onLevelIncreased();
+            }
+        }
+    }
+
+    private double generateRandomInterest() {
+        int min = 0, max = 2;
+        Random random = new Random();
+        double interest = Constants.interestValues[random.nextInt((max - min) + 1) + min];
+        Log.d(LOG_TAG, "random interest (7, 10, 12) = " + interest);
+        return interest;
     }
 
     private void showAddResourcesFragment(int resourceType) {
@@ -469,10 +423,14 @@ public class MainActivity extends AppCompatActivity implements
 
     long getSavedTime() {
         sp = getPreferences(MODE_PRIVATE);
-        return sp.getLong(Constants.PREFERENCE_CURRENT_TIME, 0);
+        return sp.getLong(Constants.PREFERENCE_CURRENT_TIME, Constants.SAVED_TIME_DEFAULT);
     }
 
-    //добавление ресурсов
+    /**
+     * Докупить плутоний
+     * @param count: количество добавляемого плутония (ед.)
+     * @param price: цена плутония ($)
+     */
     @Override
     public void onAddPlutonium(int count, double price) {
         purse.giveCash(price, bank, calendarPresent.getTimeInMillis());
@@ -481,6 +439,11 @@ public class MainActivity extends AppCompatActivity implements
         resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
     }
 
+    /**
+     * Добавить топливо
+     * @param count: количество добавляемого бензина (мл)
+     * @param price: цена бензина ($)
+     */
     @Override
     public void onAddFuel(int count, double price) {
         purse.giveCash(price, bank, calendarPresent.getTimeInMillis());
@@ -490,31 +453,166 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void showLevelIncreasedDialog(int level) {
+        String message = "";
+        switch (level) {
+            case 1:
+                message = getString(R.string.message_level_1);
+                level1done = false;
+                level2done = false;
+                level3done = false;
+                break;
+            case 2:
+                message = getString(R.string.message_level_2);
+                level1done = true;
+                break;
+            case 3:
+                message = getString(R.string.message_level_3);
+                level2done = true;
+                break;
+            case 4:
+                message = getString(R.string.message_win);
+                level3done = true;
+                break;
+            default: break;
+        }
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Повышение уровня: " + level);
-        dialogBuilder.setMessage("Поздравляем!");
-        dialogBuilder.setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialogBuilder.create();
-        dialogBuilder.show();
+        dialogBuilder.setTitle(getString(R.string.dialog_level_up_title_text) + " " + level)
+                .setMessage(message)
+                .setNegativeButton(R.string.dialog_continue_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    public void showLoseDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(getString(R.string.title_lose))
+                //.setMessage(message)
+                .setNegativeButton(R.string.dialog_continue_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
     @Override
     public void onLevelIncreased() {
         int level = delorean.getLevel();
-        showLevelIncreasedDialog(level);
-        switch (level) {
-            case 1:
-
-                break;
-            case 2:
-                break;
-        }
-
+        showLevelIncreasedDialog(level + 1);
         delorean.increaseLevel();
     }
+
+    //asyncTasks
+
+    private class TaskStartNewGame extends AsyncTask<Long, Void, Void> {
+        @Override
+        protected Void doInBackground(Long... params) {
+            long currentSystemTime = params[0];
+
+            saveTime(currentSystemTime);
+            bank.clearDeposits();
+            delorean.init();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    resourcesToolbar.setPlutoniumNumber(delorean.getPlutonium());
+                    resourcesToolbar.setFuelNumber(delorean.getFuel());
+                    //показывается диалог с первым уровнем
+                    showLevelIncreasedDialog(Constants.GAME_START);
+                }
+            });
+
+
+            String savedGameName = "my_new_game " + currentSystemTime;
+            //сохранение системного времени как ключа
+            dbHelper.addSavedGame(db, currentSystemTime, savedGameName);
+            //удалить вклады
+            dbHelper.deleteDeposits(db);
+            //добавить вклады
+            dbHelper.addDeposits(db, bank.getDeposits(currentSystemTime), currentSystemTime);
+            //добавить личные сбережения
+            dbHelper.addPurse(db, purse.getPurse(), currentSystemTime);
+            //добавить общую информацию
+            dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
+                    calendarDestination.getTimeInMillis(), calendarLast.getTimeInMillis(),
+                    bank.getCurrency(), currentSystemTime);
+            //добавить данные Delorean
+            dbHelper.addDelorean(db, delorean, currentSystemTime);
+            return null;
+        }
+    }
+
+    private class TaskReadGameData extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... params) {
+            long savedTime = params[0];
+            Bundle generalInfoBundle;
+            //считать вклады
+            bank.setDeposits(dbHelper.readDeposits(db, savedTime));
+            //считать сбережения
+            dbHelper.readPurse(db, purse, savedTime);
+            //считать общую информацию
+            generalInfoBundle = dbHelper.readGeneralInfo(db, savedTime);
+            //считать данные Delorean
+            dbHelper.readDelorean(db, delorean, savedTime);
+            //установить игровое время
+            calendarDestination.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_DESTINATION));
+            calendarPresent.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_PRESENT));
+            calendarLast.setTimeInMillis(generalInfoBundle.getLong(Constants.BUNDLE_DB_TIME_LAST_DEPARTED));
+            //установить выбранную валюту
+            bank.setCurrency(generalInfoBundle.getInt(Constants.BUNDLE_DB_CURRENCY_SELECTED));
+            purseAdapter.selectCurrency(bank.getCurrency(), calendarPresent.getTimeInMillis());
+
+            updateDepositsRecyclerHeight(savedTime);
+
+            //обновить время в адаптере сбережений
+            purseAdapter.updateTime(calendarPresent.getTimeInMillis());
+            return null;
+        }
+    }
+
+    private class TaskUpdateGameData extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... params) {
+            long gameSavedTime = params[0];
+            long presentTime = params[1];
+            //перезаписать вклады
+            dbHelper.deleteDeposits(db);
+            dbHelper.addDeposits(db, bank.getDeposits(presentTime),
+                    gameSavedTime);
+            //если не получилось обновить сбережения по gameSavedTime
+            if(dbHelper.updatePurse(db, purse.getPurse(), gameSavedTime) == 0) {
+                //то добавить их
+                dbHelper.addPurse(db, purse.getPurse(), gameSavedTime);
+            }
+
+            //если не получилось обновить время и валюту
+            if(dbHelper.updateGeneralInfo(db, calendarPresent.getTimeInMillis(),
+                    calendarDestination.getTimeInMillis(),
+                    calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime) == 0) {
+                //то добавляем их
+                dbHelper.addGeneralData(db, calendarPresent.getTimeInMillis(),
+                        calendarDestination.getTimeInMillis(),
+                        calendarLast.getTimeInMillis(), bank.getCurrency(), gameSavedTime);
+            }
+
+            //если не получилось обновить данные Delorean
+            if(dbHelper.updateDelorean(db, delorean, gameSavedTime) == 0) {
+                //то добавляем их
+                dbHelper.addDelorean(db, delorean, gameSavedTime);
+            }
+            return null;
+        }
+    }
+
+
 }

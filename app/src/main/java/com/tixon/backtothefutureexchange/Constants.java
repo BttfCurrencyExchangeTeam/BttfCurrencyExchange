@@ -36,6 +36,8 @@ public class Constants {
     public static final long DEC_2045_31 = 2398280400000L;
     //                                     2398280400000
 
+    public static final long SAVED_TIME_DEFAULT = -2209089600000l;
+
     public static final long[] TIMES = new long[] {
             //-2209003200000l, //1900 01.01
             //http://currentmillis.com
@@ -74,9 +76,13 @@ public class Constants {
 
     };
 
+    public static final int GAME_START = 1;
     public static final int MONEY_LEVEL_1 = 100000;
     public static final int MONEY_LEVEL_2 = 1000000;
     public static final int MONEY_LEVEL_3 = 1000000000;
+
+    public static final String KEY_INTEREST = "key_interest";
+    public static final String KEY_CURRENT_TIME = "key_current_time";
 
 
     public static final String KEY_RESOURCE_TYPE = "key_resource_type";
@@ -84,7 +90,8 @@ public class Constants {
     public static final int RESOURCE_TYPE_PLUTONIUM = 1;
     public static final int RESOURCE_TYPE_FUEL = 2;
 
-    public static final int PLUTONIUM_PRICE = 25000; //цена за единицу плутония в долларах
+    public static final double PLUTONIUM_COEFFICIENT = 1.3;
+    public static final int PLUTONIUM_PRICE = 10000; //цена за единицу плутония в долларах
     public static final int FUEL_PRICE = 1; //цена за литр топлива в долларах
 
     //секунды * минуты * часы * дни * 1000 = мс в году

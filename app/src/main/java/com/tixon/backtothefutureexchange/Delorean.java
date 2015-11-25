@@ -31,7 +31,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
         return plutonium;
     }
 
-    public double getFuel() {
+    public int getFuel() {
         return fuel;
     }
 
@@ -61,6 +61,7 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     //переместиться во времени
     //на одно перемещение расходуется один контейнер с плутонием
+    //и 100 мл бензина
     public void travel() {
         this.plutonium--;
         this.fuel -= 100;
@@ -68,13 +69,19 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     /**
      * Докупить плутоний
-     * @param count: количество добавляемого плутония
+     * @param count: количество добавляемого плутония (ед.)
+     * @param price: цена плутония ($)
      */
     @Override
     public void onAddPlutonium(int count, double price) {
         //this.plutonium += count;
     }
 
+    /**
+     * Добавить топливо
+     * @param count: количество добавляемого бензина (мл)
+     * @param price: цена бензина ($)
+     */
     @Override
     public void onAddFuel(int count, double price) {
 

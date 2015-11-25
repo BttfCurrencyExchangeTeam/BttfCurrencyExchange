@@ -17,12 +17,6 @@ import com.tixon.backtothefutureexchange.R;
 import java.util.Calendar;
 
 public class ControlPanelItem extends RelativeLayout {
-
-    /*deprecated
-    public static final int GREEN = 1;
-    public static final int YELLOW = 2;
-    public static final int RED = 3;*/
-
     public static final int DESTINATION_TIME = 0;
     public static final int PRESENT_TIME = 1;
     public static final int LAST_TIME_DEPARTED = 2;
@@ -119,7 +113,7 @@ public class ControlPanelItem extends RelativeLayout {
         fieldTime.setOnClickListener(listener);
     }
 
-    //set colors for each editText
+    //установка цвета для каждого поля editText
     private void setColorForEditTexts(int color) {
         etMonth.setTextColor(color);
         etDay.setTextColor(color);
@@ -128,21 +122,30 @@ public class ControlPanelItem extends RelativeLayout {
         etMinute.setTextColor(color);
     }
 
+    /**
+     * Запускает посекундный отсчёт для панели времени
+     * используется только в панелях настоящего времени
+     */
     public void startTimeRoll() {
         Calendar systemCalendar = Calendar.getInstance();
         systemCalendar.setTimeInMillis(System.currentTimeMillis());
-
         calendar.set(Calendar.SECOND, systemCalendar.get(Calendar.SECOND));
         final Handler h = new Handler();
-        h.postDelayed(new Runnable() {
+        Thread threadTimeRoll = new Thread(new Runnable() {
             @Override
             public void run() {
-                addSecond(calendar);
-                setDate(calendar);
-                //Log.d("myLogs", "seconds = " + calendar.get(Calendar.SECOND));
-                h.postDelayed(this, 1000);
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addSecond(calendar);
+                        setDate(calendar);
+                        //Log.d("myLogs", "seconds = " + calendar.get(Calendar.SECOND));
+                        h.postDelayed(this, 1000);
+                    }
+                }, 1000);
             }
-        }, 1000);
+        });
+        threadTimeRoll.start();
     }
 
     private void addSecond(Calendar calendar) {
