@@ -83,7 +83,7 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
                 break;
             case R.id.exit_:
                 touch(tvExit, event);
-                System.exit(0);
+                onBackPressed();
         }
         return true;
     }
@@ -94,10 +94,12 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         switch (v.getId()) {
             case R.id.new_game:
                 startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW);
+                startMainActivityIntent.putExtra(Constants.KEY_FROM_MENU, true);
                 startActivity(startMainActivityIntent);
                 break;
             case R.id.continue_:
                 startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_CONTINUE);
+                startMainActivityIntent.putExtra(Constants.KEY_FROM_MENU, true);
                 startActivity(startMainActivityIntent);
                 break;
             case R.id.tv_about:

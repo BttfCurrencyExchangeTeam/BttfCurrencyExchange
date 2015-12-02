@@ -18,6 +18,7 @@ import java.util.Calendar;
 public class FragmentChange extends Fragment
         implements OnItemCheckedListener,
         OnCurrencyChangedListener {
+    private static final String LOG_TAG ="myLogs" ;
     Button buttonChange;
     SeekBar seekBar;
     TextView textView;
@@ -69,6 +70,15 @@ public class FragmentChange extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_change, container, false);
+
+        (v.findViewById(R.id.click_layout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //предотвращение нажатий в Activity
+                Log.d(LOG_TAG, this.getClass().getSimpleName() + ": click");
+            }
+        });
+
         buttonChange = (Button) v.findViewById(R.id.fragment_change_button);
         seekBar = (SeekBar) v.findViewById(R.id.fragment_change_seek_bar);
         textView = (TextView) v.findViewById(R.id.fragment_change_text_view);

@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     DepositRecyclerAdapter depositsAdapter;
 
     private boolean level1done = false, level2done = false, level3done = false;
+    private boolean isGameStarted = false;
 
     private List<OnTimeTravelListener> onTimeTravelListenersList = new ArrayList<>();
 
@@ -86,6 +87,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            isGameStarted = savedInstanceState.getBoolean("isGameStarted");
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "restore instance state: isGameStarted error: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         dbHelper = new DataBaseHelper(this);
         db = dbHelper.getWritableDatabase();
@@ -150,30 +158,47 @@ public class MainActivity extends AppCompatActivity implements
         //создание или продолжение игры
 
         Intent fromMainMenu = getIntent();
-        switch (fromMainMenu.getIntExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW)) {
-            case Constants.KEY_NEW:
-                long currentSystemTime;
-                currentSystemTime = System.currentTimeMillis();
-                //создание новой игры
-                //формирование записей базы данных для сохранения игры
-                TaskStartNewGame taskStartNewGame = new TaskStartNewGame();
-                taskStartNewGame.execute(currentSystemTime);
-                break;
-            case Constants.KEY_CONTINUE:
-                long savedTime = getSavedTime();
-                Log.d(LOG_TAG, "savedTime = " + savedTime);
-                if(savedTime != Constants.SAVED_TIME_DEFAULT) {
-                    //продолжение игры со считанными параметрами
-                    TaskReadGameData taskReadGameData = new TaskReadGameData();
-                    taskReadGameData.execute(savedTime);
-                } else {
-                    //если параметров нет, начать новую игру
-                    // и сформировать таблицы
+        if(!isGameStarted) {
+            switch (fromMainMenu.getIntExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_NEW)) {
+                case Constants.KEY_NEW:
+                    long currentSystemTime;
                     currentSystemTime = System.currentTimeMillis();
-                    TaskStartNewGame taskAnywayStartNewGame = new TaskStartNewGame();
-                    taskAnywayStartNewGame.execute(currentSystemTime);
-                }
-                break;
+                    //создание новой игры
+                    //формирование записей базы данных для сохранения игры
+                    TaskStartNewGame taskStartNewGame = new TaskStartNewGame();
+                    taskStartNewGame.execute(currentSystemTime);
+                    break;
+                case Constants.KEY_CONTINUE:
+                    long savedTime = getSavedTime();
+                    Log.d(LOG_TAG, "savedTime = " + savedTime);
+                    if(savedTime != Constants.SAVED_TIME_DEFAULT) {
+                        //продолжение игры со считанными параметрами
+                        TaskReadGameData taskReadGameData = new TaskReadGameData();
+                        taskReadGameData.execute(savedTime);
+                    } else {
+                        //если параметров нет, начать новую игру
+                        // и сформировать таблицы
+                        currentSystemTime = System.currentTimeMillis();
+                        TaskStartNewGame taskAnywayStartNewGame = new TaskStartNewGame();
+                        taskAnywayStartNewGame.execute(currentSystemTime);
+                    }
+                    break;
+            }
+            isGameStarted = true;
+        } else {
+            long savedTime = getSavedTime();
+            Log.d(LOG_TAG, "savedTime = " + savedTime);
+            if(savedTime != Constants.SAVED_TIME_DEFAULT) {
+                //продолжение игры со считанными параметрами
+                TaskReadGameData taskReadGameData = new TaskReadGameData();
+                taskReadGameData.execute(savedTime);
+            } else {
+                //если параметров нет, начать новую игру
+                // и сформировать таблицы
+                long currentSystemTime = System.currentTimeMillis();
+                TaskStartNewGame taskAnywayStartNewGame = new TaskStartNewGame();
+                taskAnywayStartNewGame.execute(currentSystemTime);
+            }
         }
 
         mainPresentTimePanel.setDate(calendarPresent);
@@ -196,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+        outState.putBoolean("isGameStarted", isGameStarted);
     }
 
     //сохранение игры в onStop

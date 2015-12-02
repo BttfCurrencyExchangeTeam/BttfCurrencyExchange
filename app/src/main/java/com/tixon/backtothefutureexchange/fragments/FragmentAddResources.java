@@ -3,6 +3,7 @@ package com.tixon.backtothefutureexchange.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.List;
 //import com.tixon.backtothefutureexchange.Delorean;
 
 public class FragmentAddResources extends Fragment {
+    private static final String LOG_TAG = "myLogs";
     TextView tvResources, tvAllCash, tvPrice, tvError;
     ImageView ivLess, ivMore;
     Button bAdd;
@@ -69,6 +71,14 @@ public class FragmentAddResources extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_resources, container, false);
+
+        (v.findViewById(R.id.click_layout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //предотвращение нажатий в Activity
+                Log.d(LOG_TAG, this.getClass().getSimpleName() + ": click");
+            }
+        });
 
         addResourcesText = getString(R.string.add_resources_description);
 

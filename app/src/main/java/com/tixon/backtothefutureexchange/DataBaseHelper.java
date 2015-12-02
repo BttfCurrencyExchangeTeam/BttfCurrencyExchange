@@ -45,6 +45,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //table delorean fields
     private static final String DELOREAN_PLUTONIUM = "delorean_plutonium_field";
     private static final String DELOREAN_FUEL = "delorean_fuel_field";
+    private static final String DELOREAN_LEVEL = "delorean_level_field";
 
     //table time fields
     private static final String TIME_PRESENT = "time_present_field";
@@ -58,20 +59,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             GAME_SAVED_NAME + " text, " + DEPOSIT_NAME + " text, " +
             DEPOSIT_CURRENCY + " integer, " + DEPOSIT_INIT_TIME + " integer, " +
             DEPOSIT_INIT_VALUE + " real, " + DEPOSIT_INTEREST + " real" + ");";
+
     private static final String CREATE_TABLE_PURSE = "create table " + TABLE_PURSE + " (" +
             UID + " integer primary key autoincrement, " + GAME_SAVED_TIME + " integer, " +
             GAME_SAVED_NAME + " text, " + PURSE_RUBLES_IMPERIAL + " real, " +
             PURSE_RUBLES_SOVIET + " real, " + PURSE_RUBLES_RF + " real, " +
             PURSE_DOLLARS + " real, " + PURSE_POUNDS + " real" + ");";
+
     private static final String CREATE_TABLE_DELOREAN = "create table " + TABLE_DELOREAN + " (" +
             UID + " integer primary key autoincrement, " + GAME_SAVED_TIME + " integer, " +
             GAME_SAVED_NAME + " text, " + DELOREAN_PLUTONIUM + " integer, " +
-            DELOREAN_FUEL + " real" + ");";
+            DELOREAN_FUEL + " integer, " + DELOREAN_LEVEL + " integer" + ");";
+
     private static final String CREATE_TABLE_GENERAL = "create table " + TABLE_GENERAL + " (" +
             UID + " integer primary key autoincrement, " + GAME_SAVED_TIME + " integer, " +
             GAME_SAVED_NAME + " text, " + TIME_PRESENT + " integer, " +
             TIME_DESTINATION + " integer, " + TIME_LAST_DEPARTED + " integer, " +
             CURRENCY_SELECTED + " integer" + ");";
+
     private static final String CREATE_TABLE_SAVED_GAMES = "create table " + TABLE_SAVED_GAMES + " (" +
             UID + " integer primary key autoincrement, " + GAME_SAVED_TIME + " integer, " +
             GAME_SAVED_NAME + " text" + ");";
@@ -134,6 +139,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(DELOREAN_PLUTONIUM, delorean.getPlutonium());
         cv.put(DELOREAN_FUEL, delorean.getFuel());
+        cv.put(DELOREAN_LEVEL, delorean.getLevel());
 
         cv.put(GAME_SAVED_TIME, gameSavedTime);
 
@@ -286,10 +292,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if(c.moveToFirst()) {
             int plutoniumColIndex = c.getColumnIndex(DELOREAN_PLUTONIUM);
             int fuelColIndex = c.getColumnIndex(DELOREAN_FUEL);
+            int levelColIndex = c.getColumnIndex(DELOREAN_LEVEL);
 
             do {
                 delorean.setPlutonium(c.getInt(plutoniumColIndex));
                 delorean.setFuel(c.getInt(fuelColIndex));
+                delorean.setLevel(c.getInt(levelColIndex));
+                Log.d(LOG_TAG, "level = " + c.getInt(levelColIndex));
             } while(c.moveToNext());
         } else {
             Log.d(LOG_TAG, "read delorean: no rows found");
@@ -306,6 +315,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(DELOREAN_PLUTONIUM, delorean.getPlutonium());
         cv.put(DELOREAN_FUEL, delorean.getFuel());
+        cv.put(DELOREAN_LEVEL, delorean.getLevel());
 
         long updateCount = db.update(TABLE_DELOREAN, cv, selection, selectionArgs);
         Log.d(LOG_TAG, "update delorean: rows count = " + updateCount);

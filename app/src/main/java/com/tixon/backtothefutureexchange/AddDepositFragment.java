@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddDepositFragment extends Fragment {
-
-    private static final String LOG_TAG = "myLogs";
     EditText etName;
     TextView tvValue, tvInterest;
     Button bAdd;
@@ -32,16 +30,12 @@ public class AddDepositFragment extends Fragment {
 
     private OnMoneyChangedListener onMoneyChangedListener;
 
-    //private List<OnMoneyChangedListener> onMoneyChangedListeners = new ArrayList<>();
     private List<OnDepositAddListener> onDepositAddListeners = new ArrayList<>();
 
     public void setOnMoneyChangedListener(OnMoneyChangedListener listener) {
         this.onMoneyChangedListener = listener;
     }
 
-    /*public void addOnMoneyChangedListener(OnMoneyChangedListener listener) {
-        onMoneyChangedListeners.add(listener);
-    }*/
     public void addOnDepositAddListener(OnDepositAddListener listener) {
         onDepositAddListeners.add(listener);
     }
@@ -51,18 +45,11 @@ public class AddDepositFragment extends Fragment {
     String[] currencies;
 
     private double moneyToAdd = 0, interest;
-
     private int currencySelectedPosition = 0;
 
     private static Bank bank;
     private static Purse purse;
     private static long currentTime;
-
-    //private OnDepositAddListener onDepositAddListener;
-
-    /*public void setOnDepositAddListener(OnDepositAddListener listener) {
-        this.onDepositAddListener = listener;
-    }*/
 
     public static AddDepositFragment newInstance(Bank mBank, Purse mPurse, long mCurrentTime, double interest) {
         bank = mBank;
@@ -86,6 +73,15 @@ public class AddDepositFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_deposit, container, false);
+
+        (v.findViewById(R.id.click_layout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //предотвращение нажатий в Activity
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         tvValue = (TextView) v.findViewById(R.id.add_deposit_fragment_tv_value);
         tvInterest = (TextView) v.findViewById(R.id.tv_interest);
         etName = (EditText) v.findViewById(R.id.add_deposit_fragment_et_name);
@@ -190,6 +186,7 @@ public class AddDepositFragment extends Fragment {
         return s.length() == 0;
     }
 
+    @SuppressWarnings("unused")
     private int getCurrencyIndexByName(String currencyName) {
         String[] currencies = getResources().getStringArray(R.array.deposit_currencies_names_before_1998);
         int index = 0;

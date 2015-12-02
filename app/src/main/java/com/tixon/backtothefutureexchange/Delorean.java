@@ -59,6 +59,10 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     //переместиться во времени
     //на одно перемещение расходуется один контейнер с плутонием
     //и 100 мл бензина

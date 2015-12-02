@@ -12,9 +12,13 @@ public class Constants {
     public static final String BACK_STACK_ADD_PLUTONIUM = "ADD_PLUTONIUM_FRAGMENT";
     public static final String BACK_STACK_ADD_FUEL = "ADD_FUEL_FRAGMENT";
 
+    public static final String KEY_FROM_MENU = "key_from_main_menu";
     public static final String KEY_NEW_OR_CONTINUE = "key_new_or_continue";
     public static final int KEY_NEW = 1;
     public static final int KEY_CONTINUE = 2;
+    public static final int FROM_MENU = 11;
+
+    public static final String KEY_LEVEL = "key_level";
 
     public static final String PREFERENCE_CURRENT_TIME = "preference_current_time";
 
