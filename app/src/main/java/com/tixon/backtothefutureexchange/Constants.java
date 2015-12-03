@@ -21,6 +21,9 @@ public class Constants {
     public static final String KEY_LEVEL = "key_level";
     public static final String KEY_GAME_STARTED = "isGameStarted";
 
+    public static final String PREFERENCES_FILE_NAME = "BTTF_preferences_file";
+    public static final String KEY_GAME_GOING = "isGameGoing";
+
     public static final String PREFERENCE_CURRENT_TIME = "preference_current_time";
 
     //bundle
@@ -31,7 +34,7 @@ public class Constants {
 
     public static final int REQUEST_CODE_TRAVEL = 10;
 
-    public static final int PLUTONIUM_START_VALUE = 3;
+    public static final int PLUTONIUM_START_VALUE = 5;
     public static final int FUEL_START_VALUE = 2000;
 
     public static final double[] interestValues = new double[] {7, 10, 12};

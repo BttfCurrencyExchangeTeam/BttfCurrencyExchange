@@ -36,6 +36,7 @@
     <color name="grey_label_background_color">#343434</color>
     <color name="grey_label_text_color">#efefef</color>
     <color name="main_menu_color">#ffffff</color>
+    <color name="main_menu_disabled_color">#777777</color>
     <color name="main_menu_pressed_button_color">#9c27b0</color>
     <color name="black_color">#000000</color>
 

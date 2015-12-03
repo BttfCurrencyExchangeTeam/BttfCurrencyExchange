@@ -1,6 +1,7 @@
 package com.tixon.backtothefutureexchange;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,36 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
 
     TextView tvNew_game, tvContinue, tvAbout, tvExit;
 
+    private boolean isGameGoing = false;
+    private int colorEnabled, colorDisabled;
+
+    private void setGameGoing() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Constants.KEY_GAME_GOING, true);
+        editor.apply();
+    }
+
+    private boolean getGameStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        return sharedPreferences.getBoolean(Constants.KEY_GAME_GOING, false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            isGameGoing = getGameStatus();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        if(isGameGoing) {
+            tvContinue.setTextColor(colorEnabled);
+        } else {
+            tvContinue.setTextColor(colorDisabled);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +55,9 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
 
         //mediaPlayer = MediaPlayer.create(this, R.raw.main_theme);
         //mediaPlayer.start();
+
+        colorEnabled = getResources().getColor(R.color.main_menu_color);
+        colorDisabled = getResources().getColor(R.color.main_menu_disabled_color);
 
         //инициализация ImageView
         top = (ImageView) findViewById(R.id.iv_name);
@@ -74,9 +108,12 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
         switch (v.getId()) {
             case R.id.new_game:
                 touch(tvNew_game, event);
+                setGameGoing();
                 break;
             case R.id.continue_:
-                touch(tvContinue, event);
+                if(isGameGoing) {
+                    touch(tvContinue, event);
+                }
                 break;
             case R.id.tv_about:
                 touch(tvAbout, event);
@@ -98,9 +135,11 @@ public class MainMenu extends AppCompatActivity implements View.OnTouchListener,
                 startActivity(startMainActivityIntent);
                 break;
             case R.id.continue_:
-                startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_CONTINUE);
-                startMainActivityIntent.putExtra(Constants.KEY_FROM_MENU, true);
-                startActivity(startMainActivityIntent);
+                if(isGameGoing) {
+                    startMainActivityIntent.putExtra(Constants.KEY_NEW_OR_CONTINUE, Constants.KEY_CONTINUE);
+                    startMainActivityIntent.putExtra(Constants.KEY_FROM_MENU, true);
+                    startActivity(startMainActivityIntent);
+                }
                 break;
             case R.id.tv_about:
                 Intent intentStartAboutActivity = new Intent(this, AboutActivity.class);

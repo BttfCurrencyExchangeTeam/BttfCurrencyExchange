@@ -240,9 +240,32 @@ public class MainActivity extends AppCompatActivity implements
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if(count == 0) {
-            super.onBackPressed();
+            showExitConfirmationDialog();
         } else {
             getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    private void showExitConfirmationDialog() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.dialog_confirm_exit_title)
+                .setMessage(R.string.dialog_confirm_exit_message)
+                .setNegativeButton(R.string.dialog_confirm_exit_negative_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.dialog_confirm_exit_positive_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();
+                    }
+                });
+        if(count == 0) {
+            dialogBuilder.create().show();
         }
     }
 
@@ -381,11 +404,25 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDepositAdd(double howMuch, int currencyIndex, long timeInMillis) {
+    public void onDepositAdd(double howMuch, int currencyIndex, final long timeInMillis) {
         depositsAdapter.updateDeposits(bank.getDeposits(timeInMillis));
         depositsAdapter.notifyDataSetChanged();
         updateDepositsRecyclerHeight(mainPresentTimePanel.getDate().getTimeInMillis());
 
+        //обновление депозитов в БД
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHelper = new DataBaseHelper(MainActivity.this);
+                db = dbHelper.getWritableDatabase();
+                dbHelper.deleteDeposits(db);
+                dbHelper.addDeposits(db, bank.getDeposits(timeInMillis),
+                        getSavedTime());
+                db.close();
+                dbHelper.close();
+            }
+        });
+        t.start();
     }
 
     //обновление высоты recyclerView для вкладов
@@ -447,6 +484,13 @@ public class MainActivity extends AppCompatActivity implements
                 .setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(backStackEntryName)
                 .commit();
+    }
+
+    void setGameStopped() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Constants.KEY_GAME_GOING, false);
+        editor.apply();
     }
 
     //функции сохранения и восстановления системного времени для сохранения и продолжения игры
@@ -548,7 +592,8 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //todo сделать невозможным продолжение игры
-                        onBackPressed();
+                        setGameStopped();
+                        MainActivity.super.onBackPressed();
                         dialog.dismiss();
                     }
                 })
@@ -571,6 +616,8 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dbHelper = new DataBaseHelper(MainActivity.this);
+            db = dbHelper.getWritableDatabase();
             timeTaskStarted = System.currentTimeMillis();
         }
 
@@ -619,6 +666,8 @@ public class MainActivity extends AppCompatActivity implements
             super.onPostExecute(aVoid);
             long timeSpent = System.currentTimeMillis() - timeTaskStarted;
             Log.d(LOG_TAG, "Запись данных заняла " + timeSpent/1000d + " секунд");
+            db.close();
+            dbHelper.close();
         }
     }
 
@@ -628,6 +677,8 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dbHelper = new DataBaseHelper(MainActivity.this);
+            db = dbHelper.getWritableDatabase();
             timeTaskStarted = System.currentTimeMillis();
         }
 
@@ -667,6 +718,8 @@ public class MainActivity extends AppCompatActivity implements
             super.onPostExecute(aVoid);
             long timeSpent = System.currentTimeMillis() - timeTaskStarted;
             Log.d(LOG_TAG, "Чтение данных заняло " + timeSpent/1000d + " секунд");
+            db.close();
+            dbHelper.close();
         }
     }
 
@@ -676,6 +729,8 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dbHelper = new DataBaseHelper(MainActivity.this);
+            db = dbHelper.getWritableDatabase();
             timeTaskStarted = System.currentTimeMillis();
         }
 
@@ -721,7 +776,9 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             long timeSpent = System.currentTimeMillis() - timeTaskStarted;
-            Log.d(LOG_TAG, "Обновление данных заняло " + timeSpent/1000d + " секунд");
+            Log.d(LOG_TAG, "Обновление данных заняло " + timeSpent / 1000d + " секунд");
+            db.close();
+            dbHelper.close();
         }
     }
 
