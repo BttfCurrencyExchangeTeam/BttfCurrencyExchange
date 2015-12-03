@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         try {
-            isGameStarted = savedInstanceState.getBoolean("isGameStarted");
+            isGameStarted = savedInstanceState.getBoolean(Constants.KEY_GAME_STARTED);
         } catch (Exception e) {
             Log.e(LOG_TAG, "restore instance state: isGameStarted error: " + e.getMessage());
             e.printStackTrace();
@@ -219,11 +219,10 @@ public class MainActivity extends AppCompatActivity implements
         addDepositFragment.setOnMoneyChangedListener(this);
     }
 
-    //todo: сохранение данных
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("isGameStarted", isGameStarted);
+        outState.putBoolean(Constants.KEY_GAME_STARTED, isGameStarted);
     }
 
     //сохранение игры в onStop
@@ -331,7 +330,8 @@ public class MainActivity extends AppCompatActivity implements
                     startActivityForResult(startTravelActivity,
                             Constants.REQUEST_CODE_TRAVEL);
                 } else {
-                    showLoseDialog();
+                    //todo контроль количества денег
+                    showLoseDialog(plutoniumCount, fuelCount);
                 }
                 break;
             case R.id.main_activity_button_exchange:
@@ -534,10 +534,16 @@ public class MainActivity extends AppCompatActivity implements
         dialogBuilder.create().show();
     }
 
-    public void showLoseDialog() {
+    public void showLoseDialog(int plutoniumCount, int fuelCount) {
+        String message = "";
+        if(plutoniumCount == 0) {
+            message = getResources().getString(R.string.message_lose_plutonium);
+        } else if(fuelCount == 0) {
+            message = getResources().getString(R.string.message_lose_fuel);
+        }
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(getString(R.string.title_lose))
-                //.setMessage(message)
+                .setMessage(message)
                 .setNegativeButton(R.string.dialog_lose_main_menu_button_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

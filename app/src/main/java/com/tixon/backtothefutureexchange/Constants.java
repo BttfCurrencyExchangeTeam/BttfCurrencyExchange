@@ -19,6 +19,7 @@ public class Constants {
     public static final int FROM_MENU = 11;
 
     public static final String KEY_LEVEL = "key_level";
+    public static final String KEY_GAME_STARTED = "isGameStarted";
 
     public static final String PREFERENCE_CURRENT_TIME = "preference_current_time";
 
