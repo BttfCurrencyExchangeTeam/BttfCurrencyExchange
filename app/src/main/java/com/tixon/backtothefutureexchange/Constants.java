@@ -30,6 +30,9 @@ public class Constants {
 
     public static final int REQUEST_CODE_TRAVEL = 10;
 
+    public static final int PLUTONIUM_START_VALUE = 3;
+    public static final int FUEL_START_VALUE = 2000;
+
     public static final double[] interestValues = new double[] {7, 10, 12};
 
     public static final long JAN_1900_1 = -2208999600000L;

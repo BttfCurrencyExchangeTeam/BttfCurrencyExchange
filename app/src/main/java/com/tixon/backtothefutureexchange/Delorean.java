@@ -10,8 +10,8 @@ public class Delorean implements OnAddResourcesListener, OnTimeTravelListener {
 
     public void init() {
         level = 1;
-        plutonium = 5;
-        fuel = 2000;
+        plutonium = Constants.PLUTONIUM_START_VALUE;
+        fuel = Constants.FUEL_START_VALUE;
     }
 
     public static Delorean getInstance() {

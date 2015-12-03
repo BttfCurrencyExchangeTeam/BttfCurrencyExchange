@@ -201,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
+        updateDepositsRecyclerHeight(presentTime);
+
         mainPresentTimePanel.setDate(calendarPresent);
         mainPresentTimePanel.startTimeRoll();
 
@@ -318,15 +320,18 @@ public class MainActivity extends AppCompatActivity implements
             //кнопка путешествия во времени
             case R.id.main_activity_button_travel:
                 int plutoniumCount = delorean.getPlutonium();
+                int fuelCount = delorean.getFuel();
                 Intent startTravelActivity = new Intent(MainActivity.this, ControlPanelActivity.class);
                 //проверка плутония
-                if(plutoniumCount > 0) {
+                if((plutoniumCount > 0) && (fuelCount > 0)) {
                     startTravelActivity.putExtra(Constants.KEY_TIME_PRESENT, calendarPresent.getTimeInMillis());
                     startTravelActivity.putExtra(Constants.KEY_TIME_LAST, calendarLast.getTimeInMillis());
                     calendarLast.setTimeInMillis(calendarPresent.getTimeInMillis());
 
                     startActivityForResult(startTravelActivity,
                             Constants.REQUEST_CODE_TRAVEL);
+                } else {
+                    showLoseDialog();
                 }
                 break;
             case R.id.main_activity_button_exchange:
@@ -515,18 +520,29 @@ public class MainActivity extends AppCompatActivity implements
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                })
-                .create()
-                .show();
+                });
+        if(level3done) {
+            dialogBuilder.setPositiveButton(R.string.dialog_start_new_game, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    TaskStartNewGame taskStartNewGame = new TaskStartNewGame();
+                    taskStartNewGame.execute(System.currentTimeMillis());
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialogBuilder.create().show();
     }
 
     public void showLoseDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(getString(R.string.title_lose))
                 //.setMessage(message)
-                .setNegativeButton(R.string.dialog_continue_button_text, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_lose_main_menu_button_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //todo сделать невозможным продолжение игры
+                        onBackPressed();
                         dialog.dismiss();
                     }
                 })
@@ -544,6 +560,18 @@ public class MainActivity extends AppCompatActivity implements
     //asyncTasks
 
     private class TaskStartNewGame extends AsyncTask<Long, Void, Void> {
+
+        private long timeTaskStarted;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            timeTaskStarted = System.currentTimeMillis();
+        }
+
+        /**
+         * Асинхронная запись данных игры в БД
+         * @param params текущее системное время смартфона
+         */
         @Override
         protected Void doInBackground(Long... params) {
             long currentSystemTime = params[0];
@@ -579,10 +607,28 @@ public class MainActivity extends AppCompatActivity implements
             dbHelper.addDelorean(db, delorean, currentSystemTime);
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            long timeSpent = System.currentTimeMillis() - timeTaskStarted;
+            Log.d(LOG_TAG, "Запись данных заняла " + timeSpent/1000d + " секунд");
+        }
     }
 
     private class TaskReadGameData extends AsyncTask<Long, Void, Void> {
 
+        private long timeTaskStarted;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            timeTaskStarted = System.currentTimeMillis();
+        }
+
+        /**
+         * Асинхронное чтение данных игры из БД
+         * @param params сохранённое время в SharedPreferences
+         */
         @Override
         protected Void doInBackground(Long... params) {
             long savedTime = params[0];
@@ -609,10 +655,30 @@ public class MainActivity extends AppCompatActivity implements
             purseAdapter.updateTime(calendarPresent.getTimeInMillis());
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            long timeSpent = System.currentTimeMillis() - timeTaskStarted;
+            Log.d(LOG_TAG, "Чтение данных заняло " + timeSpent/1000d + " секунд");
+        }
     }
 
     private class TaskUpdateGameData extends AsyncTask<Long, Void, Void> {
 
+        private long timeTaskStarted;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            timeTaskStarted = System.currentTimeMillis();
+        }
+
+        /**
+         * Асинхронное обновление данных игры в БД
+         * @param params сюда подаётся:
+         *               первым параметром - сохранённое время в SharedPreferences
+         *               вторым параметром - текущее время по календарю игры
+         */
         @Override
         protected Void doInBackground(Long... params) {
             long gameSavedTime = params[0];
@@ -643,6 +709,13 @@ public class MainActivity extends AppCompatActivity implements
                 dbHelper.addDelorean(db, delorean, gameSavedTime);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            long timeSpent = System.currentTimeMillis() - timeTaskStarted;
+            Log.d(LOG_TAG, "Обновление данных заняло " + timeSpent/1000d + " секунд");
         }
     }
 

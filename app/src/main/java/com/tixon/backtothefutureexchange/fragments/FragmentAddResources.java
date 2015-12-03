@@ -21,8 +21,6 @@ import com.tixon.backtothefutureexchange.R;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.tixon.backtothefutureexchange.Delorean;
-
 public class FragmentAddResources extends Fragment {
     private static final String LOG_TAG = "myLogs";
     TextView tvResources, tvAllCash, tvPrice, tvError;

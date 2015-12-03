@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddDepositFragment extends Fragment {
+    private static final String LOG_TAG = "myLogs";
     EditText etName;
     TextView tvValue, tvInterest;
     Button bAdd;
@@ -78,7 +80,7 @@ public class AddDepositFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //предотвращение нажатий в Activity
-                getActivity().getSupportFragmentManager().popBackStack();
+                Log.d(LOG_TAG, this.getClass().getSimpleName() + ": click");
             }
         });
 
